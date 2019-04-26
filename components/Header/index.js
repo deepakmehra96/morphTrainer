@@ -15,10 +15,12 @@ class Header extends React.Component {
         }
     }
     handleBack() {
-        if (this.props.handleBackBtn) {
-            return this.props.handleBackBtn()
+        if(this.props.source){
+            if (this.props.handleBackBtn) {
+                return this.props.handleBackBtn()
+            }
+            this.props.navigation.goBack();
         }
-        this.props.navigation.goBack();
     }
     checkBorderBottom(val) {
         if (val) {
@@ -47,7 +49,7 @@ class Header extends React.Component {
     }
     render() {
         return (
-            <View>
+            <View style={{marginBottom: 10}}>
                 <View style={this.checkNotch()}>
                     <View style={styles.width20}>
                         <TouchableOpacity onPress={() => { this.handleBack() }}>

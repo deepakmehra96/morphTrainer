@@ -6,7 +6,7 @@ import GradientButton from '../../components/GradientButton';
 import TextBox from '../../components/TextField';
 import microValidator from 'micro-validator'
 import is from 'is_js'
-import { forgotPassword } from '../../redux/actions';
+import { forgotPassword, openToast } from '../../redux/actions';
 import { connect } from 'react-redux'
 import ShowLoader from '../../components/ShowLoader';
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -56,13 +56,13 @@ class ForgetPassword extends React.Component {
                 this.props.navigation.navigate('SignIn')
             }
             if(res.data.msg){
-                this.refs.toast.show(res.data.msg)
+                this.props.dispatch(openToast(res.data.msg))
             }
         }).catch(error => {
             this.setState({ showLoader: false })
             console.log(error,"error")
             if(error.data.message){
-                this.refs.toast.show(error.data.message)
+                this.props.dispatch(openToast(error.data.message))
             }
         })
         this.setState({ errors: {} })
@@ -85,7 +85,7 @@ class ForgetPassword extends React.Component {
                     <View style={styles.con}>
                         <Header 
                             source={require('../../assets/images/back-btn.png')} 
-                            label="Forget Password" navigation={this.props.navigation}/>
+                            label="Forgot Password" navigation={this.props.navigation}/>
                         <View style={styles.main}>
                             <View style={styles.imageLogo}>
                                 <Image style={styles.imageMain} source={require('../../assets/images/logo.png')} />

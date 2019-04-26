@@ -198,12 +198,12 @@ class EditPofile extends React.Component {
                             <Text style={styles.errorMsgText}>{errors.job_role && errors.job_role[0]}</Text>
                         </View>
                         <View style={styles.margintop20}>
-                            <TextBox styleMainBox={styles.about} label="About"  onChange={this.handelChnage.bind(this, 'about')} value={userData.about}/>
+                            <TextBox styleMainBox={styles.about} label="About"  onChange={this.handelChnage.bind(this, 'about')} value={userData.about} multiline={true}/>
                             <Text style={styles.errorMsgText}>{errors.about && errors.about[0]}</Text>
                         </View>
 
                         <View style={styles.margintop20}>
-                            <TextBox  styleMainBox={styles.address} label="Address"  onChange={this.handelChnage.bind(this, 'address')} value={userData.address}/>
+                            <TextBox  styleMainBox={styles.address} label="Address"  onChange={this.handelChnage.bind(this, 'address')} value={userData.address} multiline={true} />
                             <Text style={styles.errorMsgText}>{errors.address && errors.address[0]}</Text>
                         </View>
 
@@ -298,10 +298,12 @@ const styles = StyleSheet.create({
         color:"red"
     },
     address:{
-        paddingTop:60
+        height: 50,
+        justifyContent: 'flex-start'
     },
     about:{
-        paddingTop:100
+        height: 70,
+        justifyContent: 'flex-start'
     },
     textChangePass:{
         marginTop:10,

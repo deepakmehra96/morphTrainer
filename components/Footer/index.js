@@ -4,6 +4,7 @@ import { Button, Icon, Footer, FooterTab } from 'native-base'
 import Header from '../Header';
 import Profile from '../../Views/Profile';
 import Options from '../../Views/Options';
+import Customers from '../../Views/Customers';
 var { height, width } = Dimensions.get('window');
 
 class FooterMain extends React.Component {
@@ -14,13 +15,44 @@ class FooterMain extends React.Component {
     constructor(){
         super()
         this.state = {
-            activeIndex:3
+            activeIndex:2
         }
 
     }
  
     onClickBtn(val){
         this.setState({ activeIndex : val})
+    }
+    imageStyle(val){
+        let { activeIndex } = this.state;
+        if(val == 1){
+            if(activeIndex !== val){
+                return require('../../assets/images/calender.png')
+            }else{
+                return require('../../assets/images/menu-icons_03.png')
+            }
+        }
+        if(val == 2){
+            if(activeIndex !== val){
+                return require('../../assets/images/people.png')
+            }else{
+                return require('../../assets/images/menu-icons_05.png')
+            }
+        }
+        if(val == 3){
+            if(activeIndex !== val){
+                return require('../../assets/images/menu-icons_07.png')
+            }else{
+                return require('../../assets/images/profileColor.png')
+            }
+        }
+        if(val == 4){
+            if(activeIndex !== val){
+                return require('../../assets/images/settings.png')
+            }else{
+                return require('../../assets/images/menu-icons_09.png')
+            }
+        }
     }
 
     handleComponents(){
@@ -30,7 +62,7 @@ class FooterMain extends React.Component {
                 return null
                 break;
             case 2:
-                return null
+                return <Customers navigation={this.props.navigation}/>
                 break;
             case 3:
                 return <Profile navigation={this.props.navigation}/>
@@ -54,25 +86,25 @@ class FooterMain extends React.Component {
                     <FooterTab style={{ backgroundColor:'#fff'}}>
                         <Button vertical onPress={() => this.onClickBtn(3)}>
                             <View style={styles.imageOutFirst}>
-                                <Image source={require('../../assets/images/calender.png')} style={styles.imageMain} />
+                                <Image source={this.imageStyle(1)} style={styles.imageMain} />
                             </View>
                             <Text style={styles.footerText}>Appointments</Text>
                         </Button>
-                        <Button vertical onPress={() => this.onClickBtn(3)}>
+                        <Button vertical onPress={() => this.onClickBtn(2)}>
                             <View style={styles.imageOutPeople}>
-                                <Image source={require('../../assets/images/people.png')} style={styles.imageMain} />
+                                <Image source={this.imageStyle(2)} style={styles.imageMain} />
                             </View>
                             <Text style={styles.footerText}>Customers</Text>
                         </Button>
                         <Button vertical onPress={() => this.onClickBtn(3)}>
                             <View style={styles.imageOutPeople}>
-                                <Image source={require('../../assets/images/profileColor.png')} style={styles.imageMain} />
+                                <Image source={this.imageStyle(3)} style={styles.imageMain} />
                             </View>
                             <Text style={styles.footerText}>Profile</Text>
                         </Button>
                         <Button vertical  onPress={() => this.onClickBtn(4)}>
                             <View style={styles.imageOutPeople} >
-                                <Image source={require('../../assets/images/settings.png')} style={styles.imageMain} />
+                                <Image source={this.imageStyle(4)} style={styles.imageMain} />
                             </View>
                             <Text style={styles.footerText}>Settings</Text>
                         </Button>

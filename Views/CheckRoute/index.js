@@ -8,9 +8,9 @@ class CheckRoute extends React.Component {
         header: null
     }
     async componentWillMount(){
-        let remember = await AsyncStorage.getItem('remember')
+        let token = await AsyncStorage.getItem('token')
         let user = await AsyncStorage.getItem('user')
-        if(remember && user){
+        if(token && user){
             this.props.dispatch(setUserDetail(JSON.parse(user)))
             this.props.navigation.navigate('FooterMain')
         }else{

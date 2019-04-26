@@ -6,7 +6,7 @@ import GradientButton from '../../components/GradientButton';
 import TextBox from '../../components/TextField';
 import microValidator from 'micro-validator'
 import is from 'is_js'
-import { coachLogin } from '../../redux/actions';
+import { coachLogin, openToast } from '../../redux/actions';
 import { connect } from 'react-redux'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import ShowLoader from '../../components/ShowLoader';
@@ -81,19 +81,24 @@ class SignIn extends React.Component {
         this.props.dispatch(coachLogin(userData)).then(async res => {
             console.log(res,"response")
             this.setState({ showLoader: false })
+            if(res.data.msg === 'Logged in successfully' && !checked){
+                userData.email= ''
+                userData.password= ''
+                this.setState({userData})
+            }
             if(res.data.msg === 'Logged in successfully'){
-                if (checked) {
-                    await AsyncStorage.setItem('remember', 'true')
-                }
                 this.props.navigation.navigate('FooterMain')
             }
+            if (checked) {
+                await AsyncStorage.setItem('remember', 'true')
+            }
             if(res.data.msg){
-                this.refs.toast.show(res.data.msg)
+                this.props.dispatch(openToast(res.data.msg))
             }
         }).catch(err => {
             this.setState({ showLoader: false })
             if(err.data.msg){
-                this.refs.toast.show(err.data.msg)
+                this.props.dispatch(openToast(err.data.msg))
             }
             console.log(err,"err")
         })
@@ -110,7 +115,7 @@ class SignIn extends React.Component {
         return
     }
     render() {
-        let { email } = this.state.userData
+        let { email,password } = this.state.userData
         let { errors } = this.state
         return (
             <Container>
@@ -122,11 +127,11 @@ class SignIn extends React.Component {
                                 <Image style={styles.imageMain} source={require('../../assets/images/logo.png')} />
                             </View>
                             <View style={styles.relitive}>
-                                <TextBox label="Login" onChange={this.handelChnage.bind(this, 'email')} />
+                                <TextBox label="Login" onChange={this.handelChnage.bind(this, 'email')} value={email}/>
                                 <Text style={{fontSize:10, color:"red"}}>{errors.email && errors.email[0]}</Text>
                             </View>
                             <View style={[styles.relitive, styles.textMargin]}>
-                                <TextBox label="Password" onChange={this.handelChnage.bind(this, 'password')} />
+                                <TextBox label="Password" secureTextEntry={true} onChange={this.handelChnage.bind(this, 'password')} value={password}/>
                                 <Text style={{fontSize:10, color:"red"}}>{errors.password && errors.password[0]}</Text>
                             </View>
                             <View style={styles.ALignInRow}>

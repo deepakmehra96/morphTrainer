@@ -12,6 +12,9 @@ class Options extends React.Component {
     static navigationOptions = {
         header: null
     }
+    state = {
+        toggle: false
+    }
     async logout(){
         await AsyncStorage.removeItem('token')
         await AsyncStorage.removeItem('user')
@@ -27,7 +30,7 @@ class Options extends React.Component {
                     <View style={styles.shadowMain}>
                         <LinearGradient colors={['#f7b944', '#f49a3e', '#ef6937']} style={styles.gradientMain}>
                             <Text style={styles.textHeading}>
-                                Prefrence
+                                Preference
                             </Text>
                         </LinearGradient>
                         <View style={styles.innerCon}>
@@ -36,17 +39,19 @@ class Options extends React.Component {
                                     <Image source={require('../../assets/images/coach-settings_07.png')} style={styles.imageMain} />
                                 </View>
                                 <Text style={styles.textMain}>
-                                    Notification
+                                    Notifications
                                 </Text>
                                 <View style={styles.colorTextOut}>
                                 <Switch
-                                    onValueChange={(val) => console.log(val)}
+                                    onValueChange={() => this.setState({ toggle: !this.state.toggle })}
                                     circleSize={20}
                                     backgroundActive={'#d6d6d6'}
                                     backgroundInactive={'#d6d6d6'}
                                     circleBorderWidth={0}
                                     circleActiveColor={'orange'}
                                     circleInActiveColor={'orange'}
+                                    value={this.state.toggle}
+                                    disabled={false}
                                     innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} // style for inner animated circle for what you (may) be rendering inside the circle
                                 />
                                 </View>
@@ -57,7 +62,7 @@ class Options extends React.Component {
                                     <Image source={require('../../assets/images/coach-settings_13.png')} style={styles.imageMain} />
                                 </View>
                                 <Text style={styles.textMain}>
-                                    Working Hour
+                                    Working Hours
                                 </Text>
                                 <View style={styles.colorTextOut}>
                                     <Image source={require('../../assets/images/right-arrow.png')} style={styles.imageMain} />
@@ -68,7 +73,7 @@ class Options extends React.Component {
                                     <Image source={require('../../assets/images/coach-settings_16.png')} style={styles.imageMain} />
                                 </View>
                                 <Text style={styles.textMain}>
-                                    Appointment Slot
+                                    Appointment Slots
                                 </Text>
                                 <View style={styles.colorTextOut}>
                                     <Text style={styles.coloredText}>

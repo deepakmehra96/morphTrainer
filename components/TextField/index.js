@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput , Dimensions} from 'react-native';
+import { StyleSheet, Text, View, TextInput , Dimensions, Platform } from 'react-native';
 var { height, width } = Dimensions.get('window');
 // import { TextField } from 'react-native-material-textfield';
 
@@ -12,7 +12,7 @@ class TextBox extends React.Component {
     }
     render() {
         return (
-            <View>
+            <View style={styles.outerView}>
                 {/* <TextField
                     lineWidth={0}
                     activeLineWidth={0}
@@ -32,6 +32,9 @@ class TextBox extends React.Component {
                     keyboardType= {this.props.type}
                     value={this.props.value}
                     autoCapitalize = 'none'
+                    value={this.props.value}
+                    numberOfLines={this.props.numberOfLines}
+                    multiline={this.props.multiline}
                 />
 
             </View>
@@ -50,21 +53,23 @@ const styles = StyleSheet.create({
     inputLable: {
         color: '#467bdd',
         position: 'absolute',
-        marginTop: 5,
+        paddingTop: 5,
         paddingLeft: 22,
         fontSize: 12
     },
     textField: {
+        display: 'flex',
+        fontSize: 12
+    },
+    outerView: {
         borderWidth: 1,
         borderColor: '#d1d1d1',
         borderRadius: 5,
-        display: 'flex',
-        paddingTop: 20,
-        paddingBottom: 0,
         paddingLeft: 22,
         paddingRight: 22,
-        fontSize: 12
-    },
+        paddingTop: 20,
+        paddingBottom: Platform.OS === 'ios' ? 10 : 0
+    }
 
 });
 

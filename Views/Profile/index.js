@@ -52,8 +52,7 @@ class Profile extends React.Component {
         let { user } = this.props.userData
         return (
             <Container>
-                <Content>
-                    <Header 
+                 <Header 
                         showShadow={true}
                         widthAdjust={styles.widthImageRight} 
                         imageBack={require('../../assets/images/coach-editBtn.png')} 
@@ -61,6 +60,7 @@ class Profile extends React.Component {
                         leftArrow={false} 
                         navigation={this.props.navigation}
                         handleRightBtn={() => this.props.navigation.navigate('EditPofile')} />
+                <Content style={{marginBottom:60}}>
                     <View style={styles.alIgnItemCenter}>
                         <View style={styles.imageOut}>
                             <View style={styles.prolileOnlineImg}>
@@ -94,17 +94,21 @@ class Profile extends React.Component {
                                 {/* <Text style={styles.textMain}>EAST MALBOURNE 3002</Text> */}
                             </View>
                             <View style={styles.width50SecondContainer}>
-                                <View style={styles.alignImagesInRow}>
+                                <View style={[styles.alignImagesInRow]}>
                                     <View style={styles.imageOutIcon}>
                                         <Image source={require('../../assets/images/phone.png')} style={styles.imageMain} />
                                     </View>
-                                    <Text style={[styles.textMain,{position: 'absolute',left: 55}]}>{user.phone_number}</Text>
+                                    <View style={{flexWrap:'wrap'}}>
+                                        <Text style={[styles.textMain,{flexWrap:'wrap'}]}>{user.phone_number}</Text>
+                                    </View>
                                 </View>
                                 <View style={styles.alignImagesInRow}>
                                     <View style={styles.imageOutIcon}>
                                         <Image source={require('../../assets/images/email.png')} style={styles.imageMain} />
                                     </View>
-                                    <Text style={[styles.textMain,{position: 'absolute',right: 0}]}>{user.email}</Text>
+                                    <View style={{flexWrap:'wrap'}}>
+                                        <Text style={[styles.textMain,{flexWrap:'wrap'}]}>{user.email}</Text>
+                                    </View>
                                 </View>
                             </View>
                         </View>
@@ -121,7 +125,7 @@ const styles = StyleSheet.create({
     prolileOnlineImg:{ 
         height: 11, 
         width: 9, 
-        zIndex: 99, 
+        zIndex: 1, 
         position: 'absolute', 
         left:'45%', 
         bottom: -7
@@ -131,14 +135,15 @@ const styles = StyleSheet.create({
         width:24,
         paddingRight:10,
         position: 'absolute',
-        right: 105,
-        top: 2
+        left: 10,
+        top: 5
     },
     alignImagesInRow:{
         flexDirection:'row',
         width:'100%',
+        paddingLeft:30,
         marginBottom:10,
-        height: 15
+        // height: 15
     },
     widthImageRight:{
         position: 'absolute',
@@ -173,7 +178,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 10,
         shadowOffset: { height: 2, width: 0 },
-        marginTop:20
+        marginTop:20,
     },
     imageMain:{
         height:'100%',

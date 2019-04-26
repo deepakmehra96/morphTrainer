@@ -36,7 +36,7 @@ class Policies extends React.Component{
         let {data} = this.state;
         return(
             <Container>
-                <Header  navigation={this.props.navigation} showShadow={true} label="Policies" source={require('../../assets/images/back-btn.png')} />
+                <Header  navigation={this.props.navigation} showShadow={true} label="Privacy Policy" source={require('../../assets/images/back-btn.png')} />
                 <TextContent htmlContent={data}/> 
                 {this.handelLoader()}
             </Container>

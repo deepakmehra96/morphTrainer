@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_URL } from './constant';
-import { SET_USER_DETAIL } from './ActionTypes';
+import { SET_USER_DETAIL, OPEN_TOAST, SET_GOAL_LIST, GOAL_VISIBLE, DASHBOARD_DATA, SET_DASHBOARD_DATA, SET_MOMENT_DATE } from './ActionTypes';
 import {AsyncStorage} from 'react-native'
 
 export const coachLogin = (data) => {
@@ -140,5 +140,150 @@ export const changePassword = (data) => {
                 return reject(error.response)
             })
         )
+    }
+}
+
+export const questionList = () => {
+    return dispatch => {
+        return new Promise(
+            (resolve, reject) => 
+            axios.get(`${API_URL}/questions`)
+            .then(res => {
+                console.log(res,"apire")
+                return resolve(res)
+            })
+            .catch((error) => {
+                console.log({...error})
+                return reject(error.message)
+            })
+        )
+    }
+}
+
+export const getUserAnswers = (id) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        console.log(token,id)
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+ token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.get(`${API_URL}/getUserAnswers/${id}`,{headers: headers})
+            .then(async res => {
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.message)
+            })
+        )
+    }
+}
+
+export const getUserDetails = (id) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.get(`${API_URL}/getUserDetails/${id}`,{headers: headers})
+            .then(async res => {
+                if(res.data.message === 'User detail'){
+                    await AsyncStorage.setItem('user', JSON.stringify(res.data.user))
+                    dispatch(setUserDetail(res.data.user))
+                }
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.message)
+            })
+        )
+    }
+}
+
+export const getGoalList = () => {
+    return dispatch => {
+        return new Promise(
+            (resolve, reject) => 
+            axios.get(`${API_URL}/goallist`)
+            .then(res => {
+                if(res.data.data){
+                    dispatch(setGoalList(res.data.data))
+                }
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.message)
+            })
+        )
+    }
+}
+
+export const getDashboardData = (data) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        console.log(token,"token")
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/getDashboardData/`, data, {headers: headers})
+            .then(res => {
+                if(res.data.message === 'User dashboard details'){
+                    dispatch(setDashboardData(res.data))
+                }
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.response)
+            })
+        )
+    }
+}
+
+export const openToast = data => {
+    return {
+        type: OPEN_TOAST,
+        payload: {
+            toast_msg: data
+        }
+    }
+}
+
+export const setGoalList = data => {
+    return {
+        type: SET_GOAL_LIST,
+        payload: data
+    }
+}
+
+export const setGoalVisible = bool => {
+    return {
+        type: GOAL_VISIBLE,
+        payload: bool
+    }
+}
+
+export const setDashboardData = data => {
+    return {
+        type: DASHBOARD_DATA,
+        payload: data
+    }
+}
+
+export const setDashData = bool => {
+    return {
+        type: SET_DASHBOARD_DATA,
+        payload: bool
+    }
+}
+
+export const setMomentDate = data => {
+    return {
+        type: SET_MOMENT_DATE,
+        payload: data
     }
 }

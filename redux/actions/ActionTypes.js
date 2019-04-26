@@ -7,8 +7,12 @@ export const  GOAL_WEIGHT ='GOAL_WEIGHT'
 export const  GOAL_TYPE ='GOAL_TYPE'
 export const  SET_INTENSITY ='SET_INTENSITY'
 export const  SET_REMEMBER ='SET_REMEMBER'
-
-
+export const  OPEN_TOAST ='OPEN_TOAST'
+export const  SET_GOAL_LIST ='SET_GOAL_LIST'
+export const  GOAL_VISIBLE ='GOAL_VISIBLE'
+export const  DASHBOARD_DATA ='DASHBOARD_DATA'
+export const  SET_DASHBOARD_DATA ='SET_DASHBOARD_DATA'
+export const  SET_MOMENT_DATE ='SET_MOMENT_DATE'
 
 
 

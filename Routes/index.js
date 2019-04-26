@@ -10,6 +10,8 @@ import ChangePassword from "../Views/ChangePassword";
 import FooterMain from "../components/Footer";
 import Options from "../Views/Options";
 import CheckRoute from "../Views/CheckRoute";
+import PersonalityQa from "../Views/Customers/PersonalityQa";
+import Dashboard from "../Views/Dashboard";
 
 const AppNavigator = createStackNavigator(
     {
@@ -22,10 +24,15 @@ const AppNavigator = createStackNavigator(
         EditPofile: EditPofile,
         ChangePassword:ChangePassword,
         FooterMain:FooterMain,
-        CheckRoute: CheckRoute
+        CheckRoute: CheckRoute,
+        PersonalityQa: PersonalityQa,
+        Dashboard: Dashboard
       },
       {
-        initialRouteName: "CheckRoute"
+        initialRouteName: "CheckRoute",
+        defaultNavigationOptions: {
+          gesturesEnabled: false
+        },
       }
 );
 
