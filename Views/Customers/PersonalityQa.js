@@ -25,6 +25,7 @@ class PersonalityQa extends React.Component {
         answers: {}
     }
     componentDidMount(){
+        let {user_id} = this.props.navigation.state && this.props.navigation.state.params
         this.setState({ showLoader: true, editLoader: true })
         this.props.dispatch(questionList()).then(res => {
             this.setState({ showLoader: false })
@@ -36,7 +37,8 @@ class PersonalityQa extends React.Component {
             this.setState({ showLoader: false })
             console.log({...err},"err")
         })
-        this.props.dispatch(getUserAnswers('5cb42576b38edb7f10202805')).then(res => {
+        this.props.dispatch(getUserAnswers(user_id)).then(res => {
+            console.log(res,"qares")
             this.setState({editLoader: false})
             if(res.data.message === 'success'){
                 let apiData = res.data.data
@@ -44,6 +46,8 @@ class PersonalityQa extends React.Component {
                 let optionsId = optionData.map(item => item)
                 this.setState({ options: optionsId, answers: apiData })
             }
+        }).catch(err => {
+            console.log(err,"err123")
         })
     }
 

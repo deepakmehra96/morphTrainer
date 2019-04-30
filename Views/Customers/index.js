@@ -3,9 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, AsyncStorage, Dimensio
 import { Container, Content } from 'native-base';
 import Header from '../../components/Header';
 import { Switch } from 'react-native-switch';
-import { setUserDetail } from '../../redux/actions';
+import { setUserDetail, getCustomerList } from '../../redux/actions';
 import { connect } from 'react-redux'
 import GradientBtn from '../../components/LinearGradient';
+import ShowLoader from '../../components/ShowLoader';
 var { height, width } = Dimensions.get('window');
 
 class Options extends React.Component {
@@ -14,50 +15,71 @@ class Options extends React.Component {
         header: null
     }
     state = {
-        list: [1,1,1,1,1,1,1]
+        list: [1,1,1,1,1,1,1],
+        showLoader: false
+    }
+    componentDidMount(){
+        let { user } = this.props.userData
+        console.log(user,"user")
+        this.setState({ showLoader: true })
+        this.props.dispatch(getCustomerList(user._id)).then(res => {
+            this.setState({ showLoader: false })
+            console.log(res,"resres")   
+        })
+    }
+
+    handelLoader() {
+        let { showLoader } = this.state
+        if (showLoader) {
+            return <ShowLoader />
+        } else {
+            return null
+        }
+        return
     }
     
     render() {
-        let { list } = this.state;
+        let { customerList } = this.props.userData
         return (
             <Container>
                 <Header navigation={this.props.navigation} showShadow={true} label="Customers list"  />
                 <Content>
                     <View style={{paddingLeft: 25,paddingRight: 25,marginBottom: 100}}>
-                        {list.map((item,key) => {
+                        {customerList.length ? customerList.map((item,key) => {
                             return(
                                 <View style={[styles.alignRowGoals,styles.mainList]} key={key}>
                                     <View>
                                         <TouchableOpacity style={styles.marginBottom10}>
                                             <GradientBtn text="Analytics" style={styles.gradientButn}/>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('Dashboard')}>
+                                        <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('Dashboard',{user_id: item._id})}>
                                             <GradientBtn text="Dashboard" style={styles.gradientButn}/>
                                         </TouchableOpacity>
                                         <Text style={styles.greyText}>Calories intake: 1030 cal</Text>
                                     </View>
                                     <View style={{flexWrap: 'wrap',overflow: 'hidden'}}>
-                                        <Text style={styles.nameText}>Mike Brown</Text>
+                                        <Text style={styles.nameText}>{item.name}</Text>
                                         <View style={styles.centerRow}><Text style={styles.goalText}>Goal: </Text><Text style={styles.orangeText}>Gain weight</Text></View>
                                         <Text style={[styles.orangeText]}>72 kg</Text>
                                     </View>
                                     <View style={styles.mainImageStyle}>
-                                        <Image source={require('../../assets/images/person.jpg')} style={styles.imageStyle}/>
+                                        <Image source={item.avatar ? item.avatar : require('../../assets/images/person.jpg')} style={styles.imageStyle}/>
                                     </View>
                                     <View style={styles.alignEnd}>
                                         <TouchableOpacity style={styles.marginBottom10}>
                                             <GradientBtn text="Chat" style={styles.gradientButn}/>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('PersonalityQa')}>
+                                        <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('PersonalityQa',{user_id: item._id})}>
                                             <GradientBtn text="Personality Q&A" style={styles.gradientButn}/>
                                         </TouchableOpacity>
                                         <Text style={styles.greyText}>Calories intake: 1030 cal</Text>
                                     </View>
                                 </View>
                             )
-                        })}
+                        }): <View><Text>No customer yet</Text></View>}
                     </View>
                 </Content>
+                {this.handelLoader()}
             </Container>
         )
     }

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import ProgressCircle from 'react-native-progress-circle'
 import GradientBtn from '../../components/LinearGradient';
 import DialogBox from '../../components/Common/DialogBox';
-import { getGoalList, addUserGoal, openToast, setGoalVisible, getUserDetails, getDashboardData, setDashData, setMomentDate } from '../../redux/actions';
+import { getGoalList, addUserGoal, openToast, setGoalVisible, getUserDetails, getDashboardData, setDashData, setMomentDate, getCustomerList } from '../../redux/actions';
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
 import ShowLoader from '../../components/ShowLoader';
 import {InputAutoSuggest} from '../../components/Common/react-native-autocomplete-search';
@@ -50,10 +50,7 @@ class Dashboard extends React.Component {
     componentDidMount(){
         let { date } = this.props.userData
         this.setState({ showLoader: true })
-        this.props.dispatch(getUserDetails('5cb42576b38edb7f10202805')).then(res => {
-            console.log(res,"res.data")
-            this.setState({ showLoader: false })
-        })
+        console.log(this.props,"this.props")
         this.getDashboardApi(date)
         this.props.dispatch(getGoalList()).then(res => {
             this.setState({ showLoader: false })
@@ -77,12 +74,15 @@ class Dashboard extends React.Component {
 
 
     getDashboardApi(date){
+        let {user_id} = this.props.navigation.state && this.props.navigation.state.params
+        console.log(this.props.navigation,user_id,"jhgcf")
         this.setState({ dbLoader: true })
         let data = {
-            user_id: '5cb42576b38edb7f10202805',
+            user_id: user_id,
             date: date
         }
         this.props.dispatch(getDashboardData(data)).then(res => {
+            console.log(res,"res0987")
             this.renderData(res.data)
             this.renderFoodItem('Breakfast')
             this.renderFoodItem('Lunch')
@@ -90,6 +90,7 @@ class Dashboard extends React.Component {
             this.renderFoodItem('Snacks')
             this.setState({ dbLoader: false})
         }).catch(err => {
+            console.log(err,"err0987")
             this.setState({ dbLoader: false })
         })
     }
@@ -161,14 +162,17 @@ class Dashboard extends React.Component {
     onAddUserGoal = () => {
         let { setGoal } = this.state
         let { date } = this.props.userData
+        let {user_id} = this.props.navigation.state && this.props.navigation.state.params
         let data = {
             goal: setGoal,
             color: this.state.selectedColor,
+            user_id: user_id,
             date: date
         }
         if(setGoal){
             this.setState({ goalLoader: true })
             this.props.dispatch(addUserGoal(data)).then(res => {
+                console.log(res,"resgoal")
                 this.props.dispatch(setGoalVisible(false))
                 this.setState({ goalLoader: false })
                 if(res.data.message){
@@ -179,6 +183,7 @@ class Dashboard extends React.Component {
                     this.props.navigation.navigate('Dashboard')
                 }
             }).catch(err => {
+                console.log(err,"errgoal")
                 this.setState({ goalLoader: false })
                 if(err.message){
                     this.props.dispatch(openToast(err.message))
@@ -391,7 +396,7 @@ class Dashboard extends React.Component {
     }
     render() {
         let { user, goalVisible, dashboardData, date } = this.props.userData
-        console.log(date,"date123123")
+        console.log(this.props.userData,"date123123")
         console.log(PixelRatio.get(),"user")
         return (
             <Container>
@@ -469,7 +474,7 @@ class Dashboard extends React.Component {
                                 <View>
                                     {dashboardData.Tasks && dashboardData.Tasks.length ? dashboardData.Tasks.map((item, key) => {
                                         return(
-                                            <TouchableOpacity style={[styles.checkView,{height: 35,paddingLeft: 40,borderColor: item.color,paddingRight: 40,borderBottomWidth: 0.5}]} onPress={this.changeGoalStatus.bind(this, item)} activeOpacity={0.9}>
+                                            <TouchableOpacity style={[styles.checkView,{height: 35,paddingLeft: 40,borderColor: item.color,paddingRight: 40,borderBottomWidth: 0.5}]} activeOpacity={0.9}>
                                                 <View style={{position: 'absolute',height: 12,width: 12, borderRadius: 10, backgroundColor: item.color,left: 10}}></View>
                                                 {this.checkedGoal(item)}
                                                 <View style={[styles.checkBoxAbs,{top: 10}]}>{this.showChecked(item.status)}</View>

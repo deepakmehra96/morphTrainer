@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_URL } from './constant';
-import { SET_USER_DETAIL, OPEN_TOAST, SET_GOAL_LIST, GOAL_VISIBLE, DASHBOARD_DATA, SET_DASHBOARD_DATA, SET_MOMENT_DATE } from './ActionTypes';
+import { SET_USER_DETAIL, OPEN_TOAST, SET_GOAL_LIST, GOAL_VISIBLE, DASHBOARD_DATA, SET_DASHBOARD_DATA, SET_MOMENT_DATE, SET_CUSTOMER_LIST, SET_USER, SET_WORKING_HOURS, SET_NOTIFICATION, SET_SLOTS, SET_DATA_SOURCE, SET_RIGHT_DATA_SOURCE, SET_DURATION_TYPE, SET_DURATION } from './ActionTypes';
 import {AsyncStorage} from 'react-native'
 
 export const coachLogin = (data) => {
@@ -46,6 +46,15 @@ export const setUserDetail = data => {
         type: SET_USER_DETAIL,
         payload: {
             user: data
+        }
+    }
+}
+
+export const setUser = data => {
+    return {
+        type: SET_USER,
+        payload: {
+            userDetail: data
         }
     }
 }
@@ -180,7 +189,7 @@ export const getUserAnswers = (id) => {
     }
 }
 
-export const getUserDetails = (id) => {
+export const getCustomerList = (id) => {
     return async dispatch => {
         let token = await AsyncStorage.getItem('token')
         var headers = {
@@ -188,11 +197,36 @@ export const getUserDetails = (id) => {
         }
         return new Promise(
             (resolve, reject) => 
-            axios.get(`${API_URL}/getUserDetails/${id}`,{headers: headers})
+            axios.get(`${API_URL}/coach/customerList/${id}`,{headers: headers})
             .then(async res => {
-                if(res.data.message === 'User detail'){
-                    await AsyncStorage.setItem('user', JSON.stringify(res.data.user))
-                    dispatch(setUserDetail(res.data.user))
+                console.log(res,"121212")
+                if(res.data.message === 'Customers List'){
+                    dispatch(setCustomerList(res.data.data))
+                }
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.message)
+            })
+        )
+    }
+}
+
+export const getSettings = () => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.get(`${API_URL}/coach/settings`,{headers: headers})
+            .then(async res => {
+                console.log(res,"121212")
+                if(res.data.message === 'Coach working hours'){
+                    dispatch(setWorkinghours(res.data.data.WorkingHours))
+                    dispatch(setNotification(res.data.data.notification))
+                    dispatch(setSlots(res.data.data.slots))
                 }
                 return resolve(res)
             })
@@ -235,6 +269,63 @@ export const getDashboardData = (data) => {
                 if(res.data.message === 'User dashboard details'){
                     dispatch(setDashboardData(res.data))
                 }
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.response)
+            })
+        )
+    }
+}
+
+export const addUserGoal = (data) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/addusergoals/`, data, {headers: headers})
+            .then(res => {
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.response)
+            })
+        )
+    }
+}
+
+export const changeNotification = (data) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/coach/changeNotification/`, data, {headers: headers})
+            .then(res => {
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.response)
+            })
+        )
+    }
+}
+
+export const selectSlot = (data) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/coach/selectSlot/`, data, {headers: headers})
+            .then(res => {
                 return resolve(res)
             })
             .catch((error) => {
@@ -287,3 +378,61 @@ export const setMomentDate = data => {
         payload: data
     }
 }
+
+export const setCustomerList = data => {
+    return {
+        type: SET_CUSTOMER_LIST,
+        payload: data
+    }
+}
+
+export const setNotification = bool => {
+    return {
+        type: SET_NOTIFICATION,
+        payload: bool
+    }
+}
+
+export const setWorkinghours = data => {
+    return {
+        type: SET_WORKING_HOURS,
+        payload: data
+    }
+}
+
+export const setSlots = data => {
+    return {
+        type: SET_SLOTS,
+        payload: data
+    }
+}
+
+export const setDataSource = data => {
+    return {
+        type: SET_DATA_SOURCE,
+        payload: data
+    }
+}
+
+export const setRightDataSource = data => {
+    return {
+        type: SET_RIGHT_DATA_SOURCE,
+        payload: data
+    }
+}
+
+export const setDurationType = data => {
+    return {
+        type: SET_DURATION_TYPE,
+        payload: data
+    }
+}
+
+export const setDuration = data => {
+    return {
+        type: SET_DURATION,
+        payload: data
+    }
+}
+
+
