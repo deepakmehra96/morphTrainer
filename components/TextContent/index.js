@@ -9,6 +9,14 @@ class TextContent extends React.Component {
     static navigationOptions = {
         header: null
     }
+    renderHtml(){
+        let { htmlContent } = this.props
+        if(htmlContent){
+            return htmlContent
+        }else{
+            return ' '
+        }
+    }
     render() {
         let { htmlContent } = this.props
         return (
@@ -59,7 +67,7 @@ class TextContent extends React.Component {
                         
                 </View> */}
                 <ScrollView style={{ flex: 1,paddingLeft: 20, paddingRight: 20 }}>
-                    <HTML html={htmlContent}  />
+                    <HTML html={this.renderHtml()}  />
                 </ScrollView>
             </Content>
         )

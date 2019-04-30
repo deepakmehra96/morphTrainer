@@ -84,7 +84,7 @@ class FooterMain extends React.Component {
             {/* </View> */}
                 <Footer style={{ position: "absolute", bottom: 0, backgroundColor:'#fff',height:60}}>
                     <FooterTab style={{ backgroundColor:'#fff'}}>
-                        <Button vertical onPress={() => this.onClickBtn(3)}>
+                        <Button vertical onPress={() => this.onClickBtn(1)}>
                             <View style={styles.imageOutFirst}>
                                 <Image source={this.imageStyle(1)} style={styles.imageMain} />
                             </View>

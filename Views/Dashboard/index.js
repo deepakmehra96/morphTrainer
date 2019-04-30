@@ -326,16 +326,6 @@ class Dashboard extends React.Component {
         }
     }
 
-    checkWeightType(){
-        let { user } = this.props.userData
-        if(parseInt(user && user.current_weight) > parseInt(user && user.goal_weight)){
-            return 'Lose'
-        }else{
-            return 'Gain'
-        }
-    }
-
-
     totalMealCalories = (item) => {
         if(item){
             let { totalBreakfastCalories, totalDinnerCalories, totalLunchCalories, totalSnacksCalories } = item
@@ -394,8 +384,19 @@ class Dashboard extends React.Component {
             return calGoal
         }
     }
+    checkWeightType(){
+        let { user_detail } = this.props.userData && this.props.userData.dashboardData
+        if(user_detail){
+            if(parseInt(user_detail.current_weight) > parseInt(user_detail.goal_weight)){
+                return 'Lose'
+            }else{
+                return 'Gain'
+            }
+        }
+    }
     render() {
         let { user, goalVisible, dashboardData, date } = this.props.userData
+        let { user_detail } = this.props.userData && this.props.userData.dashboardData
         console.log(this.props.userData,"date123123")
         console.log(PixelRatio.get(),"user")
         return (
@@ -410,9 +411,6 @@ class Dashboard extends React.Component {
                                 <View style={styles.flexRow}><Text style={styles.whiteText}>Hello</Text><Text style={styles.whiteTextNotBold}>  {user && user.name},</Text></View>
                                 <Text style={styles.whiteText}>Things look alright</Text>
                             </View>
-                            <TouchableOpacity style={styles.notificationView} onPress={() => this.props.navigation.navigate('Notifications')}>
-                                <Image source={require('../../assets/images/notification.png')} style={styles.imageStyle}/>
-                            </TouchableOpacity>
                         </ImageBackground>
                         <View style={styles.whiteImageView}></View>
                     </View>
@@ -431,7 +429,7 @@ class Dashboard extends React.Component {
                                     <Text style={styles.heading}>Latest weight, Jan 22</Text>
                                 </View>
                                 <View style={styles.contentInRow}>
-                                    <Text style={styles.content}>{parseInt(user && user.current_weight)}</Text>
+                                    <Text style={styles.content}>{parseInt(user_detail && user_detail.current_weight)}</Text>
                                     <Text style={styles.contentValue}>kg</Text>
                                     <View style={styles.imageIconOut}>
                                         <Image source={require('../../assets/images/profileUp.png')} style={styles.imageMain} />

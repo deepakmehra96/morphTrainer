@@ -76,7 +76,7 @@ class Options extends React.Component {
                                     </View>
                                 </View>
                             )
-                        }): <View><Text>No customer yet</Text></View>}
+                        }): <View></View>}
                     </View>
                 </Content>
                 {this.handelLoader()}
