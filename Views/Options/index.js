@@ -188,17 +188,17 @@ class Options extends React.Component {
                                 </View>
 
                             </View>
-                            <View style={styles.contentOut}>
+                            <TouchableOpacity style={styles.contentOut} onPress={() => this.props.navigation.navigate('WorkingHours')}>
                                 <View style={styles.iconContainer}>
                                     <Image source={require('../../assets/images/coach-settings_13.png')} style={styles.imageMain} />
                                 </View>
                                 <Text style={styles.textMain}>
                                     Working Hours
                                 </Text>
-                                <View style={styles.colorTextOut}>
-                                    <Image source={require('../../assets/images/right-arrow.png')} style={styles.imageMain} />
+                                <View style={{width: 15,height: 15,position: 'absolute',right: 10,top: 13}}>
+                                    <Image source={require('../../assets/images/right.jpg')} style={styles.imageMain} />
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                             <TouchableOpacity style={styles.contentOut} onPress={this.toggleModal.bind(this, true)}>
                                 <View style={styles.iconContainer}>
                                     <Image source={require('../../assets/images/coach-settings_16.png')} style={styles.imageMain} />

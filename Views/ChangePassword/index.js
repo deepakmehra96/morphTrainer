@@ -101,7 +101,7 @@ class ChangePassword extends React.Component {
         return (
             <Container>
                 <Content>
-                    <View style={{ position: "absolute", height: height, width: '100%' }}>
+                    <View style={{ position: "absolute", height: width - 120, width: '100%' }}>
                         <Image source={require('../../assets/images/bg.png')} style={styles.imageMain}></Image>
                     </View>
                     <Header widthAdjust={styles.widthAdjust}
@@ -145,7 +145,7 @@ class ChangePassword extends React.Component {
                     textStyle={{color: '#fff', textAlign: 'center'}}
                 />
                 {this.handelLoader()}
-                <View style={{position: 'absolute',bottom: -20,width: '100%'}}>
+                <View style={{position: 'absolute',bottom: 0,width: '100%'}}>
                     <DownButton textMain="SAVE CHANGES" onClickBtn={() => this.handelSubmit()}/>
                 </View>
             </Container>
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 99,
-        marginTop: 120,
+        marginTop: width-210,
         paddingLeft: 30,
         paddingRight: 30,
     },
@@ -189,11 +189,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#fff',
         borderRadius: 50,
-        elevation: 6,
-        shadowColor: "#000000",
-        shadowOpacity: 0.3,
-        shadowRadius: 10,
-        shadowOffset: { height: 2, width: 0 },
+        marginTop: -40
     },
     prolileEditImg: {
         height: 16,

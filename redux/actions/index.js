@@ -335,6 +335,25 @@ export const selectSlot = (data) => {
     }
 }
 
+export const changeWorkingHours = (data) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/coach/changeWorkingHours/`, data, {headers: headers})
+            .then(res => {
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.response)
+            })
+        )
+    }
+}
+
 export const openToast = data => {
     return {
         type: OPEN_TOAST,
@@ -434,5 +453,7 @@ export const setDuration = data => {
         payload: data
     }
 }
+
+
 
 

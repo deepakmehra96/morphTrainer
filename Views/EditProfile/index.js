@@ -158,7 +158,7 @@ class EditPofile extends React.Component {
         return (
             <Container>
                 <Content>
-                    <View style={{ position: "absolute", height: height, width: '100%' }}>
+                    <View style={{ position: "absolute", height: width - 120, width: '100%' }}>
                         <Image source={require('../../assets/images/bg.png')} style={styles.imageMain}></Image>
                     </View>
                     <Header widthAdjust={styles.widthAdjust}
@@ -219,7 +219,7 @@ class EditPofile extends React.Component {
                     
                 </Content>
                 {this.handelLoader()}
-                <View style={{position: 'absolute',width: '100%',bottom: -20}}>
+                <View style={{position: 'absolute',width: '100%',bottom: 0}}>
                     <DownButton textMain="SAVE CHANGES" onClickBtn={() => this.handelSubmit()} />
                 </View>
                 <Toast
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 99,
-        marginTop: 120,
+        marginTop: width-210,
         paddingLeft: 30,
         paddingRight: 30,
     },
@@ -271,7 +271,8 @@ const styles = StyleSheet.create({
         width: 80,
         borderWidth: 1,
         borderColor: '#fff',
-        borderRadius: 50
+        borderRadius: 50,
+        marginTop: -40
     },
     prolileEditImg: {
         height: 16,
