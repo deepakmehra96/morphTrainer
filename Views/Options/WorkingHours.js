@@ -24,7 +24,8 @@ class WorkingHours extends React.Component{
         start_time: '00:00',
         end_time: '00:00',
         dayId: '',
-        showLoader: false
+        showLoader: false,
+        day: ''
     }
     changeNotification(){
         
@@ -48,7 +49,7 @@ class WorkingHours extends React.Component{
     openWorkingHours = (visible,data) => {
         this.setState({ editHours: visible })
         if(data){
-            this.setState({ start_time: data.start_time, end_time: data.end_time, dayId: data._id })
+            this.setState({ start_time: data.start_time, end_time: data.end_time, dayId: data._id, day: data.day })
         }
     }
 
@@ -127,7 +128,7 @@ class WorkingHours extends React.Component{
         return
     }
     render(){
-        let { editHours, isDateTimePickerVisible, isDateTimePickerVisible2 } = this.state;
+        let { editHours, isDateTimePickerVisible, isDateTimePickerVisible2, day } = this.state;
         console.log(this.props,"props")
         let { workingHours } = this.props.userData || []
         return(
@@ -189,7 +190,7 @@ class WorkingHours extends React.Component{
                     </View>
                 </Content>
                 {this.handelLoader()}
-                <DialogBox visible={editHours} openCloseModal={this.openWorkingHours} headingText={"Monday's Working Hours"} content={this.workingHoursContent}/>
+                <DialogBox visible={editHours} openCloseModal={this.openWorkingHours} headingText={`${day}'s Working Hours`} content={this.workingHoursContent}/>
                 
             </Container>
         )

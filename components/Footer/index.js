@@ -17,7 +17,6 @@ class FooterMain extends React.Component {
         this.state = {
             activeIndex:2
         }
-
     }
  
     onClickBtn(val){

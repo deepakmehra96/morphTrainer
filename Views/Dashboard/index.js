@@ -414,6 +414,9 @@ class Dashboard extends React.Component {
                         </ImageBackground>
                         <View style={styles.whiteImageView}></View>
                     </View>
+                    <TouchableOpacity style={{position: 'absolute',width: 20,height: 15, left: 20,top: 30}} onPress={() => this.props.navigation.goBack()}>
+                        <Image source={require('../../assets/images/back-btn.png')} style={styles.imageStyle} />
+                    </TouchableOpacity>
                     <View style={styles.mainContainer}>
                         <View style={styles.alignRowGoals}>
                             <View style={styles.innerCon}>

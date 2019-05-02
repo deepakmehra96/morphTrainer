@@ -13,6 +13,7 @@ import CheckRoute from "../Views/CheckRoute";
 import PersonalityQa from "../Views/Customers/PersonalityQa";
 import Dashboard from "../Views/Dashboard";
 import WorkingHours from "../Views/Options/WorkingHours";
+import Gallery from "../Views/Profile/Gallery";
 
 const AppNavigator = createStackNavigator(
     {
@@ -28,7 +29,8 @@ const AppNavigator = createStackNavigator(
         CheckRoute: CheckRoute,
         PersonalityQa: PersonalityQa,
         Dashboard: Dashboard,
-        WorkingHours: WorkingHours
+        WorkingHours: WorkingHours,
+        Gallery: Gallery
       },
       {
         initialRouteName: "CheckRoute",

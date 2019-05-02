@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, CameraRoll } from 'react-native';
 import { Container, Content } from 'native-base';
 import Header from '../../components/Header';
 import TextBox from '../../components/TextField';
@@ -144,13 +144,34 @@ class EditPofile extends React.Component {
     }
 
     handelLoader() {
-        let { showLoader, loader } = this.state
-        if (showLoader || loader) {
+        let { showLoader, loader, anotherLoader } = this.state
+        if (showLoader || loader || anotherLoader) {
             return <ShowLoader />
         } else {
             return null
         }
         return
+    }
+
+    getPhoto = () => {
+        this.setState({ anotherLoader: true })
+        console.log(CameraRoll,)
+        CameraRoll.getPhotos({
+            first: 200,
+            assetType: 'Photos',
+        })
+        .then(r => {
+            this.setState({ anotherLoader: false })
+            if(r.edges){
+                this.props.navigation.navigate('Gallery', {
+                    photos: r.edges
+                })
+            }
+        })
+        .catch((err) => {
+            this.setState({ anotherLoader: false})
+            //Error Loading Images
+        })
     }
 
     render() {
@@ -166,7 +187,7 @@ class EditPofile extends React.Component {
                         source={require('../../assets/images/back-white-arrow.png')}
                         label="Edit profile"
                         navigation={this.props.navigation} />
-                    <View style={styles.conatiner}>
+                    <TouchableOpacity style={styles.conatiner} onPress={this.getPhoto} activeOpacity={0.7}>
                         <View style={styles.prfilepicOut}>
                             <View style={styles.prolileEditImg}>
                                 <Image source={require('../../assets/images/edit.png')} style={styles.imageMain} />
@@ -178,7 +199,7 @@ class EditPofile extends React.Component {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('ChangePassword')}>
                             <Text style={styles.textChangePass}>Change Password</Text>
                         </TouchableOpacity>
-                    </View>
+                    </TouchableOpacity>
                     <View style={styles.paddingMain}>
                         <View style={styles.margintop20}>
                             <TextBox label="Name" onChange={this.handelChnage.bind(this, 'name')} value={userData.name}/>
