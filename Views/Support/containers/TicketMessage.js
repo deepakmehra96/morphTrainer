@@ -52,27 +52,6 @@ class TicketMessage extends React.Component {
         header: null
     }
 
-    checkBorderBottom() {
-        return (
-            <View
-                style={{
-                    width: '100%',
-                    opacity: 0.4,
-                    borderWidth: 1,
-                    borderColor: '#fff',
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 12,
-                    },
-                    shadowOpacity: 0.8,
-                    shadowRadius: 3,
-                    elevation: 24,
-                }}>
-            </View>
-        )
-    }
-
     handleChatMessages(val , index) {
         if (val.status == 1) {
            return (
@@ -91,7 +70,7 @@ class TicketMessage extends React.Component {
        } else {
            return (
             <View key={index} style={styles.recieveMsgOutMain}>
-               <View key={index} style={styles.recieveMsgOut}>
+               <View style={styles.recieveMsgOut}>
                    <Text style={styles.recieveMsg}>
                    {val.text}
                    </Text>
@@ -136,7 +115,6 @@ class TicketMessage extends React.Component {
                         </ScrollView> 
                     </View>
                 </Content>
-                {/* {this.checkBorderBottom()} */}
                 <View style={styles.bottomContainer}>
                         <View>
                             <Text style={styles.title}>WRITE YOUR MESSAGE</Text>
@@ -175,7 +153,6 @@ class TicketMessage extends React.Component {
 export default connect(state => state)(TicketMessage)
 
 const styles = StyleSheet.create({
-
     bottomContainer: {
         height: 240,
         paddingLeft: 25,
