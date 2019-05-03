@@ -49,7 +49,7 @@ class Header extends React.Component {
     }
     render() {
         return (
-            <View style={{marginBottom: 10}}>
+            <View style={[{marginBottom: 10},this.props.borderStyle]}>
                 <View style={this.checkNotch()}>
                     <View style={styles.width20}>
                         <TouchableOpacity onPress={() => { this.handleBack() }}>
@@ -63,7 +63,7 @@ class Header extends React.Component {
                     </View>
                     <View style={[styles.widthRight, this.props.widthAdjust]}>
                         <TouchableOpacity onPress={() => this.handleRight()}>
-                            <Text style={styles.backText}>{this.props.backText}</Text>
+                            <Text style={[styles.backText,this.props.backStyle]}>{this.props.backText}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.handleRight()}>
                             <Image style={styles.imageaMain} source={this.props.imageBack} />

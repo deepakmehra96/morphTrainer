@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import ProgressCircle from 'react-native-progress-circle'
 import GradientBtn from '../../components/LinearGradient';
 import DialogBox from '../../components/Common/DialogBox';
-import { getGoalList, addUserGoal, openToast, setGoalVisible, getUserDetails, getDashboardData, setDashData, setMomentDate, getCustomerList } from '../../redux/actions';
+import { getGoalList, addUserGoal, openToast, setGoalVisible, getUserDetails, getDashboardData, setDashData, setMomentDate, getCustomerList, changeStatus, deleteGoal } from '../../redux/actions';
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
 import ShowLoader from '../../components/ShowLoader';
 import {InputAutoSuggest} from '../../components/Common/react-native-autocomplete-search';
@@ -366,6 +366,11 @@ class Dashboard extends React.Component {
                 bg_list: bg_list.cloneWithRows(data.blood_glucose)
             });
         }
+        if(data.Tasks){
+            this.setState({
+                tasks_list: tasks_list.cloneWithRows(data.Tasks)
+            });
+        }
         
     }
     renderProgressCalculation(){
@@ -394,6 +399,47 @@ class Dashboard extends React.Component {
             }
         }
     }
+
+    changeGoalStatus(item){
+        let data = {
+            id: item._id
+        }
+        console.log(data,"datadatadatadatadata")
+        let { date } = this.props.userData
+        if(item.status){
+            this.setState({ showLoader: true })
+            this.props.dispatch(changeStatus(data)).then(res => {
+                this.setState({ showLoader: false })
+                this.props.dispatch(openToast(res.data.message))
+                if(res.data.message === 'Goal status updated successfully'){
+                    console.log(res,'resresresres')
+                    this.getDashboardApi(date)
+                }
+            }).catch(err => {
+                this.setState({ showLoader: false })
+                this.props.dispatch(openToast(err.data.message))
+            })
+        }
+    }
+
+    onRemoveGoal(data,secId, rowId, rowMap){
+        let apiData = {
+            GoalId: data._id
+        }
+        let { date } = this.props.userData
+        this.setState({ showLoader: true })
+        this.props.dispatch(deleteGoal(apiData)).then(res => {
+            this.props.dispatch(openToast(res.data.message))
+            this.setState({ showLoader: false })
+            if(res.data.message === 'Goal deleted successfully'){
+                rowMap[`${secId}${rowId}`].props.closeRow()
+                this.getDashboardApi(date)
+            }
+        }).catch(err => {
+            this.setState({ showLoader: false })
+        })
+    }
+
     render() {
         let { user, goalVisible, dashboardData, date } = this.props.userData
         let { user_detail } = this.props.userData && this.props.userData.dashboardData
@@ -473,7 +519,7 @@ class Dashboard extends React.Component {
                                         />
                                 </View>
                                 <View>
-                                    {dashboardData.Tasks && dashboardData.Tasks.length ? dashboardData.Tasks.map((item, key) => {
+                                    {/* {dashboardData.Tasks && dashboardData.Tasks.length ? dashboardData.Tasks.map((item, key) => {
                                         return(
                                             <TouchableOpacity style={[styles.checkView,{height: 35,paddingLeft: 40,borderColor: item.color,paddingRight: 40,borderBottomWidth: 0.5}]} activeOpacity={0.9}>
                                                 <View style={{position: 'absolute',height: 12,width: 12, borderRadius: 10, backgroundColor: item.color,left: 10}}></View>
@@ -481,7 +527,23 @@ class Dashboard extends React.Component {
                                                 <View style={[styles.checkBoxAbs,{top: 10}]}>{this.showChecked(item.status)}</View>
                                             </TouchableOpacity>
                                         )
-                                    }): <View></View>}
+                                    }): <View></View>} */}
+
+                                    <List
+                                        rightOpenValue={-75}
+                                        disableRightSwipe={true}
+                                        dataSource={this.state.tasks_list}
+                                        renderRow={data =>
+                                            <TouchableOpacity style={[styles.checkView,{height: 35,paddingLeft: 40,borderColor: data.color,paddingRight: 40,borderBottomWidth: 0.5}]} activeOpacity={0.9} onPress={this.changeGoalStatus.bind(this, data)}>
+                                                <View style={{position: 'absolute',height: 12,width: 12, borderRadius: 10, backgroundColor: data.color,left: 10}}></View>
+                                                {this.checkedGoal(data)}
+                                                <View style={[styles.checkBoxAbs,{top: 10}]}>{this.showChecked(data.status)}</View>
+                                            </TouchableOpacity>}
+                                        renderRightHiddenRow={(data, secId, rowId, rowMap) =>
+                                        <Button full danger onPress={_ => this.onRemoveGoal(data,secId, rowId, rowMap)} >
+                                            <Icon active name="trash" style={{fontSize: 25}}/>
+                                        </Button>}
+                                    />
                                 </View>
                             </View>
                         </View>

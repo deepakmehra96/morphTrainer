@@ -5,6 +5,9 @@ import Header from '../Header';
 import Profile from '../../Views/Profile';
 import Options from '../../Views/Options';
 import Customers from '../../Views/Customers';
+import ShowLoader from '../ShowLoader';
+import { getUserDetails } from '../../redux/actions';
+import { connect } from 'react-redux'
 var { height, width } = Dimensions.get('window');
 
 class FooterMain extends React.Component {
@@ -15,7 +18,20 @@ class FooterMain extends React.Component {
     constructor(){
         super()
         this.state = {
-            activeIndex:2
+            activeIndex:2,
+            loader: false
+        }
+    }
+    async componentDidMount(){
+        this.setState({ loader: true })
+        let user = await AsyncStorage.getItem('user')
+        user = JSON.parse(user)
+        console.log(user,"useruser")
+        if(user){
+            this.props.dispatch(getUserDetails(user._id)).then(res => {
+                console.log(res,"res123")
+                this.setState({ loader: false })
+            })
         }
     }
  
@@ -74,12 +90,24 @@ class FooterMain extends React.Component {
                 break;
         }
     }   
+
+    handelLoader() {
+        let { loader } = this.state
+        if (loader) {
+            return <ShowLoader />
+        } else {
+            return null
+        }
+        return
+    }
+
     render() {
         return (
             <View style={styles.containerMain}>
 
             {/* <View> */}
                 {this.handleComponents()}
+                {this.handelLoader()}
             {/* </View> */}
                 <Footer style={{ position: "absolute", bottom: 0, backgroundColor:'#fff',height:60}}>
                     <FooterTab style={{ backgroundColor:'#fff'}}>
@@ -113,7 +141,7 @@ class FooterMain extends React.Component {
         )
     }
 }
-export default FooterMain;
+export default connect(state => state)(FooterMain)
 
 const styles = StyleSheet.create({
     containerMain: {

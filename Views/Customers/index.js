@@ -20,7 +20,7 @@ class Options extends React.Component {
     }
     componentDidMount(){
         let { user } = this.props.userData
-        console.log(user,"user")
+        console.log(user,"user12121212")
         this.setState({ showLoader: true })
         this.props.dispatch(getCustomerList(user._id)).then(res => {
             this.setState({ showLoader: false })
@@ -40,6 +40,7 @@ class Options extends React.Component {
     
     render() {
         let { customerList } = this.props.userData
+        console.log(customerList,"customerList")
         return (
             <Container>
                 <Header navigation={this.props.navigation} showShadow={true} label="Customers list"  />

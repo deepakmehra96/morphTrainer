@@ -223,14 +223,14 @@ class Options extends React.Component {
                             </Text>
                         </LinearGradient>
                         <View style={styles.innerCon}>
-                            <View style={styles.contentOut}>
+                            <TouchableOpacity style={styles.contentOut} onPress={() => this.props.navigation.navigate('Ticket')}>
                                 <View style={styles.iconContainer}>
                                     <Image source={require('../../assets/images/coach-settings_18.png')} style={styles.imageMain} />
                                 </View>
                                 <Text style={styles.textMain}>
                                     Support
                                 </Text>
-                            </View>
+                            </TouchableOpacity>
                             <View style={styles.contentOut}>
                                 <View style={styles.iconContainer}>
                                     <Image source={require('../../assets/images/coach-settings_20.png')} style={styles.imageMain} />

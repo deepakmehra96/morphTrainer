@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity,Image } from 'react-native'
 import { Container, Content } from 'native-base';
 import Header from '../../components/Header';
 import TextContent from '../../components/TextContent';
-import { privacypolicy, changeWorkingHours, getSettings, openToast } from '../../redux/actions';
+import { privacypolicy, changeWorkingHours, getSettings, openToast, changeAvailability } from '../../redux/actions';
 import ShowLoader from '../../components/ShowLoader';
 import { Switch } from 'react-native-switch';
 import { connect } from 'react-redux'
@@ -25,10 +25,27 @@ class WorkingHours extends React.Component{
         end_time: '00:00',
         dayId: '',
         showLoader: false,
-        day: ''
+        day: '',
+        showAvailability: false
     }
-    changeNotification(){
-        
+    changeNotification(data){
+        console.log(data,"data")
+        let apiData = {
+            dayId: data._id,
+            status: !data.status
+        }
+        this.setState({ showAvailability: true })
+        this.props.dispatch(changeAvailability(apiData)).then(res => {
+            console.log(res,"res")
+            if(res.data.message === 'Availability updated successfully'){
+                this.props.dispatch(getSettings()).then(res => {
+                    console.log(res,"rtyu")
+                    if(res.data.message === 'Coach working hours'){
+                        this.setState({ showAvailability: false })
+                    }
+                })
+            }
+        })
     }
     showDateTimePicker(){
         console.log('hi')
@@ -119,8 +136,8 @@ class WorkingHours extends React.Component{
         )
     }
     handelLoader() {
-        let { showLoader } = this.state
-        if (showLoader ) {
+        let { showLoader, showAvailability } = this.state
+        if (showLoader || showAvailability ) {
             return <ShowLoader />
         } else {
             return null
@@ -128,7 +145,7 @@ class WorkingHours extends React.Component{
         return
     }
     render(){
-        let { editHours, isDateTimePickerVisible, isDateTimePickerVisible2, day } = this.state;
+        let { editHours, isDateTimePickerVisible, isDateTimePickerVisible2, day, start_time, end_time } = this.state;
         console.log(this.props,"props")
         let { workingHours } = this.props.userData || []
         return(
@@ -152,7 +169,7 @@ class WorkingHours extends React.Component{
                                         </View>
                                         <View style={styles.notification}>
                                             <Switch
-                                                onValueChange={this.changeNotification.bind(this)}
+                                                onValueChange={this.changeNotification.bind(this, item)}
                                                 circleSize={20}
                                                 backgroundActive={'#d6d6d6'}
                                                 backgroundInactive={'#d6d6d6'}
@@ -178,6 +195,7 @@ class WorkingHours extends React.Component{
                             mode="time"
                             titleIOS="Pick a time"
                             is24Hour={false}
+                            date={new Date()}
                         />
                         <DateTimePicker
                             isVisible={isDateTimePickerVisible2}
@@ -186,6 +204,7 @@ class WorkingHours extends React.Component{
                             mode="time"
                             titleIOS="Pick a time"
                             is24Hour={false}
+                            date={new Date()}
                         />
                     </View>
                 </Content>

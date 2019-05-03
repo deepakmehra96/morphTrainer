@@ -45,6 +45,8 @@
 	<string>Used to determine location of device</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Used to determine location of device</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo Library Access Warning</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

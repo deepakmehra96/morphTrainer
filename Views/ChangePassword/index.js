@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, CameraRoll } from 'react-native';
 import { Container, Content } from 'native-base';
 import Header from '../../components/Header';
 import TextBox from '../../components/TextField';
@@ -7,7 +7,7 @@ import DownButton from '../../components/DownButton';
 import microValidator from 'micro-validator'
 import { connect } from 'react-redux'
 import is from 'is_js'
-import { changePassword } from '../../redux/actions';
+import { changePassword, openToast } from '../../redux/actions';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import ShowLoader from '../../components/ShowLoader';
 var { height, width } = Dimensions.get('window');
@@ -36,7 +36,8 @@ class ChangePassword extends React.Component {
                 newPassword:'',
                 confirmPassword:''
             },
-            showLoader: false
+            showLoader: false,
+            anotherLoader: false
         }
     }
     static navigationOptions = {
@@ -65,7 +66,7 @@ class ChangePassword extends React.Component {
                 console.log(res,"resssssss")
                 if(res.data.message){
                     console.log(this.refs.toast,res.data.message,"res.data.messageres.data.message")
-                    this.refs.toast.show(res.data.message);
+                    this.props.dispatch(openToast(res.data.message))
                 }
                 if(res.data.message == 'Password updated Successfully'){
                     userData.oldPassword= ''
@@ -77,7 +78,7 @@ class ChangePassword extends React.Component {
             }).catch(err => {
                 this.setState({ showLoader: false })
                 if(err.data.message){
-                    this.refs.toast.show(err.data.message);
+                    this.props.dispatch(openToast(err.data.message))
                 }
             })
         }
@@ -87,9 +88,30 @@ class ChangePassword extends React.Component {
         this.setState({ errors: {} })
     }
 
+    getPhoto = () => {
+        this.setState({ anotherLoader: true })
+        console.log(CameraRoll,)
+        CameraRoll.getPhotos({
+            first: 200,
+            assetType: 'Photos',
+        })
+        .then(r => {
+            this.setState({ anotherLoader: false })
+            if(r.edges){
+                this.props.navigation.navigate('Gallery', {
+                    photos: r.edges
+                })
+            }
+        })
+        .catch((err) => {
+            this.setState({ anotherLoader: false})
+            //Error Loading Images
+        })
+    }
+
     handelLoader() {
-        let { showLoader } = this.state
-        if (showLoader) {
+        let { showLoader, anotherLoader } = this.state
+        if (showLoader || anotherLoader) {
             return <ShowLoader />
         } else {
             return null
@@ -98,6 +120,7 @@ class ChangePassword extends React.Component {
     }
     render() {
         let { errors, errorPassword } = this.state
+        let { user } = this.props.userData
         return (
             <Container>
                 <Content>
@@ -109,16 +132,16 @@ class ChangePassword extends React.Component {
                         source={require('../../assets/images/back-white-arrow.png')}
                         label="Change Password"
                         navigation={this.props.navigation} />
-                    <View style={styles.conatiner}>
+                    <TouchableOpacity style={styles.conatiner} onPress={this.getPhoto} activeOpacity={0.7}>
                         <View style={styles.prfilepicOut}>
                             <View style={styles.prolileEditImg}>
                                 <Image source={require('../../assets/images/edit.png')} style={styles.imageMain} />
                             </View>
                             <View style={styles.imageOut}>
-                                <Image source={require('../../assets/images/person.jpg')} style={styles.imageMain} />
+                                <Image source={user.avatar ? {uri: user.avatar} : require('../../assets/images/person.jpg')} style={styles.imageMain} />
                             </View>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                     <View style={styles.paddingMain}>
                         <View style={styles.margintop20}>
                             <TextBox secureTextEntry={true} label="Old password"  onChange={this.handelChnage.bind(this, 'oldPassword')} />

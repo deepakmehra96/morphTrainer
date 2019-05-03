@@ -5,7 +5,7 @@ import Header from '../../components/Header';
 import GradientButton from '../../components/GradientButton';
 import TextBox from '../../components/TextField';
 import { connect } from 'react-redux'
-import { userDetail, setUserDetail } from '../../redux/actions';
+import { userDetail, setUserDetail, getUserDetails } from '../../redux/actions';
 import ShowLoader from '../../components/ShowLoader';
 import FooterMain from '../../components/Footer';
 var { height, width } = Dimensions.get('window');
@@ -24,14 +24,11 @@ class Profile extends React.Component {
     async componentDidMount(){
         if(this.props.userData && this.props.userData.user){
             this.setState({ showLoader: true })
-            this.props.dispatch(userDetail(this.props.userData.user._id)).then(async res => {
-                console.log(res,"respuserD")
+            this.props.dispatch(getUserDetails(this.props.userData.user._id)).then(res => {
+                console.log(res,"res123")
                 this.setState({ showLoader: false })
-                if(res.data.message == 'User detail'){
-                    await AsyncStorage.setItem('user', JSON.stringify(res.data.user))
-                    this.props.dispatch(setUserDetail(res.data.user))
-                }
-            }).catch(err => {
+            })
+            .catch(err => {
                 this.setState({ showLoader: false })
                 if(err.data.message){
                     this.refs.toast.show(err.data.message)
@@ -67,7 +64,7 @@ class Profile extends React.Component {
                                 <Image source={require('../../assets/images/online.png')} style={styles.imageMain} />
                             </View>
                             <View style={styles.imageOutMain}>
-                                <Image source={require('../../assets/images/person.jpg')} style={styles.imageMain} />
+                                <Image source={user.avatar ? {uri: user.avatar} : require('../../assets/images/person.jpg')} style={styles.imageMain} />
                             </View>
                         </View>
                         <View style={styles.alIgnItemCenter}>
@@ -166,7 +163,9 @@ const styles = StyleSheet.create({
     },
     imageOutMain:{
         borderRadius: 50,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: '#e6e6e6'
     },
     imageOut:{
         position: 'relative', 

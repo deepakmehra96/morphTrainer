@@ -6,7 +6,7 @@ import TextBox from '../../components/TextField';
 import microValidator from 'micro-validator'
 import is from 'is_js'
 import DownButton from '../../components/DownButton';
-import { userDetail, editProfile } from '../../redux/actions';
+import { userDetail, editProfile, getUserDetails, openToast } from '../../redux/actions';
 import ShowLoader from '../../components/ShowLoader';
 import { connect } from 'react-redux'
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -86,16 +86,14 @@ class EditPofile extends React.Component {
         console.log(this.props)
         if(this.props.userData && this.props.userData.user){
             this.setState({ showLoader: true })
-            this.props.dispatch(userDetail(this.props.userData.user._id)).then(res => {
-                console.log(res,"respuserD")
-                this.setState({ showLoader: false })
-                if(res.data.message == 'User detail'){
-                    this.setState({userData: res.data.user})
-                }
-            }).catch(err => {
+            this.props.dispatch(getUserDetails(this.props.userData.user._id)).then(res => {
+                console.log(res,"res123")
+                this.setState({ showLoader: false, userData: res.data.user })
+            })
+            .catch(err => {
                 this.setState({ showLoader: false })
                 if(err.data.message){
-                    this.refs.toast.show(err.data.message)
+                    this.props.dispatch(openToast(err.data.message))
                 }
             })
         }
@@ -128,16 +126,15 @@ class EditPofile extends React.Component {
             console.log(res,"resedit")
             this.setState({ loader: false })
             if(res.data.message){
-                this.refs.toast.show(res.data.message)
+                this.props.dispatch(openToast(res.data.message))
             }
             if(res.data.message === 'profile updated successfully'){
-                this.refs.toast.show(res.data.message)
                 this.props.navigation.navigate('FooterMain')
             }
         }).catch(err => {
             this.setState({ loader: false })
             if(err.data.message){
-                this.refs.toast.show(err.data.message)
+                this.props.dispatch(openToast(err.data.message))
             }
         })
         this.setState({ errors: {} })
@@ -176,6 +173,7 @@ class EditPofile extends React.Component {
 
     render() {
         let { errors, resError, userData } = this.state
+        let { user } = this.props.userData
         return (
             <Container>
                 <Content>
@@ -193,7 +191,7 @@ class EditPofile extends React.Component {
                                 <Image source={require('../../assets/images/edit.png')} style={styles.imageMain} />
                             </View>
                             <View style={styles.imageOut}>
-                                <Image source={require('../../assets/images/person.jpg')} style={styles.imageMain} />
+                                <Image source={user.avatar ? {uri: user.avatar} : require('../../assets/images/person.jpg')} style={styles.imageMain} />
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('ChangePassword')}>
@@ -244,14 +242,14 @@ class EditPofile extends React.Component {
                     <DownButton textMain="SAVE CHANGES" onClickBtn={() => this.handelSubmit()} />
                 </View>
                 <Toast
-                        ref="toast"
-                        style={{backgroundColor: 'rgba(0,0,0,0.7)', width: width - 40}}
-                        position='bottom'
-                        fadeInDuration={1000}
-                        fadeOutDuration={1000}
-                        opacity={0.8}
-                        textStyle={{color: '#fff', textAlign: 'center'}}
-                    />
+                    ref="toast"
+                    style={{backgroundColor: 'rgba(0,0,0,0.7)', width: width - 40}}
+                    position='bottom'
+                    fadeInDuration={1000}
+                    fadeOutDuration={1000}
+                    opacity={0.8}
+                    textStyle={{color: '#fff', textAlign: 'center'}}
+                />
             </Container>
         )
     }

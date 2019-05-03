@@ -8,6 +8,7 @@ var { height, width } = Dimensions.get('window');
 
 export default class App extends Component {
   render() {
+    console.disableYellowBox = true;
     return (
       <Provider style={styles.container} store={store}>
         <View style={{flex: 1}}>

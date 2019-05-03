@@ -78,6 +78,44 @@ export const userDetail = (id) => {
     }
 }
 
+export const changeStatus = (data) => {
+    return async dispatch  => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/goal/changeStatus/`,data,{headers: headers})
+            .then(res => {
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.response)
+            })
+        )
+    }
+}
+
+export const deleteGoal = (data) => {
+    return async dispatch  => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/deleteGoal/`,data,{headers: headers})
+            .then(res => {
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.response)
+            })
+        )
+    }
+}
+
 export const editProfile = (data) => {
     return async dispatch  => {
         let token = await AsyncStorage.getItem('token')
@@ -87,9 +125,10 @@ export const editProfile = (data) => {
         return new Promise(
             (resolve, reject) => 
             axios.post(`${API_URL}/editCoachProfile/`,data,{headers: headers})
-            .then(res => {
+            .then(async res => {
                 if(res.data.message === 'profile updated successfully'){
-                    dispatch(setUserDetail(res.data.user))
+                    console.log(res,"editres123")
+                    // dispatch(setUserDetail(res.data.user))
                 }
                 console.log(res,"actres")
                 return resolve(res)
@@ -140,6 +179,27 @@ export const changePassword = (data) => {
         return new Promise(
             (resolve, reject) => 
             axios.post(`${API_URL}/changePassword/`,data,{headers: headers})
+            .then(res => {
+                console.log(res,"actres")
+                return resolve(res)
+            })
+            .catch((error) => {
+                console.log({...error},"errorres")
+                return reject(error.response)
+            })
+        )
+    }
+}
+
+export const changeAvailability = (data) => {
+    return async dispatch  => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/coach/changeAvailability/`,data,{headers: headers})
             .then(res => {
                 console.log(res,"actres")
                 return resolve(res)
@@ -207,6 +267,66 @@ export const getCustomerList = (id) => {
             })
             .catch((error) => {
                 return reject(error.message)
+            })
+        )
+    }
+}
+
+export const getUserDetails = (id) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.get(`${API_URL}/getUserDetails/${id}`,{headers: headers})
+            .then(async res => {
+                console.log(res,"121212")
+                if(res.data.message === 'User detail'){
+                    console.log('hi pra')
+                    await AsyncStorage.setItem('user', JSON.stringify(res.data.user))
+                    dispatch(setUserDetail(res.data.user))
+                }
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.message)
+            })
+        )
+    }
+}
+
+export const editImage = (data) => {
+    console.log(data,"data")
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        let fileName = data.image.filename.split('.')
+        let lastElemnet = fileName.slice(-1)
+        let formData = new FormData()
+        formData.append('avatar', {
+            name: lastElemnet[0],
+            uri: data.image.uri,
+            type: data.type, // or photo.type
+        });
+        console.log(formData,"formData")
+        
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/editImage/`, formData, {headers: headers})
+            .then(async res => {
+                console.log(res,"editImageres")
+                if(res.data.message === 'Image updated successfully'){
+                    await AsyncStorage.setItem('user', JSON.stringify(res.data.user))
+                    dispatch(setUserDetail(res.data.user))
+                }
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.response)
             })
         )
     }
