@@ -37,6 +37,13 @@ class Options extends React.Component {
         }
         return
     }
+    checkWeightType(user){
+        if(parseInt(user.current_weight) > parseInt(user.goal_weight)){
+            return 'Lose'
+        }else{
+            return 'Gain'
+        }
+    }
     
     render() {
         let { customerList } = this.props.userData
@@ -56,15 +63,15 @@ class Options extends React.Component {
                                         <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('Dashboard',{user_id: item._id})}>
                                             <GradientBtn text="Dashboard" style={styles.gradientButn}/>
                                         </TouchableOpacity>
-                                        <Text style={styles.greyText}>Calories intake: 1030 cal</Text>
+                                        <Text style={styles.greyText}>Calories intake: {item.calories_intake} cal</Text>
                                     </View>
                                     <View style={{flexWrap: 'wrap',overflow: 'hidden'}}>
                                         <Text style={styles.nameText}>{item.name}</Text>
-                                        <View style={styles.centerRow}><Text style={styles.goalText}>Goal: </Text><Text style={styles.orangeText}>Gain weight</Text></View>
-                                        <Text style={[styles.orangeText]}>72 kg</Text>
+                                        <View style={styles.centerRow}><Text style={styles.goalText}>Goal: </Text><Text style={styles.orangeText}>{this.checkWeightType(item)} weight</Text></View>
+                                        <Text style={[styles.orangeText]}>{parseInt(item.goal_weight)} kg</Text>
                                     </View>
                                     <View style={styles.mainImageStyle}>
-                                        <Image source={item.avatar ? item.avatar : require('../../assets/images/person.jpg')} style={styles.imageStyle}/>
+                                        <Image source={item.avatar ? {uri: item.avatar} : require('../../assets/images/person.jpg')} style={styles.imageStyle}/>
                                     </View>
                                     <View style={styles.alignEnd}>
                                         <TouchableOpacity style={styles.marginBottom10}>
@@ -73,7 +80,7 @@ class Options extends React.Component {
                                         <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('PersonalityQa',{user_id: item._id})}>
                                             <GradientBtn text="Personality Q&A" style={styles.gradientButn}/>
                                         </TouchableOpacity>
-                                        <Text style={styles.greyText}>Calories intake: 1030 cal</Text>
+                                        <Text style={styles.greyText}>Calories burned: {item.calories_burned} cal</Text>
                                     </View>
                                 </View>
                             )
@@ -160,6 +167,8 @@ const styles = StyleSheet.create({
         width: 50,
         borderRadius: 25,
         overflow: 'hidden',
-        top: -25
+        top: -25,
+        borderWidth: 1,
+        borderColor: '#e6e6e6'
     }
 })

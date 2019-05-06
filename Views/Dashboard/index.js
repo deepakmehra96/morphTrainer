@@ -122,7 +122,7 @@ class Dashboard extends React.Component {
         }
     }
     showChecked(item) {
-        if (item !== 'pending') {
+        if (item) {
             return (
                 <View style={styles.checkboxOut}>
                     <Image style={styles.imageMain} source={require('../../assets/images/checking.png')} />
@@ -315,7 +315,7 @@ class Dashboard extends React.Component {
     }
 
     checkedGoal(val){
-        if(val.status !== 'pending'){
+        if(val.status){
             return <LinearGradient colors={['#f7b944', '#f49a3e', '#ef6937']} style={{paddingLeft: 10,borderRadius: 2,height: 20,paddingRight: 10,justifyContent: 'center'}}>
                         <Text style={[styles.blackTextNotBold,{color: '#fff',fontWeight: 'bold'}]} numberOfLines={1}>
                             {val.name}
@@ -401,12 +401,14 @@ class Dashboard extends React.Component {
     }
 
     changeGoalStatus(item){
+        console.log(item,"item")
         let data = {
-            id: item._id
+            id: item._id,
+            status: !item.status
         }
         console.log(data,"datadatadatadatadata")
         let { date } = this.props.userData
-        if(item.status){
+        if(item){
             this.setState({ showLoader: true })
             this.props.dispatch(changeStatus(data)).then(res => {
                 this.setState({ showLoader: false })
@@ -452,7 +454,7 @@ class Dashboard extends React.Component {
                         <ImageBackground source={require('../../assets/images/plan-selection-bx2.png')} style={[styles.imageStyle,{justifyContent: 'center'}]}>
                             <View style={{paddingLeft: 70,height: 50,justifyContent: 'center'}}>
                                 <View style={styles.imageAvatar}>
-                                    <Image source={user && user.avatar ? {uri: user && user.avatar}: require('../../assets/images/person.jpg')} style={styles.imageStyle}/>
+                                    <Image source={dashboardData.user_detail && dashboardData.user_detail.avatar ? {uri: dashboardData.user_detail && dashboardData.user_detail.avatar}: require('../../assets/images/person.jpg')} style={styles.imageStyle}/>
                                 </View>
                                 <View style={styles.flexRow}><Text style={styles.whiteText}>Hello</Text><Text style={styles.whiteTextNotBold}>  {user && user.name},</Text></View>
                                 <Text style={styles.whiteText}>Things look alright</Text>
