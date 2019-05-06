@@ -16,6 +16,7 @@ import WorkingHours from "../Views/Options/WorkingHours";
 import Gallery from "../Views/Profile/Gallery";
 import Ticket from "../Views/Support/containers/Ticket";
 import CreateYourTicket from "../Views/Support/containers/CreateYourTicket";
+import TicketMessage from "../Views/Support/containers/TicketMessage";
 const AppNavigator = createStackNavigator(
     {
         SignIn:SignIn,
@@ -33,10 +34,11 @@ const AppNavigator = createStackNavigator(
         WorkingHours: WorkingHours,
         Gallery: Gallery,
         Ticket: Ticket,
-        CreateYourTicket: CreateYourTicket
+        CreateYourTicket: CreateYourTicket,
+        TicketMessage: TicketMessage
       },
       {
-        initialRouteName: "CheckRoute",
+        initialRouteName: "TicketMessage",
         defaultNavigationOptions: {
           gesturesEnabled: false
         },

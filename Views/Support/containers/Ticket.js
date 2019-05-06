@@ -17,6 +17,10 @@ class Ticket extends React.Component {
     static navigationOptions = {
         header: null
     }
+
+    handleGoToChat(){
+        this.props.navigation.navigate('TicketMessage')
+    }
    
     render() {
         let { list, anotherList } = this.state;
@@ -29,7 +33,7 @@ class Ticket extends React.Component {
                                 <View style={styles.borderBottomcon}>
                                     {list.map((itm, key) => {
                                         return (
-                                            <View style={styles.mainList} key={key}>
+                                            <TouchableOpacity onPress={() => this.handleGoToChat()} style={styles.mainList} key={key}>
                                                 <View style={styles.boxTicket}>
                                                     <Text style={styles.title}>You</Text>
                                                 </View>
@@ -40,7 +44,7 @@ class Ticket extends React.Component {
                                                 <View style={styles.imageCon}>
                                                     <Image source={require('../../../assets/images/right.jpg')} style={styles.imageStyle}/>
                                                 </View>
-                                            </View>
+                                            </TouchableOpacity>
                                         )
                                     })}
                                 </View>
