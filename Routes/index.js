@@ -38,7 +38,7 @@ const AppNavigator = createStackNavigator(
         TicketMessage: TicketMessage
       },
       {
-        initialRouteName: "TicketMessage",
+        initialRouteName: "CheckRoute",
         defaultNavigationOptions: {
           gesturesEnabled: false
         },

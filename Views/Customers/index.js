@@ -25,6 +25,8 @@ class Options extends React.Component {
         this.props.dispatch(getCustomerList(user._id)).then(res => {
             this.setState({ showLoader: false })
             console.log(res,"resres")   
+        }).catch(err => {
+            this.setState({ showLoader: false })
         })
     }
 

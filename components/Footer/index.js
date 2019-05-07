@@ -31,6 +31,8 @@ class FooterMain extends React.Component {
             this.props.dispatch(getUserDetails(user._id)).then(res => {
                 console.log(res,"res123")
                 this.setState({ loader: false })
+            }).catch(err => {
+                this.setState({ loader: false })
             })
         }
     }
