@@ -96,9 +96,6 @@ class CreateYourTicket extends React.Component {
         this.props.dispatch(createTicket(data)).then(res => {
             console.log(res,"ressss123")
             this.setState({ showLoader: false })
-            if(res.data.message){
-                this.props.dispatch(openToast(res.data.message))
-            }
             if(res.data.message === 'Ticket created successfully'){
                 ticketData.title=''
                 ticketData.reason= ''
