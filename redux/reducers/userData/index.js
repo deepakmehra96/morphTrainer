@@ -1,5 +1,5 @@
 import initialState from '../initialState'
-import { SET_USER_DETAIL, OPEN_TOAST, SET_GOAL_LIST, GOAL_VISIBLE, DASHBOARD_DATA, SET_DASHBOARD_DATA, SET_MOMENT_DATE, SET_CUSTOMER_LIST, SET_USER, SET_NOTIFICATION, SET_WORKING_HOURS, SET_SLOTS, SET_DATA_SOURCE, SET_RIGHT_DATA_SOURCE, SET_DURATION_TYPE, SET_DURATION } from '../../actions/ActionTypes';
+import { SET_USER_DETAIL, OPEN_TOAST, SET_GOAL_LIST, GOAL_VISIBLE, DASHBOARD_DATA, SET_DASHBOARD_DATA, SET_MOMENT_DATE, SET_CUSTOMER_LIST, SET_USER, SET_NOTIFICATION, SET_WORKING_HOURS, SET_SLOTS, SET_DATA_SOURCE, SET_RIGHT_DATA_SOURCE, SET_DURATION_TYPE, SET_DURATION, SET_TICKET_DATA } from '../../actions/ActionTypes';
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -35,6 +35,8 @@ export default (state = initialState, action) => {
             return { ...state, duration_type: action.payload }; 
         case SET_DURATION:
             return { ...state, duration: action.payload };
+        case SET_TICKET_DATA:
+            return { ...state, ticketData: action.payload };
         default:
             return state;
     }

@@ -4,6 +4,9 @@ import { Container, Content, Tabs, Tab } from 'native-base';
 
 import { connect } from 'react-redux'
 import Header from '../../../components/Header';
+import { ticketList } from '../../../redux/actions';
+import ShowLoader from '../../../components/ShowLoader';
+import moment from 'moment'
 var { height, width } = Dimensions.get('window');
 
 class Ticket extends React.Component {
@@ -11,11 +14,32 @@ class Ticket extends React.Component {
         super()
         this.state = {
             list: [1,1,1,1,1],
-            anotherList: [1,1]
+            anotherList: [1,1],
+            showLoader: false
         }
     }
     static navigationOptions = {
         header: null
+    }   
+    componentDidMount(){
+        let { user } = this.props.userData
+        this.setState({ showLoader: true })
+        this.props.dispatch(ticketList(user._id)).then(res => {
+            console.log(res,"res")
+            this.setState({ showLoader: false })
+        }).catch(err => {
+            this.setState({ showLoader: false })
+        })
+    }
+
+    handelLoader() {
+        let { showLoader } = this.state
+        if (showLoader) {
+            return <ShowLoader />
+        } else {
+            return null
+        }
+        return
     }
 
     handleGoToChat(){
@@ -24,6 +48,7 @@ class Ticket extends React.Component {
    
     render() {
         let { list, anotherList } = this.state;
+        let {ticketData} = this.props.userData
         return (
             <Container>
                 <Header navigation={this.props.navigation} label="YOUR TICKETS" source={require('../../../assets/images/back-btn.png')} backText="CREATE NEW TICKET" widthAdjust={{position: 'absolute',right: 25,top: 10,width: 83,borderBottomWidth: 1}} backStyle={{fontSize: 9,letterSpacing: -1,fontWeight: 'bold'}} handleRightBtn={() => this.props.navigation.navigate('CreateYourTicket')}/>
@@ -31,22 +56,22 @@ class Ticket extends React.Component {
                         <Tab heading="OPEN" tabStyle={styles.whiteBgColor} activeTabStyle={styles.whiteBgColor} activeTextStyle={{color: '#f18173',fontSize: 12,fontWeight: 'bold'}} textStyle={{color: '#000',fontSize: 12,fontWeight: 'bold'}}>
                             <Content>
                                 <View style={styles.borderBottomcon}>
-                                    {list.map((itm, key) => {
+                                    {ticketData.length ? ticketData.map((itm, key) => {
                                         return (
                                             <TouchableOpacity onPress={() => this.handleGoToChat()} style={styles.mainList} key={key}>
                                                 <View style={styles.boxTicket}>
                                                     <Text style={styles.title}>You</Text>
                                                 </View>
                                                 <View>
-                                                    <Text style={styles.title}>Will Define By sole product be listed on Fc ?</Text>
-                                                    <Text style={styles.answer}>(Tuesday january 22, 2019)</Text>
+                                                    <Text style={styles.title}>{itm.ticket_title}</Text>
+                                                    <Text style={styles.answer}>({moment(itm.created_at).format('dddd MMMM DD, YYYY')})</Text>
                                                 </View>
                                                 <View style={styles.imageCon}>
                                                     <Image source={require('../../../assets/images/right.jpg')} style={styles.imageStyle}/>
                                                 </View>
                                             </TouchableOpacity>
                                         )
-                                    })}
+                                    }):<View></View>}
                                 </View>
                             </Content>
                         </Tab>
@@ -73,6 +98,7 @@ class Ticket extends React.Component {
                             </Content>
                         </Tab>
                     </Tabs>
+                    {this.handelLoader()} 
             </Container>
         )
     }
