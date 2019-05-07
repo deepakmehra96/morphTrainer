@@ -6,30 +6,137 @@ import { connect } from 'react-redux'
 import Header from '../../../components/Header';
 import DownButton from '../../../components/DownButton';
 import GradientBtn from '../../../components/LinearGradient';
+import { ticketReasonList, createTicket, ticketList, openToast } from '../../../redux/actions';
+import ShowLoader from '../../../components/ShowLoader';
+import microValidator from 'micro-validator'
+import is from 'is_js'
 var { height, width } = Dimensions.get('window');
+
+let validationSchema = {
+    title: {
+        required: {
+            errorMsg: 'Title is required'
+        },
+    },
+    message: {
+        required: {
+            errorMsg: 'Message is required'
+        },
+    },
+    reason: {
+        required: {
+            errorMsg: 'Reason is required'
+        },
+    }
+}
 
 class CreateYourTicket extends React.Component {
     constructor() {
         super()
         this.state = {
             list: [1,1,1,1,1],
-            ticketModal: false
+            ticketModal: false,
+            showLoader: false,
+            reasonList: [],
+            ticketData: {
+                title: '',
+                name: 'my ticket name',
+                message: '',
+                reason: ''
+            },
+            errors: {},
+            loader: false
         }
     }
     static navigationOptions = {
         header: null
     }
+    componentDidMount(){
+        this.setState({ showLoader: true })
+        this.props.dispatch(ticketReasonList()).then(res => {
+            console.log(res,"ressss")
+            this.setState({ showLoader: false, reasonList: res.data.data })
+        }).catch(err => {
+            this.setState({ showLoader: false })
+        })
+    }
 
-    handelChnage = () => {
+    onChange = (key, event) => {
+        console.log(event,"event")
+        let { ticketData } = this.state
+        if(key == 'reason'){
+            this.onValueChange(event)
+        }
+        ticketData[key] = event
+        this.setState({ ticketData, errors: {}, resError: '' })
+    }
 
+    onValueChange = (event) => {
+        console.log(event,'hi')
+        this.setState({ reason: event })
     }
 
     handelSubmit = () => {
-        this.setState({ ticketModal: true })
+        // this.setState({ ticketModal: true })
+        let { ticketData } = this.state
+        let { user } = this.props.userData
+        const errors = microValidator.validate(validationSchema, ticketData)
+        if (!is.empty(errors)) {
+            this.setState({ errors })
+            return
+        }
+        let data = {
+            title: ticketData.title,
+            name: ticketData.name,
+            message: ticketData.message,
+            reason: ticketData.reason,
+            userId: user._id
+        }
+        this.setState({ showLoader: true, loader: true })
+        this.props.dispatch(createTicket(data)).then(res => {
+            console.log(res,"ressss123")
+            this.setState({ showLoader: false })
+            if(res.data.message){
+                this.props.dispatch(openToast(res.data.message))
+            }
+            if(res.data.message === 'Ticket created successfully'){
+                ticketData.title=''
+                ticketData.reason= ''
+                ticketData.message= ''
+                this.setState({ticketData})
+                this.props.dispatch(ticketList(user._id)).then(res => {
+                    console.log(res,"res1234567")
+                    if(res.data.message === 'ticket List'){
+                        console.log('hipgl')
+                        this.setState({ ticketModal: true })
+                    }
+                    this.setState({ loader: false })
+                }).catch(err => {
+                    this.setState({ loader: false })
+                })
+            }
+        }).catch(err => {
+            this.setState({ showLoader: false })
+            if(err.data.message){
+                this.props.dispatch(openToast(err.data.message))
+            }
+        })
+
+    }
+
+    handelLoader() {
+        let { showLoader, loader } = this.state
+        if (showLoader || loader) {
+            return <ShowLoader />
+        } else {
+            return null
+        }
+        return
     }
    
     render() {
-        let { list, ticketModal } = this.state;
+        let { list, ticketModal, reasonList, errors, ticketData } = this.state;
+        console.log(ticketData,"ticketDataticketData")
         return (
             <Container>
                 <Header navigation={this.props.navigation} label="CREATE YOUR TICKET" source={require('../../../assets/images/back-btn.png')} backText="CANCEL" widthAdjust={{position: 'absolute',right: 25,top: 10,width: 35,borderBottomWidth: 1}} backStyle={{fontSize: 9,letterSpacing: -1,fontWeight: 'bold'}} handleRightBtn={() => this.props.navigation.goBack()} borderStyle={{borderBottomWidth: 1, borderColor: '#e6e6e6',paddingBottom: 10}}/>
@@ -43,11 +150,12 @@ class CreateYourTicket extends React.Component {
                             <View style={styles.mainTextView}>
                                 <TextInput
                                     style={{height: 30, borderColor: '#e6e6e6', borderBottomWidth: 1, fontSize: 12}}
-                                    onChangeText={(text) => this.setState({text})}
-                                    
+                                    onChangeText={this.onChange.bind(this, 'title')}
                                     placeholder="e.g#11023"
                                     placeholderTextColor="#000"
+                                    value={ticketData.title}
                                 />
+                                <Text style={styles.errorMsgText}>{errors.title && errors.title[0]}</Text>
                             </View>
                         </View>
                         <View style={{marginBottom: 30}}>
@@ -61,17 +169,21 @@ class CreateYourTicket extends React.Component {
                                         mode="dropdown"
                                         note
                                         style={{ width: '100%',backgroundColor: '#fff',color: 'red',  height: 30, borderRadius: 0,marginLeft: -20 }}
-                                        selectedValue={''}
+                                        selectedValue={ticketData.reason}
                                         textStyle={{ color: "#000", fontSize: 12}}
                                         placeholder="e.g Transaction, Campaign"
                                         placeholderStyle={{ color: "#000", fontSize: 12 }}
-                                        onValueChange={this.handelChnage.bind(this, 'gender')}
+                                        onValueChange={this.onChange.bind(this, 'reason')}
                                         iosIcon={<Image source={require('../../../assets/images/down_arrow.png')} style={{width: 12, height: 8,marginRight: -5}}/>}
                                         >
-                                        <Picker.Item label="Male" value="Male" />
-                                        <Picker.Item label="Female" value="Female" />
+                                        {reasonList.map((itm, key) => {
+                                            return(
+                                                <Picker.Item label={itm.reason} value={itm._id} key={key}>{itm.reason}</Picker.Item>
+                                            )
+                                        })}
                                     </Picker>
                                 </View>
+                                <Text style={styles.errorMsgText}>{errors.reason && errors.reason[0]}</Text>
                             </View>
                         </View>
                         <View style={{marginBottom: 30}}>
@@ -82,15 +194,18 @@ class CreateYourTicket extends React.Component {
                             <View style={[styles.mainTextView,{height: 80}]}>
                                 <TextInput
                                     style={{height: 80, borderColor: '#e6e6e6', borderBottomWidth: 1, fontSize: 12, justifyContent: 'flex-start',paddingRight: 5}}
-                                    onChangeText={(text) => this.setState({text})}
+                                    onChangeText={this.onChange.bind(this, 'message')}
                                     placeholder="Write your text here..."
                                     placeholderTextColor="#000"
                                     multiline={true}
+                                    value={ticketData.message}
                                 />
+                                <Text style={styles.errorMsgText}>{errors.message && errors.message[0]}</Text>
                             </View>
                         </View>
                     </View>
                 </Content>
+                {this.handelLoader()}
                 <View style={{position: 'absolute',width: '100%',bottom: 0}}>
                     <DownButton textMain="SUBMIT" onClickBtn={() => this.handelSubmit()} />
                 </View>
@@ -173,6 +288,10 @@ const styles = StyleSheet.create({
         shadowOffset: { height: 2, width: 1 },
         borderRadius: 5
     },
+    errorMsgText: {
+        fontSize: 10,
+        color: "red"
+    }
 })
 
 
