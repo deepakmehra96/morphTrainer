@@ -118,7 +118,6 @@ class CreateYourTicket extends React.Component {
                 this.props.dispatch(openToast(err.data.message))
             }
         })
-
     }
 
     handelLoader() {

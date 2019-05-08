@@ -5,11 +5,13 @@ import { connect } from 'react-redux';
 import ProgressCircle from 'react-native-progress-circle'
 import GradientBtn from '../../components/LinearGradient';
 import DialogBox from '../../components/Common/DialogBox';
+import Dialog, { SlideAnimation, DialogContent } from 'react-native-popup-dialog';
 import { getGoalList, addUserGoal, openToast, setGoalVisible, getUserDetails, getDashboardData, setDashData, setMomentDate, getCustomerList, changeStatus, deleteGoal } from '../../redux/actions';
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
 import ShowLoader from '../../components/ShowLoader';
 import {InputAutoSuggest} from '../../components/Common/react-native-autocomplete-search';
 import moment from 'moment';
+import Icons from 'react-native-vector-icons/AntDesign'
 import LinearGradient from 'react-native-linear-gradient';
 const row = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
 var { height, width } = Dimensions.get('window');
@@ -43,7 +45,24 @@ class Dashboard extends React.Component {
                 Dinner: row,
                 Snacks: row
             },
-            dbLoader: false
+            dbLoader: false,
+            goalDialog: false,
+            goalColorData: [
+                {
+                    color: 'red',
+                    id: 1
+                },
+                {
+                    color: 'blue',
+                    id: 2
+                },
+                {
+                    color: 'green',
+                    id: 2
+                },
+                
+            ],
+            goalColor: 'red'
         }
       }
 
@@ -160,12 +179,12 @@ class Dashboard extends React.Component {
         })
     }
     onAddUserGoal = () => {
-        let { setGoal } = this.state
+        let { setGoal, goalColor} = this.state
         let { date } = this.props.userData
         let {user_id} = this.props.navigation.state && this.props.navigation.state.params
         let data = {
             goal: setGoal,
-            color: this.state.selectedColor,
+            color: goalColor,
             user_id: user_id,
             date: date
         }
@@ -173,12 +192,14 @@ class Dashboard extends React.Component {
             this.setState({ goalLoader: true })
             this.props.dispatch(addUserGoal(data)).then(res => {
                 console.log(res,"resgoal")
+                this.setState({ setGoal: '', goalColor: 'red' })
                 this.props.dispatch(setGoalVisible(false))
                 this.setState({ goalLoader: false })
                 if(res.data.message){
                     this.props.dispatch(openToast(res.data.message))
                 }
                 if(res.data.message === 'Goal added successfully'){
+                    this.setState({ setGoal: '', goalColor: 'red' })
                     this.getDashboardApi(date)
                     this.props.navigation.navigate('Dashboard')
                 }
@@ -203,31 +224,46 @@ class Dashboard extends React.Component {
     }
 
     goalContent = () => {
-        let { hideList } = this.state;
+        let { hideList, goalColor } = this.state;
         let { goalList } = this.props.userData
+        let data = [{
+            value: 'Banana',
+          }, {
+            value: 'Mango',
+          }, {
+            value: 'Pear',
+          }];
         return (
             <View style={{padding: 20,paddingBottom: 0,height: '100%'}}>
                 {/* <View style={[styles.alignRowGoals,{marginTop: 0,flexDirection: 'column'}]}> */}
                     {/* <View style={{height: 30,justifyContent: 'center',alignItems: 'center',borderBottomWidth: 1,borderColor: '#f3f3f3',width: '100%'}}><Text style={{textAlign: 'center',fontSize: 15,color: '#000'}}>Your goal</Text></View> */}
                         
-                        <View style={{padding: 0,zIndex: 10000}}>
-                            {/* <TouchableOpacity style={{height: 40,alignItems: 'center',justifyContent: 'center',width: '100%',borderRadius: 3,borderWidth: 1,borderColor: '#efefef'}} onPress={this.openDropdown}>
-                                <Text style={{color: '#f3996f',fontSize: 10,fontWeight: 'bold'}}>{this.props.userData.goal || 'No Data Added'}</Text>
-                            </TouchableOpacity> */}
-                            <InputAutoSuggest
-                                style={{ minHeight: 200,backgroundColor: 'red' }}
-                                inputStyle={{ height: 40,borderRadius: 5,borderWidth: 1, borderColor: '#aba6a6',paddingLeft: 10,paddingRight: 10}}
-                                flatListStyle={{position: 'absolute',top: 45,left: 0,width: '100%',zIndex: 10000, backgroundColor: '#fff'}}
-                                itemTextStyle={{fontSize: 14,padding: 10}}
-                                staticData={goalList}
-                                onDataSelectedChange={data => this.onDataSelectedChange(data)}
-                                onChange={(data) => this.ChangeGoal(data)}
-                                onItemPress={() => this.setState({ hideList: true })}
-                                hide={hideList} 
-                                setGoal={this.state.setGoal}
-                            />
-                        </View>
-                        <RadioGroup
+                            <View style={{padding: 0,zIndex: 10000,paddingRight: 70}}>
+                                {/* <TouchableOpacity style={{height: 40,alignItems: 'center',justifyContent: 'center',width: '100%',borderRadius: 3,borderWidth: 1,borderColor: '#efefef'}} onPress={this.openDropdown}>
+                                    <Text style={{color: '#f3996f',fontSize: 10,fontWeight: 'bold'}}>{this.props.userData.goal || 'No Data Added'}</Text>
+                                </TouchableOpacity> */}
+                                <InputAutoSuggest
+                                    style={{ minHeight: 200,backgroundColor: 'red' }}
+                                    inputStyle={{ height: 40,borderRadius: 5,borderWidth: 1, borderColor: '#aba6a6',paddingLeft: 10,paddingRight: 10}}
+                                    flatListStyle={{position: 'absolute',top: 45,left: 0,width: '100%',zIndex: 10000, backgroundColor: '#fff',maxHeight: 120}}
+                                    itemTextStyle={{fontSize: 14,padding: 10}}
+                                    staticData={goalList}
+                                    onDataSelectedChange={data => this.onDataSelectedChange(data)}
+                                    onChange={(data) => this.ChangeGoal(data)}
+                                    onItemPress={() => this.setState({ hideList: true })}
+                                    hide={hideList} 
+                                    setGoal={this.state.setGoal}
+                                />
+                            </View>
+                            <View style={{position: 'absolute',right: 20, top: 20,zIndex: 100000000}}>
+                                <TouchableOpacity style={{height: 40,borderRadius: 5,borderWidth: 1, borderColor: '#aba6a6',paddingLeft: 10,paddingRight: 10, alignItems: 'center',flexDirection: 'row',zIndex: 100000}} onPress={() => this.setState({ goalDialog: true })} activeOpacity={0.7}>
+                                    <View style={{width: 15,height: 15,borderRadius: 10, backgroundColor: goalColor,marginRight: 15}}></View>
+                                    <Icons name="down" size={15} color="#aba6a6"/>
+                                </TouchableOpacity>
+                            </View>
+                        
+                        
+                        {/* <RadioGroup
                             size={24}
                             thickness={2}
                             color='#ef6937'
@@ -244,7 +280,7 @@ class Dashboard extends React.Component {
                                 <RadioButton value={'high'} style={{backgroundColor: '#fff'}}>
                                     <Text style={{color: 'red'}}>High</Text>
                                 </RadioButton>
-                        </RadioGroup>
+                        </RadioGroup> */}
                         <TouchableOpacity style={{position: 'absolute',bottom: 20,width: '100%',left: 20}} onPress={this.onAddUserGoal}>
                             <GradientBtn text={'ADD GOAL'} style={[styles.buttonShadow,{height: 35,overflow: 'hidden'}]} btnStyle={{fontSize: 16}}/>
                         </TouchableOpacity>
@@ -343,8 +379,10 @@ class Dashboard extends React.Component {
 
     completedGoal(val){
         let { dashboardData } = this.props.userData
+        console.log(dashboardData,"dashboardData")
         if(dashboardData.Tasks){
             let completedGoals = dashboardData.Tasks.filter(itm => itm.status === val)
+            console.log(completedGoals,"completedGoals")
             return completedGoals.length
         }
     }
@@ -382,7 +420,7 @@ class Dashboard extends React.Component {
         }
     }
     goalSlider(){
-        let completedGoal = this.completedGoal('completed')
+        let completedGoal = this.completedGoal(true)
         let totalGoal = this.totalGoal()
         let calGoal = completedGoal/totalGoal*100
         if(calGoal){
@@ -442,9 +480,17 @@ class Dashboard extends React.Component {
         })
     }
 
+    onChooseColor(item){
+        console.log(item,"item")
+        if(item){
+            this.setState({ goalColor: item.color, goalDialog: false })
+        }
+    }
+
     render() {
         let { user, goalVisible, dashboardData, date } = this.props.userData
         let { user_detail } = this.props.userData && this.props.userData.dashboardData
+        let { goalColorData, goalColor } = this.state;
         console.log(this.props.userData,"date123123")
         console.log(PixelRatio.get(),"user")
         return (
@@ -509,7 +555,7 @@ class Dashboard extends React.Component {
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{paddingLeft: 10,paddingRight: 10,borderColor: '#ebebeb',borderBottomWidth: 1}}>
-                                    <Text style={[styles.orangeText,{fontSize: 7,marginBottom: -2}]}>{this.completedGoal('completed')}/{this.totalGoal()} GOALS COMPLETED</Text>
+                                    <Text style={[styles.orangeText,{fontSize: 7,marginBottom: -2}]}>{this.completedGoal(true)}/{this.totalGoal()} GOALS COMPLETED</Text>
                                     <Slider
                                         step={1}
                                         minimumValue={1}
@@ -877,7 +923,31 @@ class Dashboard extends React.Component {
                             </View>
                         </View>
                     </View>
-                    <DialogBox visible={goalVisible} openCloseModal={this.openGoalModal} headingText="ADD GOAL" content={this.goalContent} propStyle={{height: '60%'}} height={{height: '100%'}}/>
+                    <DialogBox visible={goalVisible} openCloseModal={this.openGoalModal} headingText="ADD GOAL" content={this.goalContent} propStyle={{height: 280}} height={{height: '100%'}}/>
+                    <Dialog
+                        visible={this.state.goalDialog}
+                        dialogAnimation={new SlideAnimation({
+                        slideFrom: 'right',
+                        })}
+                        onTouchOutside={() => {
+                            this.setState({ goalDialog: false })
+                        }}
+                        dialogStyle={{backgroundColor: '#fff',borderRadius: 4,padding: 0, alignSelf: 'flex-end',marginBottom: 140, marginRight: 19}}
+                        containerStyle={{justifyContent: 'flex-end',padding: 0}}
+                    >
+                        <DialogContent contentContainer={{backgroundColor: 'yellow'}}>
+                            <View style={{height: 66, width: 70,marginLeft: -20,marginRight: -20}}>
+                                {goalColorData.map((item, key) => {
+                                    return(
+                                        <TouchableOpacity style={{flexDirection: 'row',height: 30, alignItems: 'center',paddingLeft: 15,borderBottomWidth: 0.5,borderBottomColor: '#aba6a6'}} onPress={this.onChooseColor.bind(this, item)} key={key}>
+                                            <View style={{width: 15, height: 15, borderRadius: 10,backgroundColor: item.color, marginRight: 15}}></View>
+                                            {goalColor === item.color && <View style={{position: 'absolute',right: 15}}><Icons name="check" size={15} color={item.color}/></View>}
+                                        </TouchableOpacity>
+                                    )
+                                })}
+                            </View>
+                        </DialogContent>
+                    </Dialog>
                 </Content>
                 {this.handelLoader()}
             </Container>

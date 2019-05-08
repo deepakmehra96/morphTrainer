@@ -146,7 +146,9 @@ style = StyleSheet.create({
     fontSize: 14,
     borderBottomWidth: 1,
   },
-  flatList: {},
+  flatList: {
+    backgroundColor: 'red'
+  },
   itemTextStyle: { fontSize: 30 },
 });
 
