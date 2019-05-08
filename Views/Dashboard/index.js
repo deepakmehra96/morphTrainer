@@ -289,17 +289,17 @@ class Dashboard extends React.Component {
             )
         }
 
-    onSelect(index, value){
-        if(value === 'normal'){
-            this.setState({ selectedColor: 'blue'})
-        }
-        if(value === 'medium'){
-            this.setState({ selectedColor: 'yellow'})
-        }
-        if(value === 'high'){
-            this.setState({ selectedColor: 'red'})
-        }
-      }
+    // onSelect(index, value){
+    //     if(value === 'normal'){
+    //         this.setState({ selectedColor: 'blue'})
+    //     }
+    //     if(value === 'medium'){
+    //         this.setState({ selectedColor: 'yellow'})
+    //     }
+    //     if(value === 'high'){
+    //         this.setState({ selectedColor: 'red'})
+    //     }
+    //   }
 
     mealDate(date){
         if(date){
