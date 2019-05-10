@@ -62,7 +62,11 @@ class Dashboard extends React.Component {
                 },
                 
             ],
-            goalColor: 'red'
+            goalColor: 'red',
+            goalCollapse: true,
+            mealCollapse: true,
+            exerciseCollapse: true,
+            bloodGlucoseCollapse: true
         }
       }
 
@@ -490,7 +494,7 @@ class Dashboard extends React.Component {
     render() {
         let { user, goalVisible, dashboardData, date } = this.props.userData
         let { user_detail } = this.props.userData && this.props.userData.dashboardData
-        let { goalColorData, goalColor } = this.state;
+        let { goalColorData, goalColor, goalCollapse, mealCollapse, bloodGlucoseCollapse, exerciseCollapse } = this.state;
         console.log(this.props.userData,"date123123")
         console.log(PixelRatio.get(),"user")
         return (
@@ -535,6 +539,9 @@ class Dashboard extends React.Component {
                             </View>
                         </View>
                         <View style={[styles.alignRowGoals]}>
+                            <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ goalCollapse: !this.state.goalCollapse })}>
+                                <Image source={goalCollapse ? require('../../assets/images/collapse_up.png') : require('../../assets/images/collapse_down.png') } style={{height: '100%', width: '100%'}}/>
+                            </TouchableOpacity>
                             <View style={[{paddingTop: 3,paddingBottom: 3,width: '100%'}]}>
                                 <View style={[styles.topView,{marginTop: 0}]}>
                                     <Text style={styles.todatText}>{this.renderDate()}</Text>
@@ -577,7 +584,7 @@ class Dashboard extends React.Component {
                                         )
                                     }): <View></View>} */}
 
-                                    <List
+                                    {goalCollapse && <List
                                         rightOpenValue={-75}
                                         disableRightSwipe={true}
                                         dataSource={this.state.tasks_list}
@@ -591,7 +598,7 @@ class Dashboard extends React.Component {
                                         <Button full danger onPress={_ => this.onRemoveGoal(data,secId, rowId, rowMap)} >
                                             <Icon active name="trash" style={{fontSize: 25}}/>
                                         </Button>}
-                                    />
+                                    />}
                                 </View>
                             </View>
                         </View>
@@ -627,6 +634,9 @@ class Dashboard extends React.Component {
                             </View>
                         </View>
                         <View style={[styles.alignRowGoals]}>
+                            <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ mealCollapse: !this.state.mealCollapse })}>
+                                <Image source={mealCollapse ? require('../../assets/images/collapse_up.png') : require('../../assets/images/collapse_down.png') } style={{height: '100%', width: '100%'}}/>
+                            </TouchableOpacity>
                             <View style={[{paddingTop: 3,paddingBottom: 3,width: '100%'}]}>
                                 <View style={[styles.newBiew,styles.newView]}>
                                     <Text style={[styles.blackText,{paddingLeft: 10,paddingBottom: 3}]}>LOG YOUR MEALS</Text>
@@ -634,59 +644,19 @@ class Dashboard extends React.Component {
                                 <View style={[styles.paddingLeftRight10,styles.height80,{borderBottomWidth: 0.5,borderBottomColor: '#000'}]}>
                                     <View style={[styles.height40Center]}><Text style={[styles.blackText,{fontSize: 11,fontWeight: 'bold'}]}>Total: {this.totalMealCalories(dashboardData.calories_counts)} Cal</Text></View>
                                 </View>
-                                <View>
-                                    <View style={[styles.paddingLeftRight10,styles.newView]}>
-                                        <Text style={[styles.blackText]}>BREAKFAST</Text>
-                                    </View>
-                                    
-                                    <List
-                                        rightOpenValue={-75}
-                                        disableRightSwipe={true}
-                                        disableLeftSwipe={true}
-                                        dataSource={this.state.meal_list.Breakfast}
-                                        renderRow={data =>
-                                        <View style={[styles.paddingLeftRight10,{paddingRight: 100,borderBottomWidth: 1,borderColor: '#f3f3f3',backgroundColor: '#fff',height: 70}]}>
-                                            <View style={styles.height40Center}><Text style={[styles.greyText]}>{this.mealDate(data.dateTime)}</Text></View>
-                                            <View style={[styles.height40Center,{justifyContent: 'flex-end'}]}><Text style={[styles.darkBlackText]}>{data.mealType}</Text></View>
-                                            <View style={[styles.absViewSand,{height: 35,width: 55,top: 16,borderRadius: 4,overflow: 'hidden'}]}>
-                                                <Image source={data.image ? {uri: data.image}: require('../../assets/images/breakfast.png')} style={styles.imageStyle}/>
-                                            </View>
-                                            <View style={[styles.newRow,{marginTop: 10}]}>
-                                                <View style={[styles.newRow,{marginRight: 30}]}>
-                                                    <View style={styles.imageHeightWidth}>
-                                                        <Image source={require('../../assets/images/dashboard-meal-tab_11.png')} style={styles.imageStyle}/>
-                                                    </View>
-                                                    <Text style={styles.greyText}>{data.calories} Cal</Text>
-                                                </View>
-                                                <View style={[styles.newRow,{marginRight: 100}]}>
-                                                    <View style={styles.imageHeightWidth}>
-                                                        <Image source={require('../../assets/images/45428.png')} style={styles.imageStyle}/>
-                                                    </View>
-                                                    <Text style={styles.greyText} numberOfLines={1}>{data.foodQuantity} {data.type}</Text>
-                                                </View>
-                                            </View>
-                                        </View>}
-                                        renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-                                        <Button full danger >
-                                            <Icon active name="trash" style={{fontSize: 35}}/>
-                                        </Button>}
-                                    />
-
-                                    <View style={[styles.paddingLeftRight10,{height: 25,justifyContent: 'center',borderBottomWidth: 0.5}]}>
-                                        <Text style={[styles.blackText,{fontSize: 11,fontWeight: 'bold'}]}>Total: {dashboardData.calories_counts && dashboardData.calories_counts.totalBreakfastCalories} Cal</Text>
-                                    </View>
-                                </View>
-                                <View>
-                                    <View style={[styles.paddingLeftRight10,styles.newView]}>
-                                        <Text style={[styles.blackText]}>LUNCH</Text>
-                                    </View>
+                                {mealCollapse ? <View>
+                                    <View>
+                                        <View style={[styles.paddingLeftRight10,styles.newView]}>
+                                            <Text style={[styles.blackText]}>BREAKFAST</Text>
+                                        </View>
+                                        
                                         <List
                                             rightOpenValue={-75}
                                             disableRightSwipe={true}
                                             disableLeftSwipe={true}
-                                            dataSource={this.state.meal_list.Lunch}
+                                            dataSource={this.state.meal_list.Breakfast}
                                             renderRow={data =>
-                                                <View style={[styles.paddingLeftRight10,{paddingRight: 100,borderBottomWidth: 1,borderColor: '#f3f3f3',backgroundColor: '#fff',height: 70}]}>
+                                            <View style={[styles.paddingLeftRight10,{paddingRight: 100,borderBottomWidth: 1,borderColor: '#f3f3f3',backgroundColor: '#fff',height: 70}]}>
                                                 <View style={styles.height40Center}><Text style={[styles.greyText]}>{this.mealDate(data.dateTime)}</Text></View>
                                                 <View style={[styles.height40Center,{justifyContent: 'flex-end'}]}><Text style={[styles.darkBlackText]}>{data.mealType}</Text></View>
                                                 <View style={[styles.absViewSand,{height: 35,width: 55,top: 16,borderRadius: 4,overflow: 'hidden'}]}>
@@ -708,58 +678,99 @@ class Dashboard extends React.Component {
                                                 </View>
                                             </View>}
                                             renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-                                            <Button full danger  >
+                                            <Button full danger >
                                                 <Icon active name="trash" style={{fontSize: 35}}/>
                                             </Button>}
                                         />
 
-                                    <View style={[styles.paddingLeftRight10,{height: 25,justifyContent: 'center',borderBottomWidth: 0.5}]}>
-                                        <Text style={[styles.blackText,{fontSize: 11,fontWeight: 'bold'}]}>Total: {dashboardData.calories_counts && dashboardData.calories_counts.totalLunchCalories} Cal</Text>
+                                        <View style={[styles.paddingLeftRight10,{height: 25,justifyContent: 'center',borderBottomWidth: 0.5}]}>
+                                            <Text style={[styles.blackText,{fontSize: 11,fontWeight: 'bold'}]}>Total: {dashboardData.calories_counts && dashboardData.calories_counts.totalBreakfastCalories} Cal</Text>
+                                        </View>
                                     </View>
-                                </View>
-                                <View>
-                                    <View style={[styles.paddingLeftRight10,styles.newView]}>
-                                        <Text style={[styles.blackText]}>DINNER</Text>
-                                    </View>
-
-                                    <List
-                                        rightOpenValue={-75}
-                                        disableRightSwipe={true}
-                                        disableLeftSwipe={true}
-                                        dataSource={this.state.meal_list.Dinner}
-                                        renderRow={data =>
-                                            <View style={[styles.paddingLeftRight10,{paddingRight: 100,borderBottomWidth: 1,borderColor: '#f3f3f3',backgroundColor: '#fff',height: 70}]}>
-                                                <View style={styles.height40Center}><Text style={[styles.greyText]}>{this.mealDate(data.dateTime)}</Text></View>
-                                                <View style={[styles.height40Center,{justifyContent: 'flex-end'}]}><Text style={[styles.darkBlackText]}>{data.mealType}</Text></View>
-                                                <View style={[styles.absViewSand,{height: 35,width: 55,top: 16,borderRadius: 4,overflow: 'hidden'}]}>
-                                                    <Image source={data.image ? {uri: data.image}: require('../../assets/images/breakfast.png')} style={styles.imageStyle}/>
-                                                </View>
-                                                <View style={[styles.newRow,{marginTop: 10}]}>
-                                                    <View style={[styles.newRow,{marginRight: 30}]}>
-                                                        <View style={styles.imageHeightWidth}>
-                                                            <Image source={require('../../assets/images/dashboard-meal-tab_11.png')} style={styles.imageStyle}/>
-                                                        </View>
-                                                        <Text style={styles.greyText}>{data.calories} Cal</Text>
+                                    <View>
+                                        <View style={[styles.paddingLeftRight10,styles.newView]}>
+                                            <Text style={[styles.blackText]}>LUNCH</Text>
+                                        </View>
+                                            <List
+                                                rightOpenValue={-75}
+                                                disableRightSwipe={true}
+                                                disableLeftSwipe={true}
+                                                dataSource={this.state.meal_list.Lunch}
+                                                renderRow={data =>
+                                                    <View style={[styles.paddingLeftRight10,{paddingRight: 100,borderBottomWidth: 1,borderColor: '#f3f3f3',backgroundColor: '#fff',height: 70}]}>
+                                                    <View style={styles.height40Center}><Text style={[styles.greyText]}>{this.mealDate(data.dateTime)}</Text></View>
+                                                    <View style={[styles.height40Center,{justifyContent: 'flex-end'}]}><Text style={[styles.darkBlackText]}>{data.mealType}</Text></View>
+                                                    <View style={[styles.absViewSand,{height: 35,width: 55,top: 16,borderRadius: 4,overflow: 'hidden'}]}>
+                                                        <Image source={data.image ? {uri: data.image}: require('../../assets/images/breakfast.png')} style={styles.imageStyle}/>
                                                     </View>
-                                                    <View style={[styles.newRow,{marginRight: 150}]}>
-                                                        <View style={styles.imageHeightWidth}>
-                                                            <Image source={require('../../assets/images/45428.png')} style={styles.imageStyle}/>
+                                                    <View style={[styles.newRow,{marginTop: 10}]}>
+                                                        <View style={[styles.newRow,{marginRight: 30}]}>
+                                                            <View style={styles.imageHeightWidth}>
+                                                                <Image source={require('../../assets/images/dashboard-meal-tab_11.png')} style={styles.imageStyle}/>
+                                                            </View>
+                                                            <Text style={styles.greyText}>{data.calories} Cal</Text>
                                                         </View>
-                                                        <Text style={styles.greyText} numberOfLines={1}>{data.foodQuantity} {data.type}</Text>
+                                                        <View style={[styles.newRow,{marginRight: 100}]}>
+                                                            <View style={styles.imageHeightWidth}>
+                                                                <Image source={require('../../assets/images/45428.png')} style={styles.imageStyle}/>
+                                                            </View>
+                                                            <Text style={styles.greyText} numberOfLines={1}>{data.foodQuantity} {data.type}</Text>
+                                                        </View>
                                                     </View>
-                                                </View>
-                                            </View>}
-                                        renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-                                        <Button full danger >
-                                            <Icon active name="trash" style={{fontSize: 35}}/>
-                                        </Button>}
-                                    />
+                                                </View>}
+                                                renderRightHiddenRow={(data, secId, rowId, rowMap) =>
+                                                <Button full danger  >
+                                                    <Icon active name="trash" style={{fontSize: 35}}/>
+                                                </Button>}
+                                            />
 
-                                    <View style={[styles.paddingLeftRight10,{height: 25,justifyContent: 'center',borderBottomWidth: 0.5}]}>
-                                        <Text style={[styles.blackText,{fontSize: 11, fontWeight: 'bold'}]}>Total: {dashboardData.calories_counts && dashboardData.calories_counts.totalDinnerCalories} Cal</Text>
+                                        <View style={[styles.paddingLeftRight10,{height: 25,justifyContent: 'center',borderBottomWidth: 0.5}]}>
+                                            <Text style={[styles.blackText,{fontSize: 11,fontWeight: 'bold'}]}>Total: {dashboardData.calories_counts && dashboardData.calories_counts.totalLunchCalories} Cal</Text>
+                                        </View>
                                     </View>
-                                </View>
-                                <View>
+                                    <View>
+                                        <View style={[styles.paddingLeftRight10,styles.newView]}>
+                                            <Text style={[styles.blackText]}>DINNER</Text>
+                                        </View>
+
+                                        <List
+                                            rightOpenValue={-75}
+                                            disableRightSwipe={true}
+                                            disableLeftSwipe={true}
+                                            dataSource={this.state.meal_list.Dinner}
+                                            renderRow={data =>
+                                                <View style={[styles.paddingLeftRight10,{paddingRight: 100,borderBottomWidth: 1,borderColor: '#f3f3f3',backgroundColor: '#fff',height: 70}]}>
+                                                    <View style={styles.height40Center}><Text style={[styles.greyText]}>{this.mealDate(data.dateTime)}</Text></View>
+                                                    <View style={[styles.height40Center,{justifyContent: 'flex-end'}]}><Text style={[styles.darkBlackText]}>{data.mealType}</Text></View>
+                                                    <View style={[styles.absViewSand,{height: 35,width: 55,top: 16,borderRadius: 4,overflow: 'hidden'}]}>
+                                                        <Image source={data.image ? {uri: data.image}: require('../../assets/images/breakfast.png')} style={styles.imageStyle}/>
+                                                    </View>
+                                                    <View style={[styles.newRow,{marginTop: 10}]}>
+                                                        <View style={[styles.newRow,{marginRight: 30}]}>
+                                                            <View style={styles.imageHeightWidth}>
+                                                                <Image source={require('../../assets/images/dashboard-meal-tab_11.png')} style={styles.imageStyle}/>
+                                                            </View>
+                                                            <Text style={styles.greyText}>{data.calories} Cal</Text>
+                                                        </View>
+                                                        <View style={[styles.newRow,{marginRight: 150}]}>
+                                                            <View style={styles.imageHeightWidth}>
+                                                                <Image source={require('../../assets/images/45428.png')} style={styles.imageStyle}/>
+                                                            </View>
+                                                            <Text style={styles.greyText} numberOfLines={1}>{data.foodQuantity} {data.type}</Text>
+                                                        </View>
+                                                    </View>
+                                                </View>}
+                                            renderRightHiddenRow={(data, secId, rowId, rowMap) =>
+                                            <Button full danger >
+                                                <Icon active name="trash" style={{fontSize: 35}}/>
+                                            </Button>}
+                                        />
+
+                                        <View style={[styles.paddingLeftRight10,{height: 25,justifyContent: 'center',borderBottomWidth: 0.5}]}>
+                                            <Text style={[styles.blackText,{fontSize: 11, fontWeight: 'bold'}]}>Total: {dashboardData.calories_counts && dashboardData.calories_counts.totalDinnerCalories} Cal</Text>
+                                        </View>
+                                    </View>
+                                    <View>
                                     <View style={[styles.paddingLeftRight10,styles.newView]}>
                                         <Text style={[styles.blackText]}>SNACKS</Text>
                                     </View>
@@ -800,13 +811,17 @@ class Dashboard extends React.Component {
                                         <Text style={[styles.blackText,{fontSize: 11, fontWeight: 'bold'}]}>Total: {dashboardData.calories_counts && dashboardData.calories_counts.totalSnacksCalories} Cal</Text>
                                     </View>
                                 </View>
+                                </View>:<View></View>}
                             </View>
                         </View>
                         <View style={[styles.alignRowGoals,{flexDirection: 'column'}]}>
+                            <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ exerciseCollapse: !this.state.exerciseCollapse })}>
+                                <Image source={exerciseCollapse ? require('../../assets/images/collapse_up.png') : require('../../assets/images/collapse_down.png') } style={{height: '100%', width: '100%'}}/>
+                            </TouchableOpacity>
                             <View style={[styles.newBiew,styles.newView]}>
                                 <Text style={[styles.blackText,{paddingLeft: 10}]}>LOG YOUR EXERCISE</Text>
                             </View>
-                            <List
+                            {exerciseCollapse && <List
                                 disableRightSwipe={true}
                                 disableLeftSwipe={true}
                                 rightOpenValue={-75}
@@ -843,7 +858,7 @@ class Dashboard extends React.Component {
                                 <Button full danger >
                                     <Icon active name="trash" style={{fontSize: 35}}/>
                                 </Button>}
-                            />
+                            />}
                         </View>
                         <View style={[styles.alignRowGoals,{flexDirection: 'column'}]}>
                             <View style={[styles.newBiew,styles.newView]}>
@@ -870,9 +885,13 @@ class Dashboard extends React.Component {
 
                         </View>
                         <View style={[styles.alignRowGoals,{flexDirection: 'column'}]}>
+                            <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ bloodGlucoseCollapse: !this.state.bloodGlucoseCollapse })}>
+                                <Image source={bloodGlucoseCollapse ? require('../../assets/images/collapse_up.png') : require('../../assets/images/collapse_down.png') } style={{height: '100%', width: '100%'}}/>
+                            </TouchableOpacity>
                             <View style={[styles.newBiew,styles.newView]}>
-                            <View style={{marginRight: 120}}><Text style={[styles.blackText,{paddingLeft: 10,paddingBottom: 3}]}>LOG YOUR BLOOD GLUCOSE</Text></View>
+                                <View style={{marginRight: 120}}><Text style={[styles.blackText,{paddingLeft: 10,paddingBottom: 3}]}>LOG YOUR BLOOD GLUCOSE</Text></View>
                             </View>
+                            {bloodGlucoseCollapse &&
                             <List
                                 rightOpenValue={-75}
                                 disableRightSwipe={true}
@@ -904,7 +923,7 @@ class Dashboard extends React.Component {
                                 <Button full danger >
                                     <Icon active name="trash" style={{fontSize: 35}}/>
                                 </Button>}
-                            />
+                            />}
                             
                         </View>
                         <View style={[styles.alignRowGoals,{flexDirection: 'column',marginBottom: 10}]}>
