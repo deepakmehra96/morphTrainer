@@ -185,19 +185,19 @@ class EditPofile extends React.Component {
                         source={require('../../assets/images/back-white-arrow.png')}
                         label="Edit profile"
                         navigation={this.props.navigation} />
-                    <TouchableOpacity style={styles.conatiner} onPress={this.getPhoto} activeOpacity={0.7}>
-                        <View style={styles.prfilepicOut}>
+                    <View style={styles.conatiner}>
+                        <TouchableOpacity style={styles.prfilepicOut} onPress={this.getPhoto} activeOpacity={0.7}>
                             <View style={styles.prolileEditImg}>
                                 <Image source={require('../../assets/images/edit.png')} style={styles.imageMain} />
                             </View>
                             <View style={styles.imageOut}>
                                 <Image source={user.avatar ? {uri: user.avatar} : require('../../assets/images/person.jpg')} style={styles.imageMain} />
                             </View>
-                        </View>
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('ChangePassword')}>
                             <Text style={styles.textChangePass}>Change Password</Text>
                         </TouchableOpacity>
-                    </TouchableOpacity>
+                    </View>
                     <View style={styles.paddingMain}>
                         <View style={styles.margintop20}>
                             <TextBox label="Name" onChange={this.handelChnage.bind(this, 'name')} value={userData.name}/>

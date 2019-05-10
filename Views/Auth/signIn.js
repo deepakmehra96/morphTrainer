@@ -143,7 +143,7 @@ class SignIn extends React.Component {
                                 </View>
                                 <View style={styles.forgotTextMain}>
                                     <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgetPassword')} >
-                                        <Text style={styles.forgotText}>Forget Password?</Text>
+                                        <Text style={styles.forgotText}>Forgot Password?</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>

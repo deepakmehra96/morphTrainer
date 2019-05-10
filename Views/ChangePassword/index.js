@@ -50,6 +50,9 @@ class ChangePassword extends React.Component {
     }
     handelSubmit() {
         let { userData } = this.state 
+
+        console.log(userData,"iuserdata")
+
         const errors = microValidator.validate(validationSchema, userData)
         if (!is.empty(errors)) {
             this.setState({ errors })
@@ -76,6 +79,8 @@ class ChangePassword extends React.Component {
                     this.props.navigation.navigate('Profile')
                 }
             }).catch(err => {
+                console.log(err,"err err")
+
                 this.setState({ showLoader: false })
                 if(err.data.message){
                     this.props.dispatch(openToast(err.data.message))
@@ -132,16 +137,16 @@ class ChangePassword extends React.Component {
                         source={require('../../assets/images/back-white-arrow.png')}
                         label="Change Password"
                         navigation={this.props.navigation} />
-                    <TouchableOpacity style={styles.conatiner} onPress={this.getPhoto} activeOpacity={0.7}>
-                        <View style={styles.prfilepicOut}>
+                    <View style={styles.conatiner}>
+                        <TouchableOpacity style={styles.prfilepicOut} onPress={this.getPhoto} activeOpacity={0.7}>
                             <View style={styles.prolileEditImg}>
                                 <Image source={require('../../assets/images/edit.png')} style={styles.imageMain} />
                             </View>
                             <View style={styles.imageOut}>
                                 <Image source={user.avatar ? {uri: user.avatar} : require('../../assets/images/person.jpg')} style={styles.imageMain} />
                             </View>
-                        </View>
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.paddingMain}>
                         <View style={styles.margintop20}>
                             <TextBox secureTextEntry={true} label="Old password"  onChange={this.handelChnage.bind(this, 'oldPassword')} />
