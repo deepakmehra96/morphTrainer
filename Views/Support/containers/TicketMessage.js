@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import Header from '../../../components/Header';
 import DownButton from '../../../components/DownButton';
 import { Switch } from 'react-native-switch';
+import LinearGradient from 'react-native-linear-gradient';
 
 var { height, width } = Dimensions.get('window');
 
@@ -55,30 +56,37 @@ class TicketMessage extends React.Component {
     handleChatMessages(val , index) {
         if (val.status == 1) {
            return (
-               <View key={index} style={styles.sentMsgOutMain}>
-                   <TouchableOpacity style={styles.sentMsgOut}>
+            <LinearGradient colors={['#f7b944', '#f49a3e', '#ef6937']} style={styles.sentMsgOutMain}>
+               {/* <View key={index} style={styles.sentMsgOutMain}> */}
+                   <View style={styles.sentMsgOut}>
                        <Text style={styles.sentMsg}>
                        {val.text}
                        </Text>
-                   </TouchableOpacity>
+                   </View>
                    <Text style={styles.timeMainSend}>
-                            07:00 AM, MON JAN 14, 2019
+                            07:00 AM
                        </Text>
                        
-               </View>
+               {/* </View> */}
+               </LinearGradient>
            )
        } else {
            return (
-            <View key={index} style={styles.recieveMsgOutMain}>
-               <View style={styles.recieveMsgOut}>
-                   <Text style={styles.recieveMsg}>
-                   {val.text}
-                   </Text>
-               </View>
-               <Text style={styles.timeMainRecieve}>
-                    07:00 AM, MON JAN 14, 2019
-                </Text>
-               </View>
+                <View style={styles.messageOutImage}>
+                    {/* <View style={styles.profileImageOut}>
+                        <Image style={styles.imageMain} source={require('../../assets/images/plus-icon_06.png')} />
+                    </View> */}
+                    <View key={index} style={styles.recieveMsgOutMain}>
+                    <View style={styles.recieveMsgOut}>
+                        <Text style={styles.recieveMsg}>
+                        {val.text}
+                        </Text>
+                    </View>
+                    <Text style={styles.timeMainRecieve}>
+                            07:00 AM
+                        </Text>
+                    </View>
+                </View>
 
            )
        }
@@ -190,66 +198,84 @@ const styles = StyleSheet.create({
         marginBottom:10
     },
     sentMsgOutMain:{
-        margin:5,
+        borderRadius:15,
+        margin:10,
         position:'relative',
         alignSelf: 'flex-end',
     },
     sentMsgOut: {
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         margin: 3,
-        borderTopRightRadius: 10,
-        borderBottomLeftRadius: 10,
-        borderTopLeftRadius: 10,
         overflow: 'hidden',
-        borderWidth:1,
-        padding:5,
-        borderColor:"#b2b2b2",
+        // borderTopRightRadius: 10,
+        // borderBottomLeftRadius: 10,
+        // borderTopLeftRadius: 10,
+        // borderWidth:1,
+        // padding:5,
+        // borderColor:"#b2b2b2",
     },
     sentMsg: {
-        opacity:0.8,
-        padding: 8,
+        padding: 5,
         paddingLeft: 11,
         paddingRight: 11,
         borderRadius: 50,
-        maxWidth: width - 80,
-        color: '#000',
+        maxWidth: width - 130,
+        color: '#fff',
+        fontSize:11,
+       
     },   
+
     recieveMsgOutMain:{
-        margin:5,
+        borderRadius:15,
+        margin:10,
+        marginLeft:0,
+        backgroundColor:'#fff',
         alignSelf: 'flex-start',
+        shadowColor: '#000',
+        shadowOffset: { width: 7, height: 7 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 1,
     },
     recieveMsgOut: {
         padding:5,
-        borderWidth:0.8,
-        borderColor:"#7f7e7e",
+        paddingBottom:0,
+        // borderWidth:0.8,
+        // borderColor:"#7f7e7e",
         backgroundColor: '#fff',
         alignSelf: 'flex-start',
-        borderTopRightRadius: 10,
-        borderBottomRightRadius: 10,
-        borderTopLeftRadius: 10,
+        borderRadius:15,
         overflow: 'hidden',
         margin: 3,
     },
     recieveMsg: {
-        padding: 8,
+        paddingTop: 5,
+        paddingBottom:0,
         paddingLeft: 11,
         paddingRight: 11,
-        maxWidth: width - 70,
+        maxWidth: width - 140,
         color: '#000',
+        fontSize:11,
     },
-   
     timeMainSend:{
-        color:"#7f7e7e",
+        color:"#fff",
         fontSize:9,
         alignSelf:"flex-end",
-        marginRight:10
+        marginRight:10,
+        marginBottom:5
     },
     timeMainRecieve:{
         color:"#7f7e7e",
         fontSize:9,
-        alignSelf:"flex-start",
-        marginLeft:10
-    }
+        alignSelf:"flex-end",
+        marginRight:10,
+        marginBottom:5
+    },
+    messageOutImage:{
+        position:'relative',
+        paddingLeft:10,
+        justifyContent:"center"
+    },
 })
 
 
