@@ -124,33 +124,33 @@ class TicketMessage extends React.Component {
                     </View>
                 </Content>
                 <View style={styles.bottomContainer}>
-                        <View>
-                            <Text style={styles.title}>WRITE YOUR MESSAGE</Text>
-                        </View>
-                        <View>
-                        <TextInput
-                                style={styles.textField}
-                                multiline={true}
-                                placeholder="Write your msg here..."
-                                placeholderTextColor="#b5b5b5"
-        
-                            />
-                        </View>
-                        <View style={styles.toogleBtnOut}>
-                            <Switch
-                                onValueChange={this.changeToggle.bind(this)}
-                                circleSize={20}
-                                backgroundActive={'#d6d6d6'}
-                                backgroundInactive={'#d6d6d6'}
-                                circleBorderWidth={0}
-                                circleActiveColor={'orange'}
-                                circleInActiveColor={'orange'}
-                                value={toggle}
-                                innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} 
-                                />
-                            <Text style={styles.titleToogle}>MARK AS COMPLETED</Text>
-                        </View>
+                    <View>
+                        <Text style={styles.title}>WRITE YOUR MESSAGE</Text>
                     </View>
+                    <View>
+                        <TextInput
+                            style={styles.textField}
+                            multiline={true}
+                            placeholder="Write your msg here..."
+                            placeholderTextColor="#b5b5b5"
+    
+                        />
+                    </View>
+                    <View style={styles.toogleBtnOut}>
+                        <Switch
+                            onValueChange={this.changeToggle.bind(this)}
+                            circleSize={20}
+                            backgroundActive={'#d6d6d6'}
+                            backgroundInactive={'#d6d6d6'}
+                            circleBorderWidth={0}
+                            circleActiveColor={'orange'}
+                            circleInActiveColor={'orange'}
+                            value={toggle}
+                            innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} 
+                            />
+                        <Text style={styles.titleToogle}>MARK AS COMPLETED</Text>
+                    </View>
+                </View>
                 <View>
                     <DownButton textMain="SUBMIT"/> 
                 </View>
