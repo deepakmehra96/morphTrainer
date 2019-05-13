@@ -172,7 +172,7 @@ class TicketMessage extends React.Component {
                     navigation={this.props.navigation}
                     label="TICKET TITLE"
                     source={require('../../../assets/images/back-btn.png')}
-                    borderStyle={{borderBottomWidth: 1, borderColor: '#e6e6e6',paddingBottom: 10}}
+                    borderStyle={{borderBottomWidth: 1, borderColor: '#e6e6e6',paddingBottom: 10,backgroundColor: '#fff',zIndex: 10000000}}
                 />
                 <KeyboardAvoidingView 
                     contentContainerStyle={{height:'100%'}} 

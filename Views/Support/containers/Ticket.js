@@ -66,12 +66,11 @@ class Ticket extends React.Component {
         let {ticketData} = this.props.userData
         let filteredOpenArray = ticketData.length && ticketData.filter(item => parseInt(item.status) === 1)
         let filteredResolvedArray = ticketData.length && ticketData.filter(item => parseInt(item.status) === 0)
-        let { initialPage } = this.props.navigation.state.params
         console.log(filteredOpenArray,filteredResolvedArray,"filteredArray")
         return (
             <Container>
-                <Header navigation={this.props.navigation} label="YOUR TICKETS" source={require('../../../assets/images/back-btn.png')} backText="CREATE NEW TICKET" widthAdjust={{position: 'absolute',right: 25,top: 10,width: 83,borderBottomWidth: 1}} backStyle={{fontSize: 9,letterSpacing: -1,fontWeight: 'bold'}} handleRightBtn={() => this.props.navigation.navigate('CreateYourTicket')}/>
-                <Tabs tabBarUnderlineStyle={{backgroundColor: '#f18173',height: 2}} scrollWithoutAnimation={true} initialPage={initialPage}>
+                <Header navigation={this.props.navigation} label="YOUR TICKETS" source={require('../../../assets/images/back-btn.png')} backText="CREATE NEW TICKET" widthAdjust={{position: 'absolute',right: 25,top: 10,width: 83,borderBottomWidth: 1}} backStyle={{fontSize: 9,letterSpacing: -1,fontWeight: 'bold'}} handleRightBtn={() => this.props.navigation.navigate('CreateYourTicket')} />
+                <Tabs tabBarUnderlineStyle={{backgroundColor: '#f18173',height: 2}} scrollWithoutAnimation={true} >
                         <Tab heading="OPEN" tabStyle={styles.whiteBgColor} activeTabStyle={styles.whiteBgColor} activeTextStyle={{color: '#f18173',fontSize: 12,fontWeight: 'bold'}} textStyle={{color: '#000',fontSize: 12,fontWeight: 'bold'}}>
                             <Content>
                                 <View style={styles.borderBottomcon}>
