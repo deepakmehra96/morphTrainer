@@ -50,9 +50,6 @@ class ChangePassword extends React.Component {
     }
     handelSubmit() {
         let { userData } = this.state 
-
-        console.log(userData,"iuserdata")
-
         const errors = microValidator.validate(validationSchema, userData)
         if (!is.empty(errors)) {
             this.setState({ errors })
@@ -68,7 +65,6 @@ class ChangePassword extends React.Component {
                 this.setState({ showLoader: false })
                 console.log(res,"resssssss")
                 if(res.data.message){
-                    console.log(this.refs.toast,res.data.message,"res.data.messageres.data.message")
                     this.props.dispatch(openToast(res.data.message))
                 }
                 if(res.data.message == 'Password updated Successfully'){
@@ -76,7 +72,7 @@ class ChangePassword extends React.Component {
                     userData.newPassword= ''
                     userData.confirmPassword= ''
                     this.setState({userData})
-                    this.props.navigation.navigate('Profile')
+                    this.props.navigation.navigate('FooterMain')
                 }
             }).catch(err => {
                 console.log(err,"err err")
@@ -93,26 +89,26 @@ class ChangePassword extends React.Component {
         this.setState({ errors: {} })
     }
 
-    getPhoto = () => {
-        this.setState({ anotherLoader: true })
-        console.log(CameraRoll,)
-        CameraRoll.getPhotos({
-            first: 200,
-            assetType: 'Photos',
-        })
-        .then(r => {
-            this.setState({ anotherLoader: false })
-            if(r.edges){
-                this.props.navigation.navigate('Gallery', {
-                    photos: r.edges
-                })
-            }
-        })
-        .catch((err) => {
-            this.setState({ anotherLoader: false})
-            //Error Loading Images
-        })
-    }
+    // getPhoto = () => {
+    //     this.setState({ anotherLoader: true })
+    //     console.log(CameraRoll,)
+    //     CameraRoll.getPhotos({
+    //         first: 200,
+    //         assetType: 'Photos',
+    //     })
+    //     .then(r => {
+    //         this.setState({ anotherLoader: false })
+    //         if(r.edges){
+    //             this.props.navigation.navigate('Gallery', {
+    //                 photos: r.edges
+    //             })
+    //         }
+    //     })
+    //     .catch((err) => {
+    //         this.setState({ anotherLoader: false})
+    //         //Error Loading Images
+    //     })
+    // }
 
     handelLoader() {
         let { showLoader, anotherLoader } = this.state
@@ -138,14 +134,14 @@ class ChangePassword extends React.Component {
                         label="Change Password"
                         navigation={this.props.navigation} />
                     <View style={styles.conatiner}>
-                        <TouchableOpacity style={styles.prfilepicOut} onPress={this.getPhoto} activeOpacity={0.7}>
-                            <View style={styles.prolileEditImg}>
+                        <View style={styles.prfilepicOut} activeOpacity={0.7}>
+                            {/* <View style={styles.prolileEditImg}>
                                 <Image source={require('../../assets/images/edit.png')} style={styles.imageMain} />
-                            </View>
+                            </View> */}
                             <View style={styles.imageOut}>
                                 <Image source={user.avatar ? {uri: user.avatar} : require('../../assets/images/person.jpg')} style={styles.imageMain} />
                             </View>
-                        </TouchableOpacity>
+                        </View>
                     </View>
                     <View style={styles.paddingMain}>
                         <View style={styles.margintop20}>

@@ -12,7 +12,7 @@ class TextBox extends React.Component {
     }
     render() {
         return (
-            <View style={styles.outerView}>
+            <View>
                 {/* <TextField
                     lineWidth={0}
                     activeLineWidth={0}
@@ -24,19 +24,15 @@ class TextBox extends React.Component {
                     labelFontSize={12}
                     titleFontSize={10}
                     /> */}
-                <Text style={styles.inputLable}>{this.props.label}</Text>
+                <Text style={[styles.inputLable , this.props.inputStyle]}>{this.props.label}</Text>
                 <TextInput
-                    style={[styles.textField, this.props.styleMainBox]}
                     secureTextEntry={this.props.secureTextEntry}
-                    onChangeText={this.props.onChange}
                     keyboardType= {this.props.type}
+                    style={styles.textField}
+                    onChangeText={this.props.onChange}
                     value={this.props.value}
                     autoCapitalize = 'none'
-                    value={this.props.value}
-                    numberOfLines={this.props.numberOfLines}
-                    multiline={this.props.multiline}
                 />
-
             </View>
         )
     }
@@ -53,23 +49,20 @@ const styles = StyleSheet.create({
     inputLable: {
         color: '#467bdd',
         position: 'absolute',
-        paddingTop: 5,
-        paddingLeft: 22,
+        marginTop: 5,
+        paddingLeft: 22,    
         fontSize: 12
     },
     textField: {
-        display: 'flex',
-        fontSize: 12
-    },
-    outerView: {
         borderWidth: 1,
         borderColor: '#d1d1d1',
         borderRadius: 5,
+        display: 'flex',
+        paddingTop: 20,
+        paddingBottom: Platform.OS === 'ios' ? 10 : 0,
         paddingLeft: 22,
         paddingRight: 22,
-        paddingTop: 20,
-        paddingBottom: Platform.OS === 'ios' ? 10 : 0
-    }
+        fontSize: 12
+    },
 
 });
-
