@@ -18,7 +18,8 @@ const initialState = {
     rightDataSource: ["min","hour"],
     duration_type: 'min',
     duration: 1,
-    ticketData: []
+    ticketData: [],
+    ticketConversation: []
 }
 
 export default initialState;

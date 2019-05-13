@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_URL } from './constant';
-import { SET_USER_DETAIL, OPEN_TOAST, SET_GOAL_LIST, GOAL_VISIBLE, DASHBOARD_DATA, SET_DASHBOARD_DATA, SET_MOMENT_DATE, SET_CUSTOMER_LIST, SET_USER, SET_WORKING_HOURS, SET_NOTIFICATION, SET_SLOTS, SET_DATA_SOURCE, SET_RIGHT_DATA_SOURCE, SET_DURATION_TYPE, SET_DURATION, SET_TICKET_DATA } from './ActionTypes';
+import { SET_USER_DETAIL, OPEN_TOAST, SET_GOAL_LIST, GOAL_VISIBLE, DASHBOARD_DATA, SET_DASHBOARD_DATA, SET_MOMENT_DATE, SET_CUSTOMER_LIST, SET_USER, SET_WORKING_HOURS, SET_NOTIFICATION, SET_SLOTS, SET_DATA_SOURCE, SET_RIGHT_DATA_SOURCE, SET_DURATION_TYPE, SET_DURATION, SET_TICKET_DATA, SET_TICKET_CONVERSATION } from './ActionTypes';
 import {AsyncStorage} from 'react-native'
 
 export const coachLogin = (data) => {
@@ -360,6 +360,66 @@ export const ticketReasonList = () => {
     }
 }
 
+export const ticketConversation = (id) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.get(`${API_URL}/ticketConversation/${id}`,{headers: headers})
+            .then(res => {
+                if(res.data.message === 'ticket List'){
+                    dispatch(setTicketConversation(res.data.data.conversation))
+                }
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.message)
+            })
+        )
+    }
+}
+
+export const changeTicketStatus = (data) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/changeTicketStatus/`, data, {headers: headers})
+            .then(res => {
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.response)
+            })
+        )
+    }
+}
+
+export const sendTicketMessage = (data) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/sendTicketMessage/`, data, {headers: headers})
+            .then(res => {
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.response)
+            })
+        )
+    }
+}
+
 
 export const editImage = (data) => {
     console.log(data,"data")
@@ -645,6 +705,12 @@ export const setTicketData = data => {
     }
 }
 
+export const setTicketConversation = data => {
+    return {
+        type: SET_TICKET_CONVERSATION,
+        payload: data
+    }
+}
 
 
 
