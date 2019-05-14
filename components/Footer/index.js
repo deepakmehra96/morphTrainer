@@ -8,6 +8,7 @@ import Customers from '../../Views/Customers';
 import ShowLoader from '../ShowLoader';
 import { getUserDetails } from '../../redux/actions';
 import { connect } from 'react-redux'
+import Appointment from '../../Views/Appointment';
 var { height, width } = Dimensions.get('window');
 
 class FooterMain extends React.Component {
@@ -76,7 +77,7 @@ class FooterMain extends React.Component {
         let { activeIndex } = this.state
         switch (activeIndex) {
             case 1:
-                return null
+                return <Appointment navigation={this.props.navigation}/>
                 break;
             case 2:
                 return <Customers navigation={this.props.navigation}/>
