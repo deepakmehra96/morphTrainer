@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, AsyncStorage, ListView } from 'react-native';
-import { Button, Icon, Footer, FooterTab, List } from 'native-base'
+import { StyleSheet, Text, View, Dimensions, Image, TouchableOpacity, ListView } from 'react-native';
+import { Button, Icon, Footer, FooterTab, List, Container, Content } from 'native-base'
 import { connect } from 'react-redux'
 import Header from '../../components/Header';
 import CalendarPicker from 'react-native-calendar-picker';
@@ -25,87 +25,93 @@ class Appointment extends React.Component {
         },
         {
             name: " Mike Brown"
+        },
+        {
+            name: " Mike Brown"
         }]
         let { tasks_list } = this.state
         this.setState({ tasks_list: tasks_list.cloneWithRows(data) });
     }
     onRemoveGoal() {
-        alert("deleted")
     }
     render() {
         return (
-            <View>
-                <Header navigation={this.props.navigation} showShadow={true} label="Appointments" />
-                <View style={styles.mainContainer}>
-                    <View style={styles.dateSlot}>
-                        <View>
-                            <LinearGradient colors={['#f7b944', '#f49a3e', '#ef6937']} style={styles.iconsOutGradientLeft}>
-                                <View style={styles.iconsOutMainLeft}>
-                                    <Image source={require('../../assets/images/arrowLeftWhite.png')} style={styles.iconsOut} />
-                                </View>
-                            </LinearGradient>
-                            <LinearGradient colors={['#f7b944', '#f49a3e', '#ef6937']} style={styles.iconsOutGradientRight}>
-                                <View style={styles.iconsOutMainRight}>
-                                    <Image source={require('../../assets/images/arrowRightWhite.png')} style={styles.iconsOut} />
-                                </View>
-                            </LinearGradient>
+            <Container>
+                <Content>
+                    <Header navigation={this.props.navigation} showShadow={true} label="Appointments" />
+                    <View style={styles.mainContainer}>
+                        <View style={styles.dateSlot}>
+                            <View>
+                                <LinearGradient colors={['#f7b944', '#f49a3e', '#ef6937']} style={styles.iconsOutGradientLeft}>
+                                    <View style={styles.iconsOutMainLeft}>
+                                        <Image source={require('../../assets/images/arrowLeftWhite.png')} style={styles.iconsOut} />
+                                    </View>
+                                </LinearGradient>
+                                <LinearGradient colors={['#f7b944', '#f49a3e', '#ef6937']} style={styles.iconsOutGradientRight}>
+                                    <View style={styles.iconsOutMainRight}>
+                                        <Image source={require('../../assets/images/arrowRightWhite.png')} style={styles.iconsOut} />
+                                    </View>
+                                </LinearGradient>
+                            </View>
+                            <CalendarPicker
+                                onDateChange={this.onDateChange}
+                                selectedDayColor="orange"
+                                selectedDayTextColor="white"
+                                scaleFactor={470}
+                                width={width}
+                                styles={{ backgroundColor: 'red' }}
+                                previousTitle=" "
+                                nextTitle=" "
+                            />
                         </View>
-                        <CalendarPicker
-                            onDateChange={this.onDateChange}
-                            selectedDayColor="orange"
-                            selectedDayTextColor="white"
-                            scaleFactor={470}
-                            width={width}
-                            styles={{ backgroundColor: 'red' }}
-                            previousTitle=" "
-                            nextTitle=" "
+
+                        <View style={styles.dateLabelOut}>
+                            <Text style={styles.dateLabelText}>
+                                Monday 10 Nov, Today
+                            </Text>
+                        </View>
+                    </View>
+                    <View>
+                        <List
+                            rightOpenValue={-75}
+                            disableRightSwipe={true}
+                            dataSource={this.state.tasks_list}
+                            style={{ backgroundColor: 'transparent', padding: 20, }}
+                            renderRow={data =>
+                                <View style={styles.secondView}>
+
+                                        <View style={styles.timeConOut}>
+                                            <View style={{ height: 20 }}>
+                                                <Text style={styles.timeTextOut}>
+                                                    09:15 AM
+                                                </Text>
+                                            </View>
+                                            <View>
+                                                <Text style={styles.timeTextOut}>
+                                                    10:15 AM
+                                                </Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.imageOutCon}>
+                                            <Image source={require('../../assets/images/person.jpg')} style={styles.iconsOut} />
+                                        </View>
+
+                                    <View style={styles.nameTextOut}>
+                                        <Text style={{fontWeight:'500'}}>
+                                            {data.name}
+                                        </Text>
+                                    </View>
+                                </View>
+                            }
+                            renderRightHiddenRow={(data, secId, rowId, rowMap) =>
+                                <Button style={styles.cancelBtnOut} danger onPress={_ => this.onRemoveGoal(data)} >
+                                    <Icon active name="ios-close-circle" style={{ fontSize: 25 }} />
+                                    <Text style={styles.cancelText}>Cancel</Text>
+                                </Button>}
                         />
                     </View>
-
-                    <View style={styles.dateLabelOut}>
-                        <Text style={styles.dateLabelText}>
-                            Monday 10 Nov, Today
-                            </Text>
-                    </View>
-                </View>
-                <View>
-                    <List
-                        rightOpenValue={-75}
-                        disableRightSwipe={true}
-                        dataSource={this.state.tasks_list}
-                        style={{ backgroundColor: 'transparent', padding: 20 }}
-                        renderRow={data =>
-                            <View style={styles.secondView}>
-                                <View style={styles.timeConOut}>
-                                    <View style={{ height: 20 }}>
-                                        <Text style={styles.timeTextOut}>
-                                            09:15 AM
-                                            </Text>
-                                    </View>
-                                    <View>
-                                        <Text style={styles.timeTextOut}>
-                                            10:15 AM
-                                            </Text>
-                                    </View>
-                                </View>
-                                <View style={styles.imageOutCon}>
-                                    <Image source={require('../../assets/images/person.jpg')} style={styles.iconsOut} />
-                                </View>
-                                <View style={styles.nameTextOut}>
-                                    <Text>
-                                        Mike Brown
-                                            </Text>
-                                </View>
-                            </View>
-                        }
-                        renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-                            <Button  style={styles.cancelBtnOut} danger onPress={_ => this.onRemoveGoal(data)} >
-                                <Icon active name="ios-close-circle" style={{ fontSize: 25 }} />
-                                <Text style={styles.cancelText}>Cancel</Text>
-                            </Button>}
-                    />
-                </View>
-            </View>
+                </Content>
+            </Container>
         )
     }
 }
@@ -160,7 +166,7 @@ const styles = StyleSheet.create({
     },
     mainContainer: {
         padding: 20,
-        paddingBottom:10
+        paddingBottom: 0
     },
     secondView: {
         borderRadius: 6,
@@ -207,13 +213,13 @@ const styles = StyleSheet.create({
     timeTextOut: {
         fontSize: 11,
     },
-    cancelText:{
-        color:"#fff"
+    cancelText: {
+        color: "#fff"
     },
-    cancelBtnOut:{
-        flexDirection:'column',
-        marginBottom:5,
-        borderTopRightRadius:6,
-        borderBottomRightRadius:6
+    cancelBtnOut: {
+        flexDirection: 'column',
+        marginBottom: 5,
+        borderTopRightRadius: 6,
+        borderBottomRightRadius: 6
     }
 })
