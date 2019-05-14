@@ -16,29 +16,40 @@ class Appointment extends React.Component {
     constructor() {
         super()
         this.state = {
+            list: [
+                {
+                    date: 'Monday 10 Nov, Today',
+                },
+                {
+                    date: 'Tuesday 11 Nov, Tommorow',
+                }
+            ],
             tasks_list: row
         }
     }
     componentDidMount() {
+///// 3 names comes from here when it will come form api you can use diff funtion & filter the array and then setState it 
         let data = [{
-            name: " Mike Brown"
+            name: "Mike Brown"
         },
         {
-            name: " Mike Brown"
+            name: "Mike Brown"
         },
         {
-            name: " Mike Brown"
+            name: "Mike Brown"
         }]
         let { tasks_list } = this.state
         this.setState({ tasks_list: tasks_list.cloneWithRows(data) });
     }
+
     onRemoveGoal() {
     }
     render() {
+        console.log(this.state.tasks_list,"dwfwef")
         return (
             <Container>
-                <Content>
-                    <Header navigation={this.props.navigation} showShadow={true} label="Appointments" />
+                <Header navigation={this.props.navigation} showShadow={true} label="Appointments" />
+                <Content style={styles.contentStyles}>
                     <View style={styles.mainContainer}>
                         <View style={styles.dateSlot}>
                             <View>
@@ -64,52 +75,56 @@ class Appointment extends React.Component {
                                 nextTitle=" "
                             />
                         </View>
-
-                        <View style={styles.dateLabelOut}>
-                            <Text style={styles.dateLabelText}>
-                                Monday 10 Nov, Today
-                            </Text>
-                        </View>
                     </View>
-                    <View>
-                        <List
-                            rightOpenValue={-75}
-                            disableRightSwipe={true}
-                            dataSource={this.state.tasks_list}
-                            style={{ backgroundColor: 'transparent', padding: 20, }}
-                            renderRow={data =>
-                                <View style={styles.secondView}>
-
-                                        <View style={styles.timeConOut}>
-                                            <View style={{ height: 20 }}>
-                                                <Text style={styles.timeTextOut}>
-                                                    09:15 AM
-                                                </Text>
-                                            </View>
-                                            <View>
-                                                <Text style={styles.timeTextOut}>
-                                                    10:15 AM
-                                                </Text>
-                                            </View>
-                                        </View>
-                                        <View style={styles.imageOutCon}>
-                                            <Image source={require('../../assets/images/person.jpg')} style={styles.iconsOut} />
-                                        </View>
-
-                                    <View style={styles.nameTextOut}>
-                                        <Text style={{fontWeight:'500'}}>
-                                            {data.name}
+                    {
+                        this.state.list.map((val, index) => {
+                            return (
+                                <View key={index}>
+                                    <View style={styles.dateLabelOut}>
+                                        <Text style={styles.dateLabelText}>
+                                            {val.date}
                                         </Text>
                                     </View>
+                                    <List
+                                        rightOpenValue={-75}
+                                        disableRightSwipe={true}
+                                        dataSource={this.state.tasks_list}
+                                        style={styles.listStyles}
+                                        renderRow={data =>
+                                            <View style={styles.secondView}>
+                                                <View style={styles.timeConOut}>
+                                                    <View style={styles.textHeight}>
+                                                        <Text style={styles.timeTextOut}>
+                                                            09:15 AM
+                                                            </Text>
+                                                    </View>
+                                                    <View>
+                                                        <Text style={styles.timeTextOut}>
+                                                            10:15 AM
+                                                            </Text>
+                                                    </View>
+                                                </View>
+                                                <View style={styles.imageOutCon}>
+                                                    <Image source={require('../../assets/images/person.jpg')} style={styles.iconsOut} />
+                                                </View>
+
+                                                <View style={styles.nameTextOut}>
+                                                    <Text style={{ fontWeight: '500' }}>
+                                                        {data.name}
+                                                    </Text>
+                                                </View>
+                                            </View>
+                                        }
+                                        renderRightHiddenRow={(data, secId, rowId, rowMap) =>
+                                            <Button style={styles.cancelBtnOut} danger onPress={_ => this.onRemoveGoal(data)} >
+                                                <Icon active name="ios-close-circle" style={styles.iconSize} />
+                                                <Text style={styles.cancelText}>Cancel</Text>
+                                            </Button>}
+                                    />
                                 </View>
-                            }
-                            renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-                                <Button style={styles.cancelBtnOut} danger onPress={_ => this.onRemoveGoal(data)} >
-                                    <Icon active name="ios-close-circle" style={{ fontSize: 25 }} />
-                                    <Text style={styles.cancelText}>Cancel</Text>
-                                </Button>}
-                        />
-                    </View>
+                            )
+                        })
+                    }
                 </Content>
             </Container>
         )
@@ -118,6 +133,9 @@ class Appointment extends React.Component {
 export default connect(state => state)(Appointment)
 
 const styles = StyleSheet.create({
+    contentStyles:{
+        marginBottom: 70
+    },
     dateSlot: {
         paddingBottom: 10,
         // height:270,
@@ -200,8 +218,8 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     dateLabelOut: {
+        paddingLeft: 22,
         marginTop: 20,
-        paddingLeft: 2
     },
     dateLabelText: {
         color: '#ef6937',
@@ -221,5 +239,16 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         borderTopRightRadius: 6,
         borderBottomRightRadius: 6
+    },
+    listStyles:{ 
+        backgroundColor: 'transparent', 
+        padding: 20, 
+        paddingBottom: 0 
+    },
+    iconSize:{ 
+        fontSize: 25 
+    },
+    textHeight:{ 
+        height: 20 
     }
 })
