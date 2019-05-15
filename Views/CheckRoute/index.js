@@ -9,6 +9,7 @@ class CheckRoute extends React.Component {
     }
     async componentWillMount(){
         let token = await AsyncStorage.getItem('token')
+        console.log(token)
         let user = await AsyncStorage.getItem('user')
         if(token && user){
             this.props.dispatch(setUserDetail(JSON.parse(user)))

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_URL } from './constant';
-import { SET_USER_DETAIL, OPEN_TOAST, SET_GOAL_LIST, GOAL_VISIBLE, DASHBOARD_DATA, SET_DASHBOARD_DATA, SET_MOMENT_DATE, SET_CUSTOMER_LIST, SET_USER, SET_WORKING_HOURS, SET_NOTIFICATION, SET_SLOTS, SET_DATA_SOURCE, SET_RIGHT_DATA_SOURCE, SET_DURATION_TYPE, SET_DURATION, SET_TICKET_DATA, SET_TICKET_CONVERSATION } from './ActionTypes';
+import { SET_USER_DETAIL, OPEN_TOAST, SET_GOAL_LIST, GOAL_VISIBLE, DASHBOARD_DATA, SET_DASHBOARD_DATA, SET_MOMENT_DATE, SET_CUSTOMER_LIST, SET_USER, SET_WORKING_HOURS, SET_NOTIFICATION, SET_SLOTS, SET_DATA_SOURCE, SET_RIGHT_DATA_SOURCE, SET_DURATION_TYPE, SET_DURATION, SET_TICKET_DATA, SET_TICKET_CONVERSATION, SET_APPOINTMENT_LIST } from './ActionTypes';
 import {AsyncStorage} from 'react-native'
 
 export const coachLogin = (data) => {
@@ -712,6 +712,51 @@ export const setTicketConversation = data => {
     }
 }
 
+export const setApoointmentList = data => {
+    return {
+        type: SET_APPOINTMENT_LIST,
+        payload: data
+    }
+}
 
 
+export const getAppointmentList = (date) => {
+    return  async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.get(`${API_URL}/coachAppointments/${date}`,{headers: headers})
+            .then(res => {
+                if(res.data.data){
+                    dispatch(setApoointmentList(res.data.data))
+                }
+                return resolve(res)
+            })
+            .catch((error) => {
+                return reject(error.message)
+            })
+        )
+    }
+}
 
+export const deleteAppointment = (data) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        var headers = {
+            'Authorization': 'Bearer'+(' ')+token
+        }
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_URL}/deleteAppointment/`,data, {headers: headers})
+            .then(res => {
+                return resolve(res)
+           })
+            .catch((error) => {
+                return reject(error.response)
+            })
+        )
+    }
+}

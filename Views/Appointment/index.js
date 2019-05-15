@@ -5,6 +5,9 @@ import { connect } from 'react-redux'
 import Header from '../../components/Header';
 import CalendarPicker from 'react-native-calendar-picker';
 import LinearGradient from 'react-native-linear-gradient';
+import { getAppointmentList, deleteAppointment, openToast } from '../../redux/actions';
+import moment from 'moment';
+import ShowLoader from '../../components/ShowLoader';
 var { height, width } = Dimensions.get('window');
 const row = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
 
@@ -16,35 +19,68 @@ class Appointment extends React.Component {
     constructor() {
         super()
         this.state = {
-            list: [
-                {
-                    date: 'Monday 10 Nov, Today',
-                },
-                {
-                    date: 'Tuesday 11 Nov, Tommorow',
-                }
-            ],
-            tasks_list: row
+            apoointmentList: row,
+            showLoader: false,
+            selectedDate:''
         }
     }
     componentDidMount() {
-///// 3 names comes from here when it will come form api you can use diff funtion & filter the array and then setState it 
-        let data = [{
-            name: "Mike Brown"
-        },
-        {
-            name: "Mike Brown"
-        },
-        {
-            name: "Mike Brown"
-        }]
-        let { tasks_list } = this.state
-        this.setState({ tasks_list: tasks_list.cloneWithRows(data) });
+        let dateToSend = moment().format('YYYY-MM-DD')
+        this.setState({  selectedDate: dateToSend})
+        this.handleAppointmentDate(dateToSend)
     }
 
-    onRemoveGoal() {
+    onDateChange = (date) => {
+        let dateToSend = date.format('YYYY-MM-DD')
+        this.handleAppointmentDate(dateToSend)
+        this.setState({  selectedDate: date.format('YYYY-MM-DD')})
+    }
+
+    handleAppointmentDate = (date) => {
+        let { apoointmentList } = this.state
+        this.setState({ showLoader: true })
+        this.props.dispatch(getAppointmentList(date)).then(res => {
+            this.setState({ apoointmentList: apoointmentList.cloneWithRows(res.data.data), showLoader: false })
+        }).catch(err => {
+            this.setState({ showLoader: false })
+            console.log(err, "err err")
+            if (err.data.message) {
+                this.props.dispatch(openToast(err.data.message))
+            }
+        })
+    }
+
+    onRemoveGoal(data) {
+        console.log(data,"datadata")
+        let dataToSend ={
+            appointmentID :data._id
+        }
+        this.setState({ showLoader: true })
+        this.props.dispatch(deleteAppointment(dataToSend)).then(res => {
+            this.setState({ showLoader: false })
+            this.handleAppointmentDate(this.state.selectedDate)
+            this.props.dispatch(openToast('Appointment deleted successfully'))
+        }).catch(err => {
+            this.setState({ showLoader: false })
+            console.log(err, "err err")
+            if (err.data.message) {
+                this.props.dispatch(openToast(err.data.message))
+            }
+        })
+    }
+
+    handelLoader() {
+        let { showLoader } = this.state
+        if (showLoader) {
+            return <ShowLoader />
+        } else {
+            return null
+        }
+        return
     }
     render() {
+        let listToDisplay = this.state && this.state.apoointmentList
+        let { selectedDate } = this.state
         return (
             <Container>
                 <Header navigation={this.props.navigation} showShadow={true} label="Appointments" />
@@ -64,6 +100,7 @@ class Appointment extends React.Component {
                                 </LinearGradient>
                             </View>
                             <CalendarPicker
+                                minDate={moment().format("YYYY-MM-DD")}
                                 onDateChange={this.onDateChange}
                                 selectedDayColor="orange"
                                 selectedDayTextColor="white"
@@ -75,56 +112,51 @@ class Appointment extends React.Component {
                             />
                         </View>
                     </View>
-                    {
-                        this.state.list.map((val, index) => {
-                            return (
-                                <View key={index}>
-                                    <View style={styles.dateLabelOut}>
-                                        <Text style={styles.dateLabelText}>
-                                            {val.date}
+                    <View>
+                        <View style={styles.dateLabelOut}>
+                            <Text style={styles.dateLabelText}>
+                                {selectedDate || moment().format("YYYY-MM-DD")}
+                            </Text>
+                        </View>
+                        <List
+                            rightOpenValue={-75}
+                            disableRightSwipe={true}
+                            dataSource={listToDisplay}
+                            style={styles.listStyles}
+                            renderRow={data =>
+                                <View style={styles.secondView}>
+                                    <View style={styles.timeConOut}>
+                                        <View style={styles.textHeight}>
+                                            <Text style={styles.timeTextOut}>
+                                                {data.time.start}
+                                            </Text>
+                                        </View>
+                                        <View>
+                                            <Text style={styles.timeTextOut}>
+                                                {data.time.end}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                    <View style={styles.imageOutCon}>
+                                        <Image source={data.avatar ? {uri: data.avatar} :require('../../assets/images/person.jpg')} style={styles.iconsOut} />
+                                    </View>
+
+                                    <View style={styles.nameTextOut}>
+                                        <Text style={{ fontWeight: '500' }}>
+                                            {data.user_name}
                                         </Text>
                                     </View>
-                                    <List
-                                        rightOpenValue={-75}
-                                        disableRightSwipe={true}
-                                        dataSource={this.state.tasks_list}
-                                        style={styles.listStyles}
-                                        renderRow={data =>
-                                            <View style={styles.secondView}>
-                                                <View style={styles.timeConOut}>
-                                                    <View style={styles.textHeight}>
-                                                        <Text style={styles.timeTextOut}>
-                                                            09:15 AM
-                                                            </Text>
-                                                    </View>
-                                                    <View>
-                                                        <Text style={styles.timeTextOut}>
-                                                            10:15 AM
-                                                            </Text>
-                                                    </View>
-                                                </View>
-                                                <View style={styles.imageOutCon}>
-                                                    <Image source={require('../../assets/images/person.jpg')} style={styles.iconsOut} />
-                                                </View>
-
-                                                <View style={styles.nameTextOut}>
-                                                    <Text style={{ fontWeight: '500' }}>
-                                                        {data.name}
-                                                    </Text>
-                                                </View>
-                                            </View>
-                                        }
-                                        renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-                                            <Button style={styles.cancelBtnOut} danger onPress={_ => this.onRemoveGoal(data)} >
-                                                <Icon active name="ios-close-circle" style={styles.iconSize} />
-                                                <Text style={styles.cancelText}>Cancel</Text>
-                                            </Button>}
-                                    />
                                 </View>
-                            )
-                        })
-                    }
+                            }
+                            renderRightHiddenRow={(data, secId, rowId, rowMap) =>
+                                <Button style={styles.cancelBtnOut} danger onPress={_ => this.onRemoveGoal(data)} >
+                                    <Icon active name="ios-close-circle" style={styles.iconSize} />
+                                    <Text style={styles.cancelText}>Cancel</Text>
+                                </Button>}
+                        />
+                    </View>
                 </Content>
+                {this.handelLoader()}
             </Container>
         )
     }
@@ -132,7 +164,7 @@ class Appointment extends React.Component {
 export default connect(state => state)(Appointment)
 
 const styles = StyleSheet.create({
-    contentStyles:{
+    contentStyles: {
         marginBottom: 70
     },
     dateSlot: {
@@ -239,15 +271,15 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 6,
         borderBottomRightRadius: 6
     },
-    listStyles:{ 
-        backgroundColor: 'transparent', 
-        padding: 20, 
-        paddingBottom: 0 
+    listStyles: {
+        backgroundColor: 'transparent',
+        padding: 20,
+        paddingBottom: 0
     },
-    iconSize:{ 
-        fontSize: 25 
+    iconSize: {
+        fontSize: 25
     },
-    textHeight:{ 
-        height: 20 
+    textHeight: {
+        height: 20
     }
 })
