@@ -45,7 +45,6 @@ class Appointment extends React.Component {
     onRemoveGoal() {
     }
     render() {
-        console.log(this.state.tasks_list,"dwfwef")
         return (
             <Container>
                 <Header navigation={this.props.navigation} showShadow={true} label="Appointments" />
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         shadowColor: "#000000",
         shadowOpacity: 0.25,
-        shadowRadius: 10,
+        shadowRadius: 7,
         shadowOffset: {
             height: 2,
             width: 2
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
         padding: 3,
         shadowColor: "#000000",
         shadowOpacity: 0.25,
-        shadowRadius: 10,
+        shadowRadius: 7,
         shadowOffset: {
             height: 2,
             width: 2
