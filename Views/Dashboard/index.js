@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, AsyncStorage, StyleSheet, Dimensions, Image, Slider, TouchableOpacity, ImageBackground, BackHandler, TextInput, TouchableHighlight, FlatList, ListView, ScrollView, PixelRatio } from 'react-native';
+import { Text, View, Keyboard, StyleSheet, Dimensions, Image, Slider, TouchableOpacity, ImageBackground, Platform, TextInput, TouchableHighlight, FlatList, ListView, ScrollView, PixelRatio } from 'react-native';
 import { Container, Content, SwipeRow, Button, List, ListItem, Icon } from 'native-base';
 import { connect } from 'react-redux';
 import ProgressCircle from 'react-native-progress-circle'
@@ -66,9 +66,14 @@ class Dashboard extends React.Component {
             goalCollapse: true,
             mealCollapse: true,
             exerciseCollapse: true,
-            bloodGlucoseCollapse: true
+            bloodGlucoseCollapse: true,
+            keyboardHeight:0
         }
       }
+
+    componentWillUnmount() {
+        this.keyboardDidHideListener.remove();
+    }
 
     componentDidMount(){
         let { date } = this.props.userData
@@ -82,6 +87,15 @@ class Dashboard extends React.Component {
             this.setState({ showLoader: false })
             console.log(err,"err")
         })
+        this.keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            this._keyboardDidHide,
+          );
+    }
+
+    _keyboardDidHide = () => {
+
+        this.setState({ keyboardHeight:0 })
     }
 
     componentWillReceiveProps(nextProps){
@@ -160,6 +174,9 @@ class Dashboard extends React.Component {
         }
     }
     openGoalModal = (visible) => {
+        if(!visible){
+            this.setState({keyboardHeight: 0})
+        }
         this.props.dispatch(setGoalVisible(visible))
     }
     
@@ -227,6 +244,15 @@ class Dashboard extends React.Component {
         }
     }
 
+    handleKeyboardHeight(){
+        console.log("hello")
+        if(Platform.OS === 'ios'){
+            this.setState({ keyboardHeight : 250 })
+        }else{
+            return
+        }
+    }
+
     goalContent = () => {
         let { hideList, goalColor } = this.state;
         let { goalList } = this.props.userData
@@ -247,6 +273,7 @@ class Dashboard extends React.Component {
                                     <Text style={{color: '#f3996f',fontSize: 10,fontWeight: 'bold'}}>{this.props.userData.goal || 'No Data Added'}</Text>
                                 </TouchableOpacity> */}
                                 <InputAutoSuggest
+                                   onFocus={() => this.handleKeyboardHeight()}
                                     style={{ minHeight: 200,backgroundColor: 'red' }}
                                     inputStyle={{ height: 40,borderRadius: 5,borderWidth: 1, borderColor: '#aba6a6',paddingLeft: 10,paddingRight: 10}}
                                     flatListStyle={{position: 'absolute',top: 45,left: 0,width: '100%',zIndex: 10000, backgroundColor: '#fff',maxHeight: 120}}
@@ -491,6 +518,7 @@ class Dashboard extends React.Component {
         }
     }
 
+    
     render() {
         let { user, goalVisible, dashboardData, date } = this.props.userData
         let { user_detail } = this.props.userData && this.props.userData.dashboardData
@@ -942,7 +970,7 @@ class Dashboard extends React.Component {
                             </View>
                         </View>
                     </View>
-                    <DialogBox visible={goalVisible} openCloseModal={this.openGoalModal} headingText="ADD GOAL" content={this.goalContent} propStyle={{height: 280}} height={{height: '100%'}}/>
+                    <DialogBox visible={goalVisible} openCloseModal={this.openGoalModal} headingText="ADD GOAL" content={this.goalContent} propStyle={{height: 280, marginBottom:this.state.keyboardHeight}} height={{height: '100%'}}/>
                     <Dialog
                         visible={this.state.goalDialog}
                         dialogAnimation={new SlideAnimation({

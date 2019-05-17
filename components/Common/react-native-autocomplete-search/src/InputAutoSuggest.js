@@ -83,9 +83,13 @@ class InputAutoSuggest extends Component {
     );
   };
 
+  onFocus(event) {
+    this.props.onFocus(event)
+  }
+  
   render() {
     const { value, data } = this.state;
-    const { inputStyle, flatListStyle } = this.props;
+    const { inputStyle, flatListStyle, onFocus } = this.props;
     return (
       <View style={style.container}>
         <TextInput
@@ -94,6 +98,7 @@ class InputAutoSuggest extends Component {
           clearButtonMode="while-editing"
           onChangeText={this.searchList}
           placeholder={'Add Goal'}
+          onFocus={onFocus}
         />
         {!this.props.hide && this.props.setGoal !== '' && <FlatList
           style={[style.flatList, flatListStyle]}
