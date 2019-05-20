@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, CameraRoll, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, Platform, TextInput } from 'react-native';
 import { Container, Content, Tabs, Tab, Picker } from 'native-base';
 import Dialog, { SlideAnimation, DialogContent } from 'react-native-popup-dialog';
 import { connect } from 'react-redux'
@@ -145,7 +145,7 @@ class CreateYourTicket extends React.Component {
                             </View>
                             <View style={styles.mainTextView}>
                                 <TextInput
-                                    style={{height: 30, borderColor: '#e6e6e6', borderBottomWidth: 1, fontSize: 12}}
+                                   style={[{ height: Platform.OS == 'ios' ? 30 : 33 , borderColor: '#e6e6e6', borderBottomWidth: 1, fontSize: 12}]}
                                     onChangeText={this.onChange.bind(this, 'title')}
                                     placeholder="e.g#11023"
                                     placeholderTextColor="#000"
@@ -164,7 +164,7 @@ class CreateYourTicket extends React.Component {
                                     <Picker
                                         mode="dropdown"
                                         note
-                                        style={{ width: '100%',backgroundColor: '#fff',color: 'red',  height: 30, borderRadius: 0,marginLeft: -20 }}
+                                        style={{ width: '100%',backgroundColor: '#fff',color: '#000',  height: 30, borderRadius: 0,marginLeft: Platform.OS == "ios" ? -20 : 0 }}
                                         selectedValue={ticketData.reason}
                                         textStyle={{ color: "#000", fontSize: 12}}
                                         placeholder="e.g Transaction, Campaign"
@@ -189,7 +189,15 @@ class CreateYourTicket extends React.Component {
                             </View>
                             <View style={[styles.mainTextView,{height: 80}]}>
                                 <TextInput
-                                    style={{height: 80, borderColor: '#e6e6e6', borderBottomWidth: 1, fontSize: 12, justifyContent: 'flex-start',paddingRight: 5}}
+                                    style={{
+                                        height: 80, 
+                                        borderColor: '#e6e6e6', 
+                                        borderBottomWidth: 1, 
+                                        fontSize: 12, 
+                                        justifyContent: 'flex-start',
+                                        paddingRight: 5,
+                                        textAlignVertical:'top'
+                                    }}
                                     onChangeText={this.onChange.bind(this, 'message')}
                                     placeholder="Write your text here..."
                                     placeholderTextColor="#000"
@@ -234,7 +242,7 @@ class CreateYourTicket extends React.Component {
                                         this.props.navigation.navigate('Ticket')
                                         }
                                     }>
-                                        <GradientBtn text="SUCCESS" style={{height: 40}} btnStyle={{fontWeight: 'bold'}}/>
+                                        <GradientBtn text="SUCCESS" style={{height: 40,elevation: 7}} btnStyle={{fontWeight: 'bold'}}/>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -277,7 +285,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     alignRowGoals: {
-        elevation: 7,
+        // elevation: 7,
         shadowColor: "#000000",
         shadowOpacity: 0.4,
         shadowRadius: 5,

@@ -146,9 +146,6 @@ class TicketMessage extends React.Component {
         this.setState({ loader: true })
         this.props.dispatch(sendTicketMessage(data)).then(res => {
             this.setState({ loader: false })
-            if (res.data.message) {
-                this.props.dispatch(openToast(res.data.message))
-            }
             if (res.data.message === 'Ticket reply send successfully') {
                 this.setState({ ticketModal: true })
             }
@@ -262,7 +259,7 @@ class TicketMessage extends React.Component {
                                         this.props.navigation.navigate('Ticket')
                                     }
                                     }>
-                                        <GradientBtn text="SUCCESS" style={{ height: 40 }} btnStyle={{ fontWeight: 'bold' }} />
+                                        <GradientBtn text="SUCCESS" style={{ height: 40 ,elevation:7}} btnStyle={{ fontWeight: 'bold' }} />
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -289,7 +286,8 @@ const styles = StyleSheet.create({
         shadowOffset: {
             height: 2,
             width: 2
-        }
+        },
+        elevation:20
     },
     title: {
         fontWeight: 'bold',
@@ -310,7 +308,8 @@ const styles = StyleSheet.create({
         borderColor: "#dbdbdb",
         borderWidth: 0.8,
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        textAlignVertical:'top'
     },
     sentMsgOutMain: {
         borderRadius: 15,
