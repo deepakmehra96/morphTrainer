@@ -4,9 +4,14 @@ import Router from './Routes';
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import ToastComponent from './components/Common/ToastComponent';
+import SplashScreen from 'react-native-splash-screen';
 var { height, width } = Dimensions.get('window');
 
 export default class App extends Component {
+  componentDidMount() {
+    SplashScreen.hide()
+  }
+
   render() {
     console.disableYellowBox = true;
     return (
