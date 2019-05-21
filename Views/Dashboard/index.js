@@ -567,9 +567,9 @@ class Dashboard extends React.Component {
                             </View>
                         </View>
                         <View style={[styles.alignRowGoals]}>
-                            <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ goalCollapse: !this.state.goalCollapse })}>
+                            {/* <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ goalCollapse: !this.state.goalCollapse })}>
                                 <Image source={goalCollapse ? require('../../assets/images/collapse_up.png') : require('../../assets/images/collapse_down.png') } style={{height: '100%', width: '100%'}}/>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <View style={[{paddingTop: 3,paddingBottom: 3,width: '100%'}]}>
                                 <View style={[styles.topView,{marginTop: 0}]}>
                                     <Text style={styles.todatText}>{this.renderDate()}</Text>
@@ -662,9 +662,9 @@ class Dashboard extends React.Component {
                             </View>
                         </View>
                         <View style={[styles.alignRowGoals]}>
-                            <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ mealCollapse: !this.state.mealCollapse })}>
+                            {/* <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ mealCollapse: !this.state.mealCollapse })}>
                                 <Image source={mealCollapse ? require('../../assets/images/collapse_up.png') : require('../../assets/images/collapse_down.png') } style={{height: '100%', width: '100%'}}/>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <View style={[{paddingTop: 3,paddingBottom: 3,width: '100%'}]}>
                                 <View style={[styles.newBiew,styles.newView]}>
                                     <Text style={[styles.blackText,{paddingLeft: 10,paddingBottom: 3}]}>LOG YOUR MEALS</Text>
@@ -843,9 +843,9 @@ class Dashboard extends React.Component {
                             </View>
                         </View>
                         <View style={[styles.alignRowGoals,{flexDirection: 'column'}]}>
-                            <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ exerciseCollapse: !this.state.exerciseCollapse })}>
+                            {/* <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ exerciseCollapse: !this.state.exerciseCollapse })}>
                                 <Image source={exerciseCollapse ? require('../../assets/images/collapse_up.png') : require('../../assets/images/collapse_down.png') } style={{height: '100%', width: '100%'}}/>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <View style={[styles.newBiew,styles.newView]}>
                                 <Text style={[styles.blackText,{paddingLeft: 10}]}>LOG YOUR EXERCISE</Text>
                             </View>
@@ -913,9 +913,9 @@ class Dashboard extends React.Component {
 
                         </View>
                         <View style={[styles.alignRowGoals,{flexDirection: 'column'}]}>
-                            <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ bloodGlucoseCollapse: !this.state.bloodGlucoseCollapse })}>
+                            {/* <TouchableOpacity style={{position: 'absolute',left: width/2 - 20,bottom: -5,zIndex: 10000000, height: 25, width: 25}} onPress={() => this.setState({ bloodGlucoseCollapse: !this.state.bloodGlucoseCollapse })}>
                                 <Image source={bloodGlucoseCollapse ? require('../../assets/images/collapse_up.png') : require('../../assets/images/collapse_down.png') } style={{height: '100%', width: '100%'}}/>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <View style={[styles.newBiew,styles.newView]}>
                                 <View style={{marginRight: 120}}><Text style={[styles.blackText,{paddingLeft: 10,paddingBottom: 3}]}>LOG YOUR BLOOD GLUCOSE</Text></View>
                             </View>

@@ -39,6 +39,7 @@ class Header extends React.Component {
                         shadowOffset: { width: 0, height: 8 },
                         shadowOpacity: 0.8,
                         shadowRadius: 2,
+                        zIndex:-1
                     }}>
                 </View>
             )
