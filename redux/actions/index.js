@@ -761,7 +761,25 @@ export const deleteAppointment = (data) => {
     }
 }
 
-export const setConverstation = (conversation) => axios.post(`${API_CHAT_URL}/new`, conversation)
+export const setConverstation = (data) => {
+    console.log(data,"data")
+    return async dispatch => {
+        return new Promise(
+            (resolve, reject) => 
+            axios.post(`${API_CHAT_URL}/new/`,data)
+            .then(res => {
+                console.log(res,"apires")
+                return resolve(res)
+           })
+            .catch((error) => {
+                console.log(error,"errres")
+                return reject(error)
+            })
+        )
+    }
+}
+
+// export const setConverstation = (conversation) => axios.post(`${API_CHAT_URL}/new`, conversation)
 
 export const getConverstationById = (conversationId, userId) => axios.get(`${API_CHAT_URL}/conversations/${conversationId}/user/${userId}`)
 

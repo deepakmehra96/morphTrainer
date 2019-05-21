@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Container, Content } from 'native-base';
 import Header from '../../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import { getConverstationById, setConversationDetails, setConverstation } from '../../redux/actions';
+import { getConverstationById, setConversationDetails, setConverstation, setMessage } from '../../redux/actions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ShowLoader from '../../components/ShowLoader';
 
@@ -27,17 +27,18 @@ class Chat extends React.Component {
 
     componentDidMount() {
         let { user } = this.props.userData
-        let {user_id_to_send} = this.props.navigation.state && this.props.navigation.state.params
+        let {user_id} = this.props.navigation.state && this.props.navigation.state.params
 
         let participants = [user._id, user_id]
 
-        let participantsList = [{
-            '_id': user._id,
-        },
-        {
-            '_id': user_id_to_send,
-        }]
-        setConverstation({participants, participantsList}).then(res => {
+        // let participantsList = [{
+        //     '_id': user._id,
+        // },
+        // {
+        //     '_id': user_id,
+        // }]
+        // console.log(participants,participantsList,'hi')
+        this.props.dispatch(setConverstation({participants})).then(res => {
             console.log(res,"response conaverstion")
             this.props.dispatch(setConversationDetails(res.data))
 
@@ -53,6 +54,8 @@ class Chat extends React.Component {
                     })
                 }
             })
+        }).catch(err => {
+            console.log({...err},"err")
         })
     }
     componentWillReceiveProps(nextprops) {
@@ -106,14 +109,14 @@ class Chat extends React.Component {
 
     sendMessage() {
         let { user } = this.props.userData
-        let {user_id_to_send} = this.props.navigation.state && this.props.navigation.state.params
+        let {user_id} = this.props.navigation.state && this.props.navigation.state.params
 
         let { chatBox } = this.state
         let socket = this.props.navigation.getScreenProps()
         if (chatBox) {
             let sendingData = {
                 from: user._id,
-                to: user_id_to_send,
+                to: user_id,
                 value: chatBox,
                 conversation: this.state.conversationResposnse,
                 conversationId: this.state.conversationResposnse._id,
@@ -123,9 +126,8 @@ class Chat extends React.Component {
             let messages = this.state.ChatArr;
             messages.push(sendingData);
             this.setState({ ChatArr: messages, chatBox: '' })
-
             socket.socket.on('receivedMessage', data => {
-                console.log(data)
+                console.log(data,"datarecieved")
             })
         }
     }
