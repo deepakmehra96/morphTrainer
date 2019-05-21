@@ -19,7 +19,9 @@ const initialState = {
     duration_type: 'min',
     duration: 1,
     ticketData: [],
-    ticketConversation: []
+    ticketConversation: [],
+    converstionDetails:{},
+    message:''
 }
 
 export default initialState;
