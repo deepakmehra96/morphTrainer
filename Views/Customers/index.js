@@ -3,10 +3,14 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, AsyncStorage, Dimensio
 import { Container, Content } from 'native-base';
 import Header from '../../components/Header';
 import { Switch } from 'react-native-switch';
-import { setUserDetail, getCustomerList } from '../../redux/actions';
+import { setUserDetail, getCustomerList, setMessage, setConversationDetails, setConverstation } from '../../redux/actions';
 import { connect } from 'react-redux'
 import GradientBtn from '../../components/LinearGradient';
 import ShowLoader from '../../components/ShowLoader';
+window.navigator.userAgent = "react-native";
+
+import io from 'socket.io-client'; // note t
+import { API_CHAT_URL } from '../../redux/actions/constant';
 var { height, width } = Dimensions.get('window');
 
 class Options extends React.Component {
@@ -19,15 +23,48 @@ class Options extends React.Component {
         showLoader: false
     }
     componentDidMount(){
+        this.setState({ showLoader: true })
         let { user } = this.props.userData
         console.log(user,"user12121212")
-        this.setState({ showLoader: true })
         this.props.dispatch(getCustomerList(user._id)).then(res => {
             this.setState({ showLoader: false })
             console.log(res,"resres")   
         }).catch(err => {
             this.setState({ showLoader: false })
         })
+              
+        this.handleSocket()
+    }
+
+    handleSocket(){
+        let { user } = this.props.userData
+        this.socket = io(API_CHAT_URL, {
+            jsonp: false,
+            reconnection: true,
+            reconnectionDelay: 100,
+            reconnectionAttempts: 100000,
+            transports: ['websocket'], // you need to explicitly tell it to use websockets
+        });
+        console.log(this.socket,"socket socket socket socket")
+        this.socket.emit('new_connection', { userId: user._id })
+        this.socket.on('id_assigned', (data) => {
+            console.log(data,"data data data data")
+            let socket = this.props.navigation.getScreenProps()
+            socket.setSocket(this.socket)
+        })
+        this.socket.on('receivedMessage', data => {
+            this.recivedMessageMethod(data)
+            console.log(data,"recivedMessageMethod recivedMessageMethod")
+        })
+    }
+
+    recivedMessageMethod = data => {
+        if (data.value) {
+            this.props.dispatch(setMessage(data.value))
+        }   
+    }
+    componentWillUnmount () {
+        this.socket.removeListener('receivedMessage', this.recivedMessageMethod)
     }
 
     handelLoader() {
@@ -76,7 +113,7 @@ class Options extends React.Component {
                                         <Image source={item.avatar ? {uri: item.avatar} : require('../../assets/images/person.jpg')} style={styles.imageStyle}/>
                                     </View>
                                     <View style={styles.alignEnd}>
-                                        <TouchableOpacity style={styles.marginBottom10}>
+                                        <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('Chat',{user_id: item._id})}>
                                             <GradientBtn text="Chat" style={styles.gradientButn}/>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('PersonalityQa',{user_id: item._id})}>

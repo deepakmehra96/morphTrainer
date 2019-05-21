@@ -18,6 +18,7 @@ import Ticket from "../Views/Support/containers/Ticket";
 import CreateYourTicket from "../Views/Support/containers/CreateYourTicket";
 import TicketMessage from "../Views/Support/containers/TicketMessage";
 import Appointment from "../Views/Appointment";
+import Chat from "../Views/Chat";
 
 const AppNavigator = createStackNavigator(
     {
@@ -38,7 +39,8 @@ const AppNavigator = createStackNavigator(
         Ticket: Ticket,
         CreateYourTicket: CreateYourTicket,
         TicketMessage: TicketMessage,
-        Appointment:Appointment
+        Appointment:Appointment,
+        Chat:Chat
       },
       {
         initialRouteName: "CheckRoute",
