@@ -109,7 +109,9 @@ class FooterMain extends React.Component {
             <View style={styles.containerMain}>
 
             {/* <View> */}
+            <View style={{flex: 1,marginBottom: 60}}>
                 {this.handleComponents()}
+            </View>
                 {this.handelLoader()}
             {/* </View> */}
                 <Footer style={{ position: "absolute", bottom: 0, backgroundColor:'#fff',height:60}}>
