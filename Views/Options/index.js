@@ -8,6 +8,8 @@ import { setUserDetail, getSettings, changeNotification, setNotification, openTo
 import { connect } from 'react-redux'
 import ShowLoader from '../../components/ShowLoader';
 import PickerSelect from '../../components/PickerSelect'
+import { StackActions, NavigationActions } from 'react-navigation';
+
 
 class Options extends React.Component {
 
@@ -47,9 +49,11 @@ class Options extends React.Component {
     }
     async logout(){
         await AsyncStorage.removeItem('token')
-        await AsyncStorage.removeItem('user')
-        this.props.dispatch(setUserDetail({}))
-        this.props.navigation.navigate('SignIn')
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'SignIn' })],
+        })
+        this.props.navigation.dispatch(resetAction)
     }
     changeNotification(){
         this.setState({ showLoader: true })

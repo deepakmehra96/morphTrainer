@@ -7,11 +7,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import { getConverstationById, setConversationDetails, setConverstation, setMessage } from '../../redux/actions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ShowLoader from '../../components/ShowLoader';
+import moment from 'moment'
 
 var { height, width } = Dimensions.get('window');
 
 class Chat extends React.Component {
-
     constructor() {
         super()
         this.state = {
@@ -27,35 +27,27 @@ class Chat extends React.Component {
 
     componentDidMount() {
         let { user } = this.props.userData
-        let {user_id} = this.props.navigation.state && this.props.navigation.state.params
-
-        let participants = [user._id, user_id]
-
-        // let participantsList = [{
-        //     '_id': user._id,
-        // },
-        // {
-        //     '_id': user_id,
-        // }]
-        // console.log(participants,participantsList,'hi')
-        this.props.dispatch(setConverstation({participants})).then(res => {
-            console.log(res,"response conaverstion")
+        let { customer } = this.props.navigation.state && this.props.navigation.state.params
+        let participants = [user._id, customer._id]
+        this.setState({ showLoader: true })
+        this.props.dispatch(setConverstation({ participants })).then(res => {
             this.props.dispatch(setConversationDetails(res.data))
 
             let { user } = this.props.userData
             getConverstationById(res.data._id, user._id)
-            .then(res => {
-                if (res.status == 200) {
-                    console.log(res,"Ressssssss")
-                    this.setState({
-                        ChatArr: res.data.messages,
-                        conversationResposnse: res.data.conversation,
-                        showLoader:false
-                    })
-                }
-            })
+                .then(res => {
+                    this.setState({ showLoader: false })
+                    if (res.status == 200) {
+                        this.setState({
+                            ChatArr: res.data.messages,
+                            conversationResposnse: res.data.conversation,
+                            showLoader: false
+                        })
+                    }
+                })
         }).catch(err => {
-            console.log({...err},"err")
+            this.setState({ showLoader: false })
+            console.log({ ...err }, "err")
         })
     }
     componentWillReceiveProps(nextprops) {
@@ -68,21 +60,19 @@ class Chat extends React.Component {
     }
 
     handleChatMessages(val, index) {
+        console.log(val)
         let { user } = this.props.userData
         if (val.from == user._id) {
             return (
                 <LinearGradient colors={['#f7b944', '#f49a3e', '#ef6937']} style={styles.sentMsgOutMain}>
-                    {/* <View key={index} style={styles.sentMsgOutMain}> */}
                     <View style={styles.sentMsgOut}>
                         <Text style={styles.sentMsg}>
                             {val.value}
                         </Text>
                     </View>
                     <Text style={styles.timeMainSend}>
-                        07:00 AM
-                       </Text>
-
-                    {/* </View> */}
+                        {this.getTime(val.updatedAt)}
+                    </Text>
                 </LinearGradient>
             )
         } else {
@@ -98,7 +88,7 @@ class Chat extends React.Component {
                             </Text>
                         </View>
                         <Text style={styles.timeMainRecieve}>
-                            07:00 AM
+                            {this.getTime(val.updatedAt)}
                         </Text>
                     </View>
                 </View>
@@ -106,17 +96,23 @@ class Chat extends React.Component {
             )
         }
     }
+    getTime(date) {
+        let newDate = moment(date)
+        newDate = newDate.format('hh:mm A')
+        return newDate
+    }
+
 
     sendMessage() {
         let { user } = this.props.userData
-        let {user_id} = this.props.navigation.state && this.props.navigation.state.params
+        let { customer } = this.props.navigation.state && this.props.navigation.state.params
 
         let { chatBox } = this.state
         let socket = this.props.navigation.getScreenProps()
         if (chatBox) {
             let sendingData = {
                 from: user._id,
-                to: user_id,
+                to: customer._id,
                 value: chatBox,
                 conversation: this.state.conversationResposnse,
                 conversationId: this.state.conversationResposnse._id,
@@ -127,7 +123,7 @@ class Chat extends React.Component {
             messages.push(sendingData);
             this.setState({ ChatArr: messages, chatBox: '' })
             socket.socket.on('receivedMessage', data => {
-                console.log(data,"datarecieved")
+                console.log(data, "datarecieved")
             })
         }
     }
@@ -149,12 +145,13 @@ class Chat extends React.Component {
 
     render() {
         let { chatBox } = this.state
+        let { customer } = this.props.navigation.state && this.props.navigation.state.params
         return (
             <Container>
                 <Header
                     source={require('../../assets/images/back-btn.png')}
                     textStyleHeader={styles.textStyleHeader}
-                    label="Linda jones"
+                    label={customer.name}
                     navigation={this.props.navigation}
                     appointment={true}
                     showShadow={true}
@@ -165,22 +162,22 @@ class Chat extends React.Component {
                     contentContainerStyle={{ height: '100%' }}
                     behavior={Platform.OS == 'ios' ? 'position' : ''}
                     style={{ flex: 1, }}>
-                    <Content contentContainerStyle={{flex:1}}>
-                    <ScrollView
-                        ref={ref => this.scrollView = ref}
-                        onContentSizeChange={(contentWidth, contentHeight) => {
-                            this.scrollView.scrollToEnd({ animated: false });
-                        }}>
-                        <View style={{ paddingLeft: 5, paddingRight: 5 }}>
-                            {
-                                this.state && this.state.ChatArr.map((val, index) => {
-                                    return (
-                                        this.handleChatMessages(val, index)
-                                    )
-                                })
-                            }
-                        </View>
-                    </ScrollView>
+                    <Content contentContainerStyle={{ flex: 1 }}>
+                        <ScrollView
+                            ref={ref => this.scrollView = ref}
+                            onContentSizeChange={(contentWidth, contentHeight) => {
+                                this.scrollView.scrollToEnd({ animated: false });
+                            }}>
+                            <View style={{ paddingLeft: 5, paddingRight: 5 }}>
+                                {
+                                    this.state && this.state.ChatArr.map((val, index) => {
+                                        return (
+                                            this.handleChatMessages(val, index)
+                                        )
+                                    })
+                                }
+                            </View>
+                        </ScrollView>
 
                     </Content>
                     <View style={styles.textFieldOut}>
@@ -198,7 +195,7 @@ class Chat extends React.Component {
                             position: 'absolute',
                             zIndex: 999999,
                             right: 10,
-                            top:20,
+                            top: 20,
                         }}>
                             <TouchableOpacity onPress={() => this.sendMessage()}>
                                 <Text style={{ fontSize: 14 }}>Send</Text>
@@ -312,7 +309,7 @@ const styles = StyleSheet.create({
         paddingTop: 10
     },
     textFieldOut: {
-        maxHeight:120,
+        maxHeight: 120,
         position: 'relative',
         padding: 8,
         justifyContent: 'center',

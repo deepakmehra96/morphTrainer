@@ -44,6 +44,17 @@ class SignIn extends React.Component {
             showLoader: false
         }
     }
+    async componentDidMount(){
+        let remember = await AsyncStorage.getItem('remember')
+        let user = await AsyncStorage.getItem('saveCredentials')
+        user = JSON.parse(user)
+        remember = JSON.parse(remember)
+        console.log(user)
+        if(remember ==  true){
+            console.log(user.password,"wferkbhfefb")
+            this.setState({ userData:{email:user.email, password:user.password} })
+        }
+    }
     handelChnage(key, event) {
         let { userData } = this.state
         userData[key] = event
@@ -87,11 +98,19 @@ class SignIn extends React.Component {
                 this.setState({userData})
             }
             if(res.data.msg === 'Logged in successfully'){
+                if (checked) {
+                    let dataToSave = JSON.stringify(userData)
+                    await AsyncStorage.setItem('saveCredentials', dataToSave)
+                    await AsyncStorage.setItem('remember', 'true')
+                }
                 this.props.navigation.navigate('FooterMain')
             }
-            if (checked) {
-                await AsyncStorage.setItem('remember', 'true')
-            }
+            // if (checked) {
+            //     // let dataToSave = JSON.stringify(userData)
+            //     // await AsyncStorage.setItem('saveCredentials', dataToSave)
+
+            //     await AsyncStorage.setItem('remember', 'true')
+            // }
             if(res.data.msg){
                 this.props.dispatch(openToast(res.data.msg))
             }
@@ -115,7 +134,7 @@ class SignIn extends React.Component {
         return
     }
     render() {
-        let { email,password } = this.state.userData
+        let { email,password } = this.state && this.state.userData
         let { errors } = this.state
         return (
             <Container>

@@ -113,7 +113,7 @@ class Options extends React.Component {
                                         <Image source={item.avatar ? {uri: item.avatar} : require('../../assets/images/person.jpg')} style={styles.imageStyle}/>
                                     </View>
                                     <View style={styles.alignEnd}>
-                                        <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('Chat',{user_id: item._id})}>
+                                        <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('Chat',{customer: item})}>
                                             <GradientBtn text="Chat" style={styles.gradientButn}/>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('PersonalityQa',{user_id: item._id})}>
