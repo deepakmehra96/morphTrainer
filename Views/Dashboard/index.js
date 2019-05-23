@@ -287,7 +287,10 @@ class Dashboard extends React.Component {
                                 />
                             </View>
                             <View style={{position: 'absolute',right: 20, top: 20,zIndex: 100000000}}>
-                                <TouchableOpacity style={{height: 40,borderRadius: 5,borderWidth: 1, borderColor: '#aba6a6',paddingLeft: 10,paddingRight: 10, alignItems: 'center',flexDirection: 'row',zIndex: 100000}} onPress={() => this.setState({ goalDialog: true })} activeOpacity={0.7}>
+                                <TouchableOpacity style={{height: 40,borderRadius: 5,borderWidth: 1, borderColor: '#aba6a6',paddingLeft: 10,paddingRight: 10, alignItems: 'center',flexDirection: 'row',zIndex: 100000}} onPress={() => {
+                                    this.setState({ goalDialog: true })
+                                    Keyboard.dismiss()
+                                    }} activeOpacity={0.7}>
                                     <View style={{width: 15,height: 15,borderRadius: 10, backgroundColor: goalColor,marginRight: 15}}></View>
                                     <Icons name="down" size={15} color="#aba6a6"/>
                                 </TouchableOpacity>
@@ -555,7 +558,7 @@ class Dashboard extends React.Component {
                             </View>
                             <View style={[styles.innerCon, styles.borderLeft]}>
                                 <View>
-                                    <Text style={styles.heading}>Latest weight, Jan 22</Text>
+                                    <Text style={styles.heading}>Latest weight, {dashboardData.user_detail && moment(dashboardData.user_detail.created_at).format('D MMM')}</Text>
                                 </View>
                                 <View style={styles.contentInRow}>
                                     <Text style={styles.content}>{parseInt(user_detail && user_detail.current_weight)}</Text>
@@ -650,9 +653,12 @@ class Dashboard extends React.Component {
                                             color="#f49b3e"
                                             shadowColor="#d8d7d7"
                                             bgColor="#fff"
+                                            outerCircleStyle={{ transform: [{ rotate: '205deg'}]}}
                                         >
-                                            <Text style={[styles.progressOuterText,{fontSize: 24,marginBottom: 5}]}>{dashboardData.calories_details && Math.ceil(dashboardData.calories_details.calories_left) || 0}</Text>
-                                            <Text style={[styles.smallText,{marginBottom: 5}]}>Calories left</Text>
+                                            <View style={{ transform: [{ rotate: '155deg'}]}}>
+                                                <Text style={[styles.progressOuterText,{fontSize: 24,marginBottom: 5}]}>{dashboardData.calories_details && Math.ceil(dashboardData.calories_details.calories_left) || 0}</Text>
+                                                <Text style={[styles.smallText,{marginBottom: 5}]}>Calories left</Text>
+                                            </View>
                                         </ProgressCircle>
                                         <View style={styles.detailButton}>
                                             <Text style={styles.detailText}>DETAIL</Text>
