@@ -144,6 +144,26 @@ class WorkingHours extends React.Component{
         }
         return
     }
+
+    dynamicStartTime(val){
+        let { start_time, end_time } = this.state;
+        let newTime;
+        if(val === 'start_time'){
+            newTime = start_time
+        }else{
+            newTime = end_time
+        }
+        var todayDate = moment().format('YYYY-MM-DD')
+        var time = moment(newTime, ["h:mm A"]).format("HH:mm:ss");
+        console.log(time,"time")
+        var date = moment(todayDate+' '+time)
+        var timestamp = moment(date).format("X");
+        console.log(date,timestamp,"date")
+        var d = new Date();
+        d.setTime(timestamp + '000')
+        console.log(d,"dynamicStartTime")
+        return d
+    }
     render(){
         let { editHours, isDateTimePickerVisible, isDateTimePickerVisible2, day, start_time, end_time } = this.state;
         console.log(this.props,"props")
@@ -195,7 +215,7 @@ class WorkingHours extends React.Component{
                             mode="time"
                             titleIOS="Pick a time"
                             is24Hour={false}
-                            date={new Date()}
+                            date={this.dynamicStartTime('start_time')}
                         />
                         <DateTimePicker
                             isVisible={isDateTimePickerVisible2}
@@ -204,7 +224,7 @@ class WorkingHours extends React.Component{
                             mode="time"
                             titleIOS="Pick a time"
                             is24Hour={false}
-                            date={new Date()}
+                            date={this.dynamicStartTime('end_time')}
                         />
                     </View>
                 </Content>
