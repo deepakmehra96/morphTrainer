@@ -9,6 +9,7 @@ import ShowLoader from '../ShowLoader';
 import { getUserDetails } from '../../redux/actions';
 import { connect } from 'react-redux'
 import Appointment from '../../Views/Appointment';
+import { StackActions, NavigationActions } from 'react-navigation';
 var { height, width } = Dimensions.get('window');
 
 class FooterMain extends React.Component {
@@ -34,6 +35,13 @@ class FooterMain extends React.Component {
                 this.setState({ loader: false })
             }).catch(err => {
                 this.setState({ loader: false })
+                if(err.data.message === 'Token has expired'){
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'SignIn' })],
+                    })
+                    this.props.navigation.dispatch(resetAction)
+                }
             })
         }
     }

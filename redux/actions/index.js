@@ -291,7 +291,7 @@ export const getUserDetails = (id) => {
                 return resolve(res)
             })
             .catch((error) => {
-                return reject(error.message)
+                return reject(error.response)
             })
         )
     }
