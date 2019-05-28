@@ -1,12 +1,11 @@
 import React from 'react'
-import { Text, View, TextInput, ScrollView, Dimensions, KeyboardAvoidingView, StyleSheet, Image, Platform } from 'react-native';
+import { Text, View, TextInput, ScrollView, Dimensions, KeyboardAvoidingView, StyleSheet, Image, Platform,TouchableOpacity, Linking } from 'react-native';
 import { connect } from 'react-redux'
 import { Container, Content } from 'native-base';
 import Header from '../../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import { getConverstationById, setConversationDetails, setConverstation, setMessage } from '../../redux/actions';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import ShowLoader from '../../components/ShowLoader';
+import { getConverstationById, setConversationDetails, setConverstation, setMessage } from '../../redux/actions';
 import moment from 'moment'
 
 var { height, width } = Dimensions.get('window');
@@ -19,6 +18,7 @@ class Chat extends React.Component {
             ChatArr: [],
             chatBox: '',
             showLoader: false,
+            coachDetails:{}
         }
     }
     static navigationOptions = {
@@ -60,8 +60,8 @@ class Chat extends React.Component {
     }
 
     handleChatMessages(val, index) {
-        console.log(val)
         let { user } = this.props.userData
+        let { customer } = this.props.navigation.state && this.props.navigation.state.params
         if (val.from == user._id) {
             return (
                 <LinearGradient colors={['#f7b944', '#f49a3e', '#ef6937']} style={styles.sentMsgOutMain}>
@@ -79,7 +79,7 @@ class Chat extends React.Component {
             return (
                 <View style={styles.messageOutImage}>
                     <View style={styles.profileImageOut}>
-                        <Image style={styles.imageMain} source={require('../../assets/images/plus-icon_06.png')} />
+                        <Image  source={customer.avatar ? {uri: customer.avatar} : require('../../assets/images/person.jpg')} style={styles.imageMain} />
                     </View>
                     <View key={index} style={styles.recieveMsgOutMain}>
                         <View style={styles.recieveMsgOut}>
@@ -143,6 +143,15 @@ class Chat extends React.Component {
         }
     }
 
+    handleCall(){
+        let { customer } = this.props.navigation.state && this.props.navigation.state.params
+        console.log(customer,"coachDetails.phone_number")
+        if (Platform.OS == 'ios') {
+            Linking.openURL(`tel://${customer.phone_number}`)
+        }else{
+            Linking.openURL(`tel:${customer.phone_number}`)
+        }
+    }
     render() {
         let { chatBox } = this.state
         let { customer } = this.props.navigation.state && this.props.navigation.state.params
@@ -156,13 +165,13 @@ class Chat extends React.Component {
                     appointment={true}
                     showShadow={true}
                     shadowStyles={styles.shadowTopMargin}
-                    mainViewStyles={{ marginBottom: 0, paddingBottom: 10, zIndex: 999999, backgroundColor: '#fff' }}
+                    borderStyle={{ marginBottom: 0, paddingBottom: 10, zIndex: 99999999, backgroundColor: '#fff' }}
                 />
                 <KeyboardAvoidingView
                     contentContainerStyle={{ height: '100%' }}
                     behavior={Platform.OS == 'ios' ? 'position' : ''}
                     style={{ flex: 1, }}>
-                    <Content contentContainerStyle={{ flex: 1 }}>
+                    {/* <Content contentContainerStyle={{ flex: 1 }}> */}
                         <ScrollView
                             ref={ref => this.scrollView = ref}
                             onContentSizeChange={(contentWidth, contentHeight) => {
@@ -179,10 +188,12 @@ class Chat extends React.Component {
                             </View>
                         </ScrollView>
 
-                    </Content>
+                    {/* </Content> */}
                     <View style={styles.textFieldOut}>
                         <View style={styles.iconOut}>
-                            <Image style={styles.imageMain} source={require('../../assets/images/plus-icon_06.png')} />
+                            <TouchableOpacity onPress={() => this.handleCall()}>
+                                <Image style={styles.imageMain} source={require('../../assets/images/call.png')} />
+                            </TouchableOpacity>
                         </View>
                         <TextInput
                             value={chatBox}
@@ -193,12 +204,13 @@ class Chat extends React.Component {
 
                         <View style={{
                             position: 'absolute',
-                            zIndex: 999999,
-                            right: 10,
-                            top: 20,
+                            zIndex: 999,
+                            right: 0,
+                            height:50, 
+                            width:50
                         }}>
-                            <TouchableOpacity onPress={() => this.sendMessage()}>
-                                <Text style={{ fontSize: 14 }}>Send</Text>
+                            <TouchableOpacity onPress={() => this.sendMessage()} style={{zIndex:999}}> 
+                                <Image style={styles.imageMain} source={require('../../assets/images/send.png')} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -338,6 +350,10 @@ const styles = StyleSheet.create({
         position: "absolute",
         height: 25,
         width: 25,
-        left: 8
+        left: 8,
+        borderWidth:0.5,
+        borderColor:'#ccc',
+        borderRadius:20,
+        overflow:'hidden'
     }
 })

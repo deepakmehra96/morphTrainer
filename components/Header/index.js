@@ -26,7 +26,7 @@ class Header extends React.Component {
         if (val) {
             return (
                 <View
-                    style={{
+                    style={[{
                         width: '100%',
                         elevation: 7,
                         opacity: 0.4,
@@ -39,7 +39,7 @@ class Header extends React.Component {
                         shadowOffset: { width: 0, height: 8 },
                         shadowOpacity: 0.8,
                         shadowRadius: 2,
-                    }}>
+                    },this.props.shadowStyles]}>
                 </View>
             )
         }
@@ -49,7 +49,7 @@ class Header extends React.Component {
     }
     render() {
         return (
-            <View style={[{marginBottom: 10},this.props.borderStyle]}>
+            <View style={[{marginBottom: 10, zIndex:999},this.props.borderStyle]}>
                 <View style={this.checkNotch()}>
                     <View style={styles.width20}>
                         <TouchableOpacity onPress={() => { this.handleBack() }}>
