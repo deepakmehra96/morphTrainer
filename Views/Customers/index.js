@@ -96,7 +96,7 @@ class Options extends React.Component {
                             return(
                                 <View style={[styles.alignRowGoals,styles.mainList]} key={key}>
                                     <View>
-                                        <TouchableOpacity style={styles.marginBottom10}>
+                                        <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('Analysis')}>
                                             <GradientBtn text="Analytics" style={styles.gradientButn}/>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.marginBottom10} onPress={() => this.props.navigation.navigate('Dashboard',{user_id: item._id})}>
