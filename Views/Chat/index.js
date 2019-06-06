@@ -36,6 +36,7 @@ class Chat extends React.Component {
             let { user } = this.props.userData
             getConverstationById(res.data._id, user._id)
                 .then(res => {
+                    console.log(res,"res")
                     this.setState({ showLoader: false })
                     if (res.status == 200) {
                         this.setState({

@@ -8,8 +8,7 @@ import { connect } from 'react-redux'
 import GradientBtn from '../../components/LinearGradient';
 import ShowLoader from '../../components/ShowLoader';
 window.navigator.userAgent = "react-native";
-
-import io from 'socket.io-client'; // note t
+import io from 'socket.io-client'; 
 import { API_CHAT_URL } from '../../redux/actions/constant';
 var { height, width } = Dimensions.get('window');
 
@@ -27,10 +26,10 @@ class Options extends React.Component {
         let { user } = this.props.userData
         console.log(user,"user12121212")
         this.props.dispatch(getCustomerList(user._id)).then(res => {
-            this.setState({ showLoader: false })
+            this.setState({ showLoader: true })
             console.log(res,"resres")   
         }).catch(err => {
-            this.setState({ showLoader: false })
+            this.setState({ showLoader: true })
         })
               
         this.handleSocket()
