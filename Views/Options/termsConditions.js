@@ -33,10 +33,10 @@ class TermsConditions extends React.Component{
         return
     }
     render(){
-        let {data} = this.state;
+        let {data, showLoader} = this.state;
         return(
             <Container>
-                <Header navigation={this.props.navigation} showShadow={true} label="Terms & Conditions" source={require('../../assets/images/back-btn.png')} />
+                <Header navigation={this.props.navigation} showShadow={!showLoader} label="Terms & Conditions" source={require('../../assets/images/back-btn.png')} />
                 <TextContent htmlContent={data}/> 
                 {this.handelLoader()} 
             </Container>

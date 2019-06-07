@@ -21,7 +21,7 @@ class Appointment extends React.Component {
         this.state = {
             apoointmentList: row,
             showLoader: false,
-            selectedDate:''
+            selectedDate:'',appointementData:[]
         }
     }
     componentDidMount() {
@@ -40,7 +40,7 @@ class Appointment extends React.Component {
         let { apoointmentList } = this.state
         this.setState({ showLoader: true })
         this.props.dispatch(getAppointmentList(date)).then(res => {
-            this.setState({ apoointmentList: apoointmentList.cloneWithRows(res.data.data), showLoader: false })
+            this.setState({ apoointmentList: apoointmentList.cloneWithRows(res.data.data), showLoader: false, appointementData : res.data.data })
         }).catch(err => {
             this.setState({ showLoader: false })
             console.log(err, "err err")
@@ -80,10 +80,10 @@ class Appointment extends React.Component {
     }
     render() {
         let listToDisplay = this.state && this.state.apoointmentList
-        let { selectedDate } = this.state
+        let { selectedDate, showLoader, appointementData } = this.state
         return (
             <Container>
-                <Header navigation={this.props.navigation} showShadow={true} label="Appointments" />
+                <Header navigation={this.props.navigation} showShadow={!showLoader} label="Appointments" />
                 <Content style={styles.contentStyles}>
                     <View style={styles.mainContainer}>
                         <View style={styles.dateSlot}>
@@ -118,6 +118,9 @@ class Appointment extends React.Component {
                                 {selectedDate || moment().format("YYYY-MM-DD")}
                             </Text>
                         </View>
+
+                        { appointementData && appointementData.length ?  
+
                         <List
                             rightOpenValue={-75}
                             disableRightSwipe={true}
@@ -153,7 +156,12 @@ class Appointment extends React.Component {
                                     <Icon active name="ios-close-circle" style={styles.iconSize} />
                                     <Text style={styles.cancelText}>Cancel</Text>
                                 </Button>}
-                        />
+                        /> : 
+                        <View style={{alignItems:'center', marginTop:30}}>
+                            <Text style={{color: '#ef6937'}}>No Appointments yet</Text>
+                        </View>
+                        }
+
                     </View>
                 </Content>
                 {this.handelLoader()}

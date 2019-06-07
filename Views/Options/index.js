@@ -154,12 +154,10 @@ class Options extends React.Component {
     }
     render() {
         let { notification, slots } = this.props.userData
-        let { modalVisible, duration_type, dataSource, rightDataSource } = this.state
-        console.log(dataSource,"dataSource")
-        console.log(slots,duration_type,this.renderType(),"notification")
+        let { modalVisible, showLoader, dataSource, rightDataSource } = this.state
         return (
             <Container>
-                <Header navigation={this.props.navigation} showShadow={true} label="Settings"  />
+                <Header navigation={this.props.navigation} showShadow={!showLoader} label="Settings"  />
                 <Content>
                 <View style={styles.mainContainer}>
                     <View style={styles.shadowMain}>

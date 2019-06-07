@@ -24,12 +24,10 @@ class Options extends React.Component {
     componentDidMount(){
         this.setState({ showLoader: true })
         let { user } = this.props.userData
-        console.log(user,"user12121212")
         this.props.dispatch(getCustomerList(user._id)).then(res => {
-            this.setState({ showLoader: true })
-            console.log(res,"resres")   
+            this.setState({ showLoader: false })
         }).catch(err => {
-            this.setState({ showLoader: true })
+            this.setState({ showLoader: false })
         })
               
         this.handleSocket()
@@ -44,16 +42,13 @@ class Options extends React.Component {
             reconnectionAttempts: 100000,
             transports: ['websocket'], // you need to explicitly tell it to use websockets
         });
-        console.log(this.socket,"socket socket socket socket")
         this.socket.emit('new_connection', { userId: user._id })
         this.socket.on('id_assigned', (data) => {
-            console.log(data,"data data data data")
             let socket = this.props.navigation.getScreenProps()
             socket.setSocket(this.socket)
         })
         this.socket.on('receivedMessage', data => {
             this.recivedMessageMethod(data)
-            console.log(data,"recivedMessageMethod recivedMessageMethod")
         })
     }
 
@@ -84,11 +79,11 @@ class Options extends React.Component {
     }
     
     render() {
+        let { showLoader } = this.state
         let { customerList } = this.props.userData
-        console.log(customerList,"customerList")
         return (
             <Container>
-                <Header navigation={this.props.navigation} showShadow={true} label="Customers list"  />
+                <Header navigation={this.props.navigation} showShadow={!showLoader} label="Customers list"  />
                 <Content>
                     <View style={{paddingLeft: 25,paddingRight: 25,marginBottom: 100}}>
                         {customerList.length ? customerList.map((item,key) => {

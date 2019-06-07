@@ -165,12 +165,12 @@ class WorkingHours extends React.Component{
         return d
     }
     render(){
-        let { editHours, isDateTimePickerVisible, isDateTimePickerVisible2, day, start_time, end_time } = this.state;
+        let { editHours, isDateTimePickerVisible, isDateTimePickerVisible2, day, showLoader, end_time } = this.state;
         console.log(this.props,"props")
         let { workingHours } = this.props.userData || []
         return(
             <Container>
-                <Header navigation={this.props.navigation} showShadow={true} label="Working Hours" source={require('../../assets/images/back-btn.png')} />
+                <Header navigation={this.props.navigation} showShadow={!showLoader} label="Working Hours" source={require('../../assets/images/back-btn.png')} />
                 <Content>
                     <View style={styles.paddingMain}>
                         <View style={styles.alignRowGoals}>

@@ -46,11 +46,12 @@ class Profile extends React.Component {
         return
     }
     render() {
+        let { showLoader } = this.state
         let { user } = this.props.userData
         return (
             <Container>
                  <Header 
-                        showShadow={true}
+                        showShadow={!showLoader}
                         widthAdjust={styles.widthImageRight} 
                         imageBack={require('../../assets/images/coach-editBtn.png')} 
                         label="My Profile" 

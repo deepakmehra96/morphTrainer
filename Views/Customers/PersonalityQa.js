@@ -19,16 +19,15 @@ class PersonalityQa extends React.Component {
         showLoader: false,
         allScreenData: [],
         stepsData: {},
-        editLoader: false,
         options: [],
         active: false,
         answers: {}
     }
     componentDidMount(){
         let {user_id} = this.props.navigation.state && this.props.navigation.state.params
-        this.setState({ showLoader: true, editLoader: true })
+        this.setState({ showLoader: true })
         this.props.dispatch(questionList()).then(res => {
-            this.setState({ showLoader: false })
+            
             console.log(res)
             if(res.data.message === 'Question List'){
                 this.setState({allScreenData : res.data.question})
@@ -39,7 +38,7 @@ class PersonalityQa extends React.Component {
         })
         this.props.dispatch(getUserAnswers(user_id)).then(res => {
             console.log(res,"qares")
-            this.setState({editLoader: false})
+            this.setState({ showLoader: false })
             if(res.data.message === 'success'){
                 let apiData = res.data.data
                 let optionData = apiData.options
@@ -47,13 +46,14 @@ class PersonalityQa extends React.Component {
                 this.setState({ options: optionsId, answers: apiData })
             }
         }).catch(err => {
+            this.setState({ showLoader: false })
             console.log(err,"err123")
         })
     }
 
     handelLoader() {
-        let { showLoader, editLoader } = this.state
-        if (showLoader || editLoader) {
+        let { showLoader } = this.state
+        if (showLoader) {
             return <ShowLoader />
         } else {
             return null
@@ -110,11 +110,11 @@ class PersonalityQa extends React.Component {
     }
     
     render() {
-        let { list, allScreenData, answers } = this.state;
+        let { list, allScreenData, answers, showLoader } = this.state;
         console.log(answers,"answers")
         return (
             <Container>
-                <Header navigation={this.props.navigation} showShadow={true} label="Personality Q&A" source={require('../../assets/images/back-btn.png')} />
+                <Header navigation={this.props.navigation} showShadow={!showLoader} label="Personality Q&A" source={require('../../assets/images/back-btn.png')} />
                 <Content>
                     <View style={{paddingLeft: 25,paddingRight: 25,marginTop: 20}}>
                         {this.renderData()}
