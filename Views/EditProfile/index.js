@@ -9,6 +9,7 @@ import DownButton from '../../components/DownButton';
 import { userDetail, editProfile, getUserDetails, openToast } from '../../redux/actions';
 import ShowLoader from '../../components/ShowLoader';
 import { connect } from 'react-redux'
+import { CustomPicker } from '../../components/Common/react-native-custom-picker'
 import Toast, { DURATION } from 'react-native-easy-toast'
 var { height, width } = Dimensions.get('window');
 
@@ -191,6 +192,7 @@ class EditPofile extends React.Component {
     render() {
         let { errors, resError, userData, genderError } = this.state
         let { user } = this.props.userData
+        const options = ['Male', 'Female']
         return (
             <Container>
                 <Content>
@@ -230,6 +232,14 @@ class EditPofile extends React.Component {
                         </View> */}
 
                         <View style={[styles.relitive, { borderRadius: 5, zIndex: 999, borderColor: '#d1d1d1', borderWidth: 1, marginBottom: 10, paddingLeft: 1, paddingRight: 10, height: 50 }]}>
+                        {Platform.OS == 'android' ?
+                                <CustomPicker
+                                    options={options}
+                                    placeholder="Select Gender"
+                                    footerTemplate={false}
+                                    value={userData.gender}
+                                    onValueChange={this.handelChnage.bind(this, 'gender')}
+                                /> :
                             <Picker
                                 note
                                 mode="dropdown"
@@ -245,6 +255,7 @@ class EditPofile extends React.Component {
                                 <Picker.Item label="Male" value="Male" />
                                 <Picker.Item label="Female" value="Female" />
                             </Picker>
+                        }
                             {Platform.OS == 'android' ?
                                 <View style={{ position: 'absolute', right: 15, top: 20, width: 12, height: 8 }}>
                                     <Image source={require('../../assets/images/down_arrow.png')} style={{ width: '100%', height: '100%' }} />
