@@ -22,7 +22,8 @@ const initialState = {
     ticketConversation: [],
     converstionDetails:{},
     message:'',
-    graphType: 'week'
+    graphType: 'week',
+    caloriesGraphType: 'week'
 }
 
 export default initialState;

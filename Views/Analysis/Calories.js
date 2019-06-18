@@ -1,12 +1,12 @@
 import React from 'react'
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
-import { Container, Content, Tab, Tabs } from 'native-base';
-import FooterMain from '../../components/Footer';
-import Header from '../../components/Header';
+import { Content} from 'native-base';
 import GradientBtn from '../../components/LinearGradient';
-import LinearGradient from 'react-native-linear-gradient';
 import PureChart from 'react-native-pure-chart';
+import { setCaloriesGraphType, caloriesGraph } from '../../redux/actions';
+import ShowLoader from '../../components/ShowLoader';
+import moment from 'moment';
 var { height, width } = Dimensions.get('window');
 
 class CaloriesAnalytics extends React.Component {
@@ -14,46 +14,87 @@ class CaloriesAnalytics extends React.Component {
         super()
         this.state = {
             btnArray: [
-                { _id: 1, value: 'Week' },
-                { _id: 2, value: 'Month' },
-                { _id: 3, value: 'Year' }
+                { _id: 1, value: 'week' },
+                { _id: 2, value: 'month' },
+                { _id: 3, value: 'year' }
             ],
-            btnId: "1"
+            btnId: "1",
+            caloriesData: {},
+            showContent: false,
+            showLoader: false
         }
     }
     static navigationOptions = {
         header: null
     }
 
+    componentDidMount(){
+        let { caloriesGraphType } = this.props.userData
+        this.caloriesGraphApi(caloriesGraphType)
+    }
+
+    caloriesGraphApi(type){
+        let {user_id} = this.props.navigation.state && this.props.navigation.state.params
+        let data = {
+            userId: user_id,
+            type: type
+        }
+
+        console.log(data," data data data data")
+
+        this.setState({ showLoader: true })
+        this.props.dispatch(caloriesGraph(data)).then(res => {
+            console.log(res,"ress")
+            if(res.data.message = "success"){
+                this.setState({ caloriesData: res.data.data, showContent: true })
+            }
+            this.setState({ showLoader: false })
+        }).catch(err => {
+            console.log({...err},"err")
+            this.setState({ showLoader: false })
+        })
+    }
+
     handelChangeValues(val) {
-        this.setState({ btnId: val._id })
+        // this.setState({ btnId: val._id })
+        this.props.dispatch(setCaloriesGraphType(val.value))
+        this.caloriesGraphApi(val.value)
     }
 
     ChangeStyle(val) {
-        let { btnId } = this.state
-        if (val._id == btnId) {
-            return <GradientBtn text={val.value} style={styles.gradientStyle} btnStyle={{ fontSize: 10 }} />
+        let {caloriesGraphType} = this.props.userData
+        if (val == caloriesGraphType) {
+            return <GradientBtn text={val} style={styles.gradientStyle} btnStyle={{ fontSize: 10 }} />
         } else {
             return (
                 <View style={styles.btn30}>
-                    <Text style={this.textChangeStyle(val._id)}>{val.value}</Text>
+                    <Text style={this.textChangeStyle(val)}>{val}</Text>
                 </View>
             )
         }
     }
     textChangeStyle(val) {
-        let { btnId } = this.state
-        if (val == btnId) {
+        let {caloriesGraphType} = this.props.userData
+        if (val == caloriesGraphType) {
             return styles.textContentWeightActive
         } else {
             return styles.textContentWeight
         }
     }
 
+    handelLoader() {
+        let { showLoader } = this.state
+        if (showLoader) {
+            return <ShowLoader />
+        } else {
+            return null
+        }
+        return
+    }
+
     render() {
-        const data = [50, 10, 40, 95, 55, 91, 35, 53, 24, 50,]
-        const contentInset = { top: 20, bottom: 20 }
-        let { btnArray } = this.state
+        let {caloriesGraphType} = this.props.userData
+        let { btnArray, caloriesData, showContent } = this.state
         let sampleData = [
             {
               seriesName: 'series1',
@@ -89,50 +130,54 @@ class CaloriesAnalytics extends React.Component {
                                     return (
                                         <TouchableOpacity key={index}
                                             onPress={() => this.handelChangeValues(val)}>
-                                            {this.ChangeStyle(val)}
+                                            {this.ChangeStyle(val.value)}
                                         </TouchableOpacity>
                                     )
                                 })
                             }
                         </View>
                     </View>
-
-                    {/* <View style={{ flexDirection: 'row' }}>
-                        <YAxis
-                            data={data}
-                            contentInset={contentInset}
-                            svg={{
-                                fill: 'grey',
-                                fontSize: 10,
-                            }}
-                            // numberOfTicks={ 10 } 
-                            formatLabel={(value, index) => index}
-                        />
-                        <AreaChart
-                            style={{ height: 200, width: '100%', paddingLeft: 10 }}
-                            data={data}
-                            contentInset={{ top: 30, bottom: 30 }}
-                            svg={{ fill: 'rgba(220, 135, 38, 0.8)' }}
-                        >
-                            <Grid />
-                        </AreaChart>
-
-                    </View>
-                    <XAxis
-                        data={data}
-                        formatLabel={(value, index) => index}
-                        contentInset={{ left: 10, right: 10 }}
-                        svg={{ fontSize: 10, fill: 'black', }}
-                    /> */}
-                    <PureChart data={sampleData} type='line' />
-                    <Text style={styles.weekText}>WEEKS</Text>
-
+                    {showContent && <PureChart data={caloriesData.graphData} type='line' />}
+                    <Text style={styles.weekText}>{caloriesGraphType.toUpperCase()}</Text>
                     <View style={styles.secondContainer}>
                         <Text style={styles.textHeading}>
-                            Lastest weight, Jan 22
+                            Lastest update: {moment().format('MMMM DD, YYYY')}
                         </Text>
                     </View>
+                    <View style={styles.secondContainer}>
+                            <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                                <View>
+                                    <View style={styles.textColoOutterCon}>
+                                        <View style={styles.eatenColor}></View>
+                                        <Text style={styles.textColorGrey}>Eaten</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={styles.caloriesText}>{caloriesData.Eaten_calories} Cal</Text>
+                                    </View>
+                                </View>
+                                <View>
+                                    <View style={styles.textColoOutterCon}>
+                                        <View style={styles.leftColor}></View>
+                                        <Text style={styles.textColorGrey}>Calories left</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={styles.caloriesText}>{caloriesData.Left_calories} Cal</Text>
+                                    </View>
+                                </View>
+                                <View>
+                                    <View style={styles.textColoOutterCon}>
+                                        <View style={styles.burnedColor}></View>
+                                        <Text style={styles.textColorGrey}>Calories burned</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={styles.caloriesText}>{caloriesData.Burned_calories} Cal</Text>
+                                    </View>
+                                </View>
+                            </View>
+
+                    </View>
                 </View>
+                {this.handelLoader()}
             </Content>
         )
     }
@@ -183,12 +228,14 @@ const styles = StyleSheet.create({
     },
     btnOutMain: {
         width: '100%',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        marginBottom:10
     },
     weekText: {
         fontWeight: '500',
-        marginLeft: 20,
+        marginLeft: 10,
         marginTop: 10,
+        marginBottom:10,
         fontSize: 10
     },
     secondContainer: {
@@ -198,5 +245,40 @@ const styles = StyleSheet.create({
         color: 'grey',
         fontSize: 12
     },
+    textColorGrey:{
+        color:"grey",
+        fontSize: 12
+    },
+    textColoOutterCon: {
+        alignItems:'center',
+        flexDirection:'row'
+    },
+    eatenColor:{ 
+        height:10, 
+        width:10, 
+        backgroundColor:"#008000", 
+        borderRadius:20, 
+        marginRight:10
+    },
 
+    leftColor:{ 
+        height:10, 
+        width:10, 
+        backgroundColor:"#0000ff", 
+        borderRadius:20, 
+        marginRight:10
+    },
+
+    burnedColor:{ 
+        height:10, 
+        width:10, 
+        backgroundColor:"#FFFF00", 
+        borderRadius:20, 
+        marginRight:10
+    },
+    caloriesText:{
+        marginTop:10,
+        fontSize:18,
+        marginLeft:2
+    }
 })

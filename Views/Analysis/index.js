@@ -31,7 +31,7 @@ class Analysis extends React.Component {
                         <WeightAnalytics  navigation={this.props.navigation} />
                     </Tab>
                     <Tab heading="CALORIES" tabStyle={styles.whiteBgColor} activeTabStyle={styles.whiteBgColor} activeTextStyle={{  color: '#000', fontSize: 12, fontWeight: 'bold' }} textStyle={{ color: '#000', fontSize: 12, fontWeight: 'bold' }}>
-                        <CaloriesAnalytics />
+                        <CaloriesAnalytics navigation={this.props.navigation} />
                     </Tab>
                 </Tabs>
             </Container>

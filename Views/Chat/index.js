@@ -147,10 +147,12 @@ class Chat extends React.Component {
     handleCall(){
         let { customer } = this.props.navigation.state && this.props.navigation.state.params
         console.log(customer,"coachDetails.phone_number")
+
+
         if (Platform.OS == 'ios') {
-            Linking.openURL(`tel://${customer.phone_number}`)
+            Linking.openURL(`tel://${customer.phone_number || 555555}`)
         }else{
-            Linking.openURL(`tel:${customer.phone_number}`)
+            Linking.openURL(`tel:${customer.phone_number || 555555}`)
         }
     }
     render() {
