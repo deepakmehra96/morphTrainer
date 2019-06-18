@@ -21,7 +21,8 @@ const initialState = {
     ticketData: [],
     ticketConversation: [],
     converstionDetails:{},
-    message:''
+    message:'',
+    graphType: 'week'
 }
 
 export default initialState;

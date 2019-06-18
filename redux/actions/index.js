@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_URL, API_CHAT_URL } from './constant';
-import { SET_USER_DETAIL, OPEN_TOAST, SET_GOAL_LIST, GOAL_VISIBLE, DASHBOARD_DATA, SET_DASHBOARD_DATA, SET_MOMENT_DATE, SET_CUSTOMER_LIST, SET_USER, SET_WORKING_HOURS, SET_NOTIFICATION, SET_SLOTS, SET_DATA_SOURCE, SET_RIGHT_DATA_SOURCE, SET_DURATION_TYPE, SET_DURATION, SET_TICKET_DATA, SET_TICKET_CONVERSATION, SET_APPOINTMENT_LIST, SET_CONVERSATION_DETAILS, SET_MESSAGE } from './ActionTypes';
+import { SET_USER_DETAIL, OPEN_TOAST, SET_GOAL_LIST, GOAL_VISIBLE, DASHBOARD_DATA, SET_DASHBOARD_DATA, SET_MOMENT_DATE, SET_CUSTOMER_LIST, SET_USER, SET_WORKING_HOURS, SET_NOTIFICATION, SET_SLOTS, SET_DATA_SOURCE, SET_RIGHT_DATA_SOURCE, SET_DURATION_TYPE, SET_DURATION, SET_TICKET_DATA, SET_TICKET_CONVERSATION, SET_APPOINTMENT_LIST, SET_CONVERSATION_DETAILS, SET_MESSAGE, SET_GRAPH_TYPE } from './ActionTypes';
 import {AsyncStorage} from 'react-native'
 
 export const coachLogin = (data) => {
@@ -293,6 +293,26 @@ export const getUserDetails = (id) => {
             .catch((error) => {
                 return reject(error.response)
             })
+        )
+    }
+}
+
+export const weightGraph = (data) => {
+    return async dispatch => {
+        let token = await AsyncStorage.getItem('token')
+        console.log(token, "token")
+        var headers = {
+            'Authorization': 'Bearer' + (' ') + token
+        }
+        return new Promise(
+            (resolve, reject) =>
+                axios.post(`${API_URL}/weightGraph/`, data, { headers: headers })
+                .then(res => {
+                    return resolve(res)
+                })
+                .catch((error) => {
+                    return reject(error.response)
+                })
         )
     }
 }
@@ -708,6 +728,13 @@ export const setTicketData = data => {
 export const setTicketConversation = data => {
     return {
         type: SET_TICKET_CONVERSATION,
+        payload: data
+    }
+}
+
+export const setGraphType = data => {
+    return {
+        type: SET_GRAPH_TYPE,
         payload: data
     }
 }

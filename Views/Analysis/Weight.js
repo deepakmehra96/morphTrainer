@@ -2,10 +2,10 @@ import React from 'react'
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
 import { Container, Content, Tab, Tabs } from 'native-base';
-import Header from '../../components/Header';
 import GradientBtn from '../../components/LinearGradient';
-import LinearGradient from 'react-native-linear-gradient';
 import PureChart from 'react-native-pure-chart';
+import { weightGraph, setGraphType } from '../../redux/actions';
+import ShowLoader from '../../components/ShowLoader';
 
 var { height, width } = Dimensions.get('window');
 
@@ -14,59 +14,88 @@ class WeightAnalytics extends React.Component {
         super()
         this.state = {
             btnArray: [
-                { _id: 1, value: 'Week' },
-                { _id: 2, value: 'Month' },
-                { _id: 3, value: 'Year' }
+                { _id: 1, value: 'week' },
+                { _id: 2, value: 'month' },
+                { _id: 3, value: 'year' }
             ],
-            btnId: "1"
+            btnId: "1",
+            weightData: {},
+            showContent: false,
         }
     }
     static navigationOptions = {
         header: null,
     }
 
+    componentDidMount(){
+        let {graphType} = this.props.userData
+        this.weightGraphApi(graphType)
+    }
+
+    weightGraphApi(type){
+        let {user_id} = this.props.navigation.state && this.props.navigation.state.params
+        let data = {
+            userId: user_id,
+            type: type
+        }
+        this.setState({ showLoader: true })
+        this.props.dispatch(weightGraph(data)).then(res => {
+            console.log(res,"ress")
+            if(res.data.message = "success"){
+                this.setState({ weightData: res.data.data, showContent: true })
+            }
+            this.setState({ showLoader: false })
+        }).catch(err => {
+            console.log({...err},"err")
+            this.setState({ showLoader: false })
+        })
+    }
+
     handelChangeValues(val) {
-        this.setState({ btnId: val._id })
+        console.log(val.value,"val")
+        this.props.dispatch(setGraphType(val.value))
+        this.weightGraphApi(val.value)
+        // this.setState({ btnId: val._id })
     }
 
     ChangeStyle(val) {
-        let { btnId } = this.state
-        if (val._id == btnId) {
-            return <GradientBtn text={val.value} style={styles.gradientStyle} btnStyle={{ fontSize: 10 }} />
+        let {graphType} = this.props.userData
+        // let { btnId } = this.state
+        if (val == graphType) {
+            return <GradientBtn text={val} style={styles.gradientStyle} btnStyle={{ fontSize: 10 }} />
         } else {
             return (
                 <View style={styles.btn30}>
-                    <Text style={this.textChangeStyle(val._id)}>{val.value}</Text>
+                    <Text style={this.textChangeStyle(val)}>{val}</Text>
                 </View>
             )
         }
     }
     textChangeStyle(val) {
-        let { btnId } = this.state
-        if (val == btnId) {
+        let {graphType} = this.props.userData
+        console.log(val,graphType,"graphTypegraphType")
+        if (val == graphType) {
+            console.log(val,graphType,"graphTypegraphType")
             return styles.textContentWeightActive
         } else {
+            console.log(val,graphType,"graphTypegraphType")
             return styles.textContentWeight
         }
     }
+    handelLoader() {
+        let { showLoader } = this.state
+        if (showLoader) {
+            return <ShowLoader />
+        } else {
+            return null
+        }
+        return
+    }
     render() {
-        const data = [10, 20, 30, 45, 55, 95, 35, 53, 24, 50,35, 53, 24, 50,]
-        const contentInset = { top: 20, bottom: 20 }
-        let { btnArray } = this.state
+        let {graphType} = this.props.userData
+        let { btnArray, weightData, showContent } = this.state
+        console.log(weightData,"weightDataweightData")
 
-        let sampleData = [
-            {
-              seriesName: 'series1',
-              data: [
-                {x: '01', y: 170},
-                {x: '02', y: 360},
-                {x: '03', y: 100},
-                {x: '04', y: 250},
-                {x: '05', y: 100}
-              ],
-              color: '#297AB1'
-            }
-          ]
         return (
             <Content>
                 <View style={styles.mainContainer}>
@@ -77,7 +106,7 @@ class WeightAnalytics extends React.Component {
                                     return (
                                         <TouchableOpacity key={index}
                                             onPress={() => this.handelChangeValues(val)}>
-                                            {this.ChangeStyle(val)}
+                                            {this.ChangeStyle(val.value)}
                                         </TouchableOpacity>
                                     )
                                 })
@@ -112,9 +141,10 @@ class WeightAnalytics extends React.Component {
                         svg={{ fontSize: 10, fill: 'black', }}
                     /> */}
                     <View style={{ marginTop:20}}>
-                        <PureChart data={sampleData} type='line' />
+                    {console.log(weightData && weightData.graphData&& weightData.graphData.length && weightData.graphData[0],"weightData && weightData.graphData&& weightData.graphData.length && weightData.graphData[0]")}
+                       {showContent && <PureChart data={weightData.graphData[0].data} type='line' />}
                     </View>
-                    <Text style={styles.weekText}>WEEKS</Text>
+                    <Text style={styles.weekText}>{graphType.toUpperCase()}</Text>
                     <View style={styles.secondContainer}>
                         <View style={styles.flexRowMain}>
                             <View style={styles.flexColumn}>
@@ -123,10 +153,10 @@ class WeightAnalytics extends React.Component {
                                 </Text>
                                 <View style={styles.flexRow}>
                                     <Text style={styles.weightFont}>
-                                        73
+                                        {weightData.Latest_weight}
                                     </Text>
                                     <Text style={styles.weightFontKg}>
-                                        kg
+                                        {weightData.Latest_weight_unit}
                                     </Text>
                                 </View>
                             </View>
@@ -141,10 +171,10 @@ class WeightAnalytics extends React.Component {
                                 </Text>
                                 <View style={styles.flexRow}>
                                     <Text style={styles.textWeightFont}>
-                                        72.8
+                                        {weightData.Start_weight}
                                     </Text>
                                     <Text style={styles.textWeightFontKg}>
-                                        kg
+                                        {weightData.Start_weight_unit}
                                     </Text>
                                 </View>
                             </View>
@@ -154,10 +184,10 @@ class WeightAnalytics extends React.Component {
                                 </Text>
                                 <View style={styles.flexRow}>
                                     <Text style={styles.textWeightFont}>
-                                        80
+                                        {weightData.Goal_weight}
                                     </Text>
                                     <Text style={styles.textWeightFontKg}>
-                                        kg
+                                        {weightData.Goal_weight_unit}
                                     </Text>
                                 </View>
                             </View>
@@ -170,10 +200,10 @@ class WeightAnalytics extends React.Component {
                                 </Text>
                                 <View style={styles.flexRow}>
                                     <Text style={styles.textWeightFont}>
-                                        7
+                                        {weightData.Left_goal_weight}
                                     </Text>
                                     <Text style={styles.textWeightFontKg}>
-                                        kg
+                                        {weightData.Left_goal_weight_unit}
                                     </Text>
                                 </View>
                             </View>
@@ -199,7 +229,9 @@ class WeightAnalytics extends React.Component {
                         </View>
                     </View>
                 </View>
+                {this.handelLoader()}
             </Content>
+            
         )
     }
 }
