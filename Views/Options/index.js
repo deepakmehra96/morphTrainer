@@ -4,7 +4,7 @@ import { Container, Content } from 'native-base';
 import Header from '../../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
 import { Switch } from 'react-native-switch';
-import { setUserDetail, getSettings, changeNotification, setNotification, openToast, setDurationType, setDuration, setDataSource, selectSlot, setSlots } from '../../redux/actions';
+import { setUserDetail, getSettings, changeNotification, setNotification, openToast, setDurationType, setDuration, setDataSource, selectSlot, setSlots, setGraphType, setCaloriesGraphType } from '../../redux/actions';
 import { connect } from 'react-redux'
 import ShowLoader from '../../components/ShowLoader';
 import PickerSelect from '../../components/PickerSelect'
@@ -49,6 +49,8 @@ class Options extends React.Component {
     }
     async logout(){
         await AsyncStorage.removeItem('token')
+        this.props.dispatch(setGraphType('week'))
+        this.props.dispatch(setCaloriesGraphType('week'))
         const resetAction = StackActions.reset({
             index: 0,
             actions: [NavigationActions.navigate({ routeName: 'SignIn' })],

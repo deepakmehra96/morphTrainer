@@ -6,7 +6,7 @@ import GradientBtn from '../../components/LinearGradient';
 import PureChart from 'react-native-pure-chart';
 import { weightGraph, setGraphType } from '../../redux/actions';
 import ShowLoader from '../../components/ShowLoader';
-
+import moment from 'moment';
 var { height, width } = Dimensions.get('window');
 
 class WeightAnalytics extends React.Component {
@@ -95,7 +95,7 @@ class WeightAnalytics extends React.Component {
         let {graphType} = this.props.userData
         let { btnArray, weightData, showContent } = this.state
         console.log(weightData,"weightDataweightData")
-
+        let calculateWeeks = weightData && weightData.Time_left && weightData.Time_left.split(' ')
         return (
             <Content>
                 <View style={styles.mainContainer}>
@@ -149,7 +149,7 @@ class WeightAnalytics extends React.Component {
                         <View style={styles.flexRowMain}>
                             <View style={styles.flexColumn}>
                                 <Text style={styles.textHeading}>
-                                    Lastest weight, Jan 22
+                                    Lastest weight, {moment(weightData.Latest_weight_date).format('MMMM DD')}
                                 </Text>
                                 <View style={styles.flexRow}>
                                     <Text style={styles.weightFont}>
@@ -167,7 +167,7 @@ class WeightAnalytics extends React.Component {
                         <View style={styles.flexRowMain}>
                             <View style={styles.flexColumn}>
                                 <Text style={styles.textHeading}>
-                                    Start weight, Dec 13
+                                    Start weight, {moment(weightData.Start_weight_date).format('MMMM DD')}
                                 </Text>
                                 <View style={styles.flexRow}>
                                     <Text style={styles.textWeightFont}>
@@ -212,17 +212,17 @@ class WeightAnalytics extends React.Component {
                                     Time left
                                 </Text>
                                 <View style={styles.flexRow}>
-                                    <Text style={styles.textWeightFont}>
-                                        12
+                                <Text style={styles.textWeightFont}>
+                                        {calculateWeeks && calculateWeeks.length && calculateWeeks[0]}
                                     </Text>
                                     <Text style={styles.textWeightFontKg}>
-                                        weeks
+                                    {calculateWeeks && calculateWeeks.length && calculateWeeks[1]}
                                     </Text>
                                     <Text style={styles.textWeightFontDates}>
-                                        2
+                                    {calculateWeeks && calculateWeeks.length && calculateWeeks[2]}
                                     </Text>
                                     <Text style={styles.textWeightFontKg}>
-                                        days
+                                    {calculateWeeks && calculateWeeks.length && calculateWeeks[3]}
                                     </Text>
                                 </View>
                             </View>
