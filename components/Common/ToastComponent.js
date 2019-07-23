@@ -1,27 +1,28 @@
-import React, {Component} from 'react';
-import { StyleSheet, View, Dimensions} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import { connect } from 'react-redux'
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast from 'react-native-easy-toast'
 import { openToast } from '../../redux/actions';
-var { height, width } = Dimensions.get('window');
+import { whiteColor } from '../constant';
+var { width } = Dimensions.get('window');
 
 class ToastComponent extends Component {
-  componentWillReceiveProps(nextProps){
-    if(this.props.userData.toast_msg !== nextProps.userData.toast_msg && nextProps.userData.toast_msg !== ''){
-      this.refs.toast.show(nextProps.userData.toast_msg);
+  componentWillReceiveProps(nextProps) {
+    if (this.props.reducer.toast_msg !== nextProps.reducer.toast_msg && nextProps.reducer.toast_msg !== '') {
+      this.refs.toast.show(nextProps.reducer.toast_msg);
       this.props.dispatch(openToast(''))
     }
   }
   render() {
     return (
-        <Toast
-          ref="toast"
-          style={{backgroundColor: 'rgba(0,0,0,0.7)', width: width - 40,zIndex: 1000000000000}}
-          position='bottom'
-          fadeInDuration={1000}
-          fadeOutDuration={1000}
-          opacity={0.8}
-          textStyle={{color: '#fff', textAlign: 'center'}}
+      <Toast
+        ref="toast"
+        style={styles.container}
+        position='bottom'
+        fadeInDuration={1000}
+        fadeOutDuration={1000}
+        opacity={0.8}
+        textStyle={styles.textColors}
       />
     );
   }
@@ -29,6 +30,12 @@ class ToastComponent extends Component {
 export default connect(state => state)(ToastComponent)
 const styles = StyleSheet.create({
   container: {
-    height:height
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    width: width - 40,
+    zIndex: 1000000000000
   },
+  textColors: {
+    color: whiteColor,
+    textAlign: 'center'
+  }
 });

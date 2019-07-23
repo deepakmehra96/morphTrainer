@@ -1,6 +1,6 @@
 import { combineReducers }  from 'redux'
-import userData from './userData/index' 
+import reducer from './storeData/index' 
 
 export default combineReducers({
-    userData
+    reducer
 })

@@ -1,11 +1,19 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-export default class Dashboard extends React.Component{
+class Dashboard extends React.Component{
+    static navigationOptions= {
+        header : null
+    }
+    constructor(){
+        super()
+    }
+
     render(){
         return(
             <View>
-                <Text>saddd</Text>
+                <Text>Morph app</Text>
             </View>
         )
     }
 }
+export default Dashboard
