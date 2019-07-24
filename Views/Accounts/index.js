@@ -22,20 +22,23 @@ class Accounts extends React.Component {
         };
     }
 
+    handleCalender() {
+        this.props.navigation.navigate("Calender")
+    }
+    handleAvailability(){
+        this.props.navigation.navigate("Availability")
+    }
+    handleReview(){
+        this.props.navigation.navigate("Review")
+    }
     handleLocation() {
-        console.log(1)
         this.props.navigation.navigate("UserLocation")
     }
     handlePayment() {
-        console.log(2)
         this.props.navigation.navigate("UserPayment")
     }
     handleCredits() {
-        console.log(3)
         this.props.navigation.navigate("UserCredits")
-    }
-    handleNotes(){
-        this.props.navigation.navigate("UserNotes")
     }
     render() {
         return (
@@ -45,6 +48,30 @@ class Accounts extends React.Component {
                 </View>
                 <View style={styles.flexSecondCon}>
                     <ScrollView>
+                        <TouchableOpacity onPress={() => this.handleCalender()}>
+                            <ListItem
+                                iconLeftStyle={styles.iconOutCalender}
+                                heading="Calender"
+                                iconLeft={require('../../assets/calanderColor.png')}
+                                iconRight={require('../../assets/arrow.png')}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.handleAvailability()}>
+                            <ListItem
+                                iconLeftStyle={styles.iconOutLoaction}
+                                heading="Availability"
+                                // iconLeft={require('../../assets/location.png')}
+                                iconRight={require('../../assets/arrow.png')}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.handleReview()}>
+                            <ListItem
+                                iconLeftStyle={styles.iconOutLoaction}
+                                heading="Reviews"
+                                // iconLeft={require('../../assets/location.png')}
+                                iconRight={require('../../assets/arrow.png')}
+                            />
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.handleLocation()}>
                             <ListItem
                                 iconLeftStyle={styles.iconOutLoaction}
@@ -63,17 +90,8 @@ class Accounts extends React.Component {
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.handleCredits()}>
                             <ListItem
-                                heading="Credits"
+                                heading="Profile"
                                 iconLeftStyle={styles.iconOutCredits}
-                                iconLeft={require('../../assets/dollar.png')}
-                                iconRight={require('../../assets/arrow.png')}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.handleNotes()}>
-                            <ListItem
-                                heading="Notes"
-                                iconLeftStyle={styles.iconOutNotes}
-                                iconLeft={require('../../assets/notes.png')}
                                 iconRight={require('../../assets/arrow.png')}
                             />
                         </TouchableOpacity>
@@ -99,6 +117,10 @@ const styles = StyleSheet.create({
     },
     iconOutLoaction: {
         marginLeft: 5
+    },
+    iconOutCalender:{
+        height: 32,
+        width: 27,
     },
     iconOut: {
         height: 27,

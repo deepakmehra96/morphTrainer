@@ -94,7 +94,7 @@ class Booking extends React.Component {
         return (
             <View style={styles.fullScreen}>
                 <View style={styles.flexMain}>
-                    <ProfileBackground textHeading="BOOKINGS" />
+                    <ProfileBackground textHeading="BOOKINGS" textBooking="Next booking in 35 minutes"/>
                 </View>
                 <View style={styles.flexSecondCon}>
                     <View style={styles.tabOut}>
@@ -147,8 +147,8 @@ const styles = StyleSheet.create({
         paddingLeft: 40
     },
     iconRight: {
-        width: 10,
-        height: 20
+        width: 8,
+        height: 16
     },
   
     tabOut: {

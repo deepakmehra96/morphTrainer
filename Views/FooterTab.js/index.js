@@ -6,22 +6,26 @@ import Bookings from '../Bookings';
 import Favourite from '../Favourite';
 import Accounts from '../Accounts';
 import UserLocation from '../Accounts/UserLocation';
-import UserCredits from '../Accounts/UserCredits';
-import UserNotes from '../Accounts/UserNotes';
 import UserPayment from '../Accounts/UserPayment';
+import Availability from '../Accounts/Availability';
+import Calender from '../Accounts/Calender';
+import Review from '../Accounts/Review';
 
 const AccountsStack = createStackNavigator({
     Accounts: {
         screen: Accounts,
     },
+    Calender: {
+        screen: Calender,
+    },
+    Availability: {
+        screen: Availability,
+    },
+    Review:{
+        screen:Review
+    },
     UserLocation: {
         screen: UserLocation,
-    },
-    UserCredits: {
-        screen: UserCredits,
-    },
-    UserNotes: {
-        screen: UserNotes,
     },
     UserPayment: {
         screen: UserPayment,
@@ -84,12 +88,12 @@ const Tabs = createBottomTabNavigator({
         navigationOptions: {
             title: '',
             tabBarIcon: ({ focused }) => focused ? <TabIcon
-                activeImage={require('../../assets/fav.png')}
-                style={styles.iconHeart}
+                activeImage={require('../../assets/person.png')}
+                style={styles.iconPerson}
 
             /> : <TabIconActive
-                    activeImage={require('../../assets/fav.png')}
-                    style={styles.iconHeart}
+                    activeImage={require('../../assets/person.png')}
+                    style={styles.iconPerson}
                 />
         }
     },
@@ -138,9 +142,9 @@ const styles = StyleSheet.create({
         height: 18,
         width: 18
     },
-    iconHeart: {
-        height: 18,
-        width: 22
+    iconPerson: {
+        height: 22,
+        width: 18
     },
     iconMenu: {
         height: 18,

@@ -8,10 +8,15 @@ const ListItem = props => {
             <View style={[styles.iconOut, props.iconLeftStyle]}>
                 <Image style={styles.imageMain} source={props.iconLeft} />
             </View>
+            {props.leftText ?
+                <View style={[styles.leftTextOut, props.leftTextOut]}>
+                    <Text numberOfLines={1} style={styles.leftText}>{props.leftText}</Text>
+                </View>
+                : null}
             <View style={styles.textOutMain}>
                 <Text style={styles.textMain}>{props.heading}</Text>
                 {props.bottomText ?
-                    <Text  style={styles.textBottom}>
+                    <Text style={styles.textBottom}>
                         {props.bottomText}
                     </Text> : null}
             </View>
@@ -47,21 +52,35 @@ const styles = StyleSheet.create({
     },
     textMain: {
         color: '#A1A1A1',
-        fontSize: fontXL,
+        fontSize: fontLarge,
         letterSpacing: 2,
         fontWeight: '600'
     },
-    textBottom:{
+    textBottom: {
         color: '#A1A1A1',
         fontSize: fontSmall,
         letterSpacing: 2,
         fontWeight: '600',
-        marginTop:5
+        marginTop: 5
     },
     backArrow: {
-        height: 18,
-        width: 10,
+        height: 16,
+        width: 8,
         position: 'absolute',
         right: 30,
+    },
+    leftText:{
+        color: '#A1A1A1',
+        fontSize: fontLarge,
+        letterSpacing: 2,
+        fontWeight: '600',
+    },
+    leftTextOut:{
+        position:'absolute',
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center',
+        overflow:'hidden',
+        width:100
     }
 })

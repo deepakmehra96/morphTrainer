@@ -15,65 +15,14 @@ class Favorite extends React.Component {
     constructor() {
         super()
         this.state = {
-            listArray:[
-                { name :'JODI PITOUT', rating:4.9},
-                { name :'JODI PITOUT', rating:4.9},
-                { name :'JODI PITOUT', rating:4.9},
-                { name :'JODI PITOUT', rating:4.9}
-            ],
-            tabIndex: 0
         };
     }
 
-    handleTab(val) {
-        this.setState({ tabIndex: val })
-    }
-
-    handleBooking(data){
-        if (data.type == 'upcomimg') {
-            this.props.navigation.navigate('ManageBooking', {
-                item: data,
-              });
-        }
-    }
+   
     render() {
-        let { listArray, tabIndex } = this.state
-        let arrayToShow = tabIndex == 0 ? listArray : []  
         return (
             <View style={styles.fullScreen}>
-                 <View style={styles.flexMain}>
-                    <ProfileBackground textHeading="FAVOURITES" />
-                </View>
-                <View style={styles.flexSecondCon}>
-                        <View style={styles.tabOut}>
-                            <TouchableOpacity onPress={() => this.handleTab(0)} style={tabIndex == 0 ? styles.tabMainActive : styles.tabMain}>
-                                <Text style={styles.tabText}>TRAINERS</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.handleTab(1)} style={tabIndex == 1 ? styles.tabMainActive : styles.tabMain}>
-                                <Text style={styles.tabText}>EXERCISES</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <ScrollView>
-                            <View style={styles.scrollContent}>
-                                {arrayToShow.map((val, index) => {
-                                    return(
-                                        <View key={index} style={styles.boxMain}>
-                                            <View style={styles.deleteIconOut}>
-                                                <Image style={styles.imagMain} source={require('../../assets/delete.png')} />
-                                            </View>
-                                            <View style={styles.imageOut}>
-                                                <Image style={styles.imagMain} source={require('../../assets/dp.png')} />
-                                            </View>
-                                            <Text numberOfLines={1} style={styles.textAll}>{val.name}</Text>
-                                            <Text style={styles.textAll}>{val.rating}</Text>
-                                        </View>
-                                    )
-                                })}
-                               
-                            </View>
-                        </ScrollView>
-
-                    </View>
+                <Text>Comming Soon</Text>
             </View>
         )
     }

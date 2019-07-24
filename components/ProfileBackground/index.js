@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Dimensions, ImageBackground, View, Image, Text, SafeAreaView } from 'react-native';
-import { whiteColor, fontXL, fontXXL } from '../constant';
+import { whiteColor, fontXL, fontXXL, fontLarge } from '../constant';
 var { height, width } = Dimensions.get('window')
 
 const ProfileBackground = props => {
@@ -12,7 +12,9 @@ const ProfileBackground = props => {
                 </View>
                 <View style={styles.textPosition}>
                     <Text style={styles.textHeading}>{props.textHeading}</Text>
-                    <Text style={styles.textHeading}>{"props.textHeading"}</Text>
+                </View>
+                <View style={styles.textPosition}>
+                    <Text style={styles.textDes}>{props.textBooking}</Text>
                 </View>
             </SafeAreaView>
             {
@@ -23,7 +25,7 @@ const ProfileBackground = props => {
                     :
                     null
             }
-            <View style={styles.contentOut}>
+            <View style={[styles.contentOut, props.containerStyles]}>
                 {props.content}
             </View>
         </ImageBackground>
@@ -63,7 +65,14 @@ const styles = StyleSheet.create({
         color: whiteColor,
         fontSize: fontXXL,
         letterSpacing: 3,
-        marginTop: 35
+        marginTop: 40,
+    },
+    textDes: {
+        color: whiteColor,
+        fontSize: fontLarge,
+        letterSpacing: 3,
+        marginTop: 110,
+        fontWeight:'700'
     },
     imageBorder: {
         height: 110,
