@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { whiteColor, fontXXL, fontXL, fontLarge } from '../../components/constant';
 import MapMain from '../Map';
 import TextBox from '../../components/TextField.js';
+import Header from '../../components/Header';
 var { height, width } = Dimensions.get('window')
 
 class Location extends React.Component {
@@ -29,6 +30,7 @@ class Location extends React.Component {
         return (
             <View style={styles.fullScreen}>
                 <View style={styles.flexMain}>
+                    <Header source={require('../../assets/back-white-arrow.png')} navigation={this.props.navigation} />
                     <MapMain />
                 </View>
                 <View style={styles.flexSecondCon}>

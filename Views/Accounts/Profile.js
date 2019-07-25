@@ -44,7 +44,7 @@ class Profile extends React.Component {
             <View style={styles.fullScreen}>
                 <View style={styles.flexMain}>
                     <Header source={require('../../assets/back-white-arrow.png')} navigation={this.props.navigation} />
-                    <ProfileBackground content={this.textContent()} imageMain={require('../../assets/dp.png')} />
+                    <ProfileBackground profileText="JODI PITOUT" content={this.textContent()} imageMain={require('../../assets/dp.png')} />
                 </View>
                 <View style={styles.flexMain}>
                     <View style={styles.mainContainer}>

@@ -12,9 +12,12 @@ const ProfileBackground = props => {
                     <View style={styles.textPosition}>
                         <Text style={styles.textHeading}>{props.textHeading}</Text>
                     </View>
-                    <View >
+                    <View>
                         <Text style={styles.textDes}>{props.textBooking}</Text>
                     </View>
+                </View>
+                <View>
+                    <Text style={styles.textHeading}>{props.profileText}</Text>
                 </View>
 
             {
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
         color: whiteColor,
         fontSize: fontXXL,
         letterSpacing: 3,
-        marginTop: 40,
+        marginTop: width <= 320 ? 20 : 30,
     },
     textDes: {
         color: whiteColor,

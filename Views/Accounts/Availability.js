@@ -90,7 +90,7 @@ render() {
                                 return (
                                     <View>
                                         <View key={index} style={styles.boxMain}>
-                                            <Text style={styles.timeText}>{val.label}</Text>
+                                            <Text style={styles.daysText}>{val.label}</Text>
                                         </View>
                                         <View style={styles.boxInColumn}>
                                             {
@@ -158,6 +158,11 @@ const styles = StyleSheet.create({
     listInRow: {
         flexDirection: "row",
         padding: 15
+    },
+    daysText:{
+        color: "#4F4F4F",
+        fontSize: width <= 360 ? fontSmall : fontMedium,
+        fontWeight:'bold'
     },
     timeText: {
         color: "#4F4F4F",
