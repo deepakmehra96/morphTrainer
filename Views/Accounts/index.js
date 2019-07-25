@@ -32,7 +32,7 @@ class Accounts extends React.Component {
         this.props.navigation.navigate("Review")
     }
     handleLocation() {
-        this.props.navigation.navigate("UserLocation")
+        this.props.navigation.navigate("Location")
     }
     handlePayment() {
         this.props.navigation.navigate("UserPayment")

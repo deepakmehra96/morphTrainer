@@ -135,10 +135,10 @@ const styles = StyleSheet.create({
         height: height,
     },
     flexMain: {
-        flex: 2
+        flex:   width <= 320 ? 3 : 1,
     },
     flexSecondCon: {
-        flex: 4,
+        flex:  width <= 320 ? 5 : 2,
         backgroundColor: whiteColor,
         marginBottom:70
     },
@@ -150,9 +150,8 @@ const styles = StyleSheet.create({
         width: 8,
         height: 16
     },
-  
     tabOut: {
-        height: 60,
+        height:  width <= 320 ? 50 : 60,
         flexDirection: 'row',
         borderBottomWidth: 1,
         borderColor: '#E5E5E5',

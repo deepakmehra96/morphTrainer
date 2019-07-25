@@ -58,21 +58,28 @@ class MapMain extends React.Component {
 
   render() {
     let { region } = this.state
-    // console.log(region, "currentLatitude currentLatitude")
+    let chandigarh = {
+      latitude: 30.733315,
+      longitude: 76.779419,
+      latitudeDelta: 0.0922,
+      longitudeDelta: LONGITUDE_DELTA * ASPECT_RATIO,
+    }
     return (
       <MapView
         style={styles.container}
         region={this.state.region}
-        // onRegionChange={region => this.setState({ region })}
-        // onRegionChangeComplete={region => this.setState({ region })}
+        onRegionChangeComplete={region => this.setState({ region })}
         zoomControlEnabled={true}
         zoomTapEnabled={true}
         zoomEnabled={true}
         scrollEnabled={true}
         draggable={true}
         showsUserLocation={true}
+        pointerEvents={false}
+        pitchEnabled={false}
         followsUserLocation={true}
-        showsMyLocationButton={true}
+        showsMyLocationButton={false}
+        followUserLocation={false}
         showsPointsOfInterest={true}
         showsCompass={true}
         loadingEnabled={true}
@@ -83,6 +90,10 @@ class MapMain extends React.Component {
          <MapView.Marker
           coordinate={this.state.region}
           title="My Location"
+        />
+         <MapView.Marker
+          coordinate={chandigarh}
+          title="Chandigarh"
         />
       </MapView>
     )

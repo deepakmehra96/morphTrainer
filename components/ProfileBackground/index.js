@@ -6,7 +6,7 @@ var { height, width } = Dimensions.get('window')
 const ProfileBackground = props => {
     return (
         <ImageBackground source={require('../../assets/profileBackGround.png')} style={styles.fullScreen}>
-            <SafeAreaView style={styles.centerImage}>
+            <SafeAreaView style={[styles.centerImage, props.centerImage]}>
                 <View style={styles.backImageOut}>
                     <Image resizeMode="contain" style={styles.imageMain} source={require('../../assets/LogoMain.png')} />
                     <View style={styles.textPosition}>
@@ -17,12 +17,12 @@ const ProfileBackground = props => {
                     </View>
                 </View>
 
-                {
-                    props.content ?
-                        <View style={[styles.contentOut, props.containerStyles]}>
-                            {props.content}
-                        </View> : null
-                }
+            {
+                props.content ?
+                    <View style={[styles.contentOut, props.containerStyles]}>
+                        {props.content}
+                    </View> : null
+            }
             </SafeAreaView>
             {
                 props.imageMain ?
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderColor: '#9A73D8',
         justifyContent: 'center',
-        height: 60,
+        height: width <= 320 ? 65 : 60,
         width: width,
         position: 'absolute',
         bottom: 0
@@ -97,9 +97,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     centerImage: {
-        height: '60%',
+        height: '100%',
         // justifyContent: 'center',
         alignItems: 'center',
-        position: 'relative'
+        // position: 'relative'
     }
 })

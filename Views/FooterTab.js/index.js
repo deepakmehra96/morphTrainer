@@ -5,7 +5,7 @@ import Main from '../Main';
 import Bookings from '../Bookings';
 import Favourite from '../Favourite';
 import Accounts from '../Accounts';
-import UserLocation from '../Accounts/UserLocation';
+import Location from '../Accounts/Location';
 import UserPayment from '../Accounts/UserPayment';
 import Availability from '../Accounts/Availability';
 import Calender from '../Accounts/Calender';
@@ -24,8 +24,8 @@ const AccountsStack = createStackNavigator({
     Review:{
         screen:Review
     },
-    UserLocation: {
-        screen: UserLocation,
+    Location: {
+        screen: Location,
     },
     UserPayment: {
         screen: UserPayment,

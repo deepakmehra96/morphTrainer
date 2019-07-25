@@ -14,4 +14,12 @@ export const buttonBottom = Platform.OS  == 'ios' ? 20 : 30
 
 export const buttonView = Platform.OS  == 'ios' ? 40 : 50
 
+export const PlatformIos = () =>{
+    return Platform.OS === 'ios'
+}
+
+
+
+
+
 

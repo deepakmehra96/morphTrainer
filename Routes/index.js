@@ -13,6 +13,7 @@ import ManageBooking from "../Views/Bookings/ManageBooking";
 import CheckRoute from "../Views/CheckRoute";
 import Review from "../Views/Accounts/Review";
 import Profile from "../Views/Accounts/Profile";
+import Location from "../Views/Accounts/Location";
 
 const AppNavigator = createStackNavigator(
   {
@@ -27,6 +28,7 @@ const AppNavigator = createStackNavigator(
     Availability: Availability,
     Review:Review,
     UserPayment: UserPayment,
+    Location:Location,
     MapMain: MapMain,
     ManageBooking: ManageBooking,
     Profile: Profile
