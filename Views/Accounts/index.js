@@ -37,8 +37,8 @@ class Accounts extends React.Component {
     handlePayment() {
         this.props.navigation.navigate("UserPayment")
     }
-    handleCredits() {
-        this.props.navigation.navigate("UserCredits")
+    handleProfile() {
+        this.props.navigation.navigate("Profile")
     }
     render() {
         return (
@@ -88,7 +88,7 @@ class Accounts extends React.Component {
                                 iconRight={require('../../assets/arrow.png')}
                             />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.handleCredits()}>
+                        <TouchableOpacity onPress={() => this.handleProfile()}>
                             <ListItem
                                 heading="Profile"
                                 iconLeftStyle={styles.iconOutCredits}

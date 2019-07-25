@@ -9,13 +9,20 @@ const ProfileBackground = props => {
             <SafeAreaView style={styles.centerImage}>
                 <View style={styles.backImageOut}>
                     <Image resizeMode="contain" style={styles.imageMain} source={require('../../assets/LogoMain.png')} />
+                    <View style={styles.textPosition}>
+                        <Text style={styles.textHeading}>{props.textHeading}</Text>
+                    </View>
+                    <View >
+                        <Text style={styles.textDes}>{props.textBooking}</Text>
+                    </View>
                 </View>
-                <View style={styles.textPosition}>
-                    <Text style={styles.textHeading}>{props.textHeading}</Text>
-                </View>
-                <View style={styles.textPosition}>
-                    <Text style={styles.textDes}>{props.textBooking}</Text>
-                </View>
+
+                {
+                    props.content ?
+                        <View style={[styles.contentOut, props.containerStyles]}>
+                            {props.content}
+                        </View> : null
+                }
             </SafeAreaView>
             {
                 props.imageMain ?
@@ -25,9 +32,7 @@ const ProfileBackground = props => {
                     :
                     null
             }
-            <View style={[styles.contentOut, props.containerStyles]}>
-                {props.content}
-            </View>
+
         </ImageBackground>
     )
 }
@@ -38,7 +43,6 @@ const styles = StyleSheet.create({
         width: width,
         zIndex: -1,
         height: height / 2,
-        // paddingTop: '10%',
         alignItems: 'center',
         overflow: 'hidden',
         position: 'absolute'
@@ -46,7 +50,11 @@ const styles = StyleSheet.create({
     backImageOut: {
         height: 120,
         width: width,
-        position: 'relative',
+        // position: 'absolute',
+        // top:15,
+        marginTop:10,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     imageMain: {
         height: '100%',
@@ -56,7 +64,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderColor: '#9A73D8',
         justifyContent: 'center',
-        height: 70,
+        height: 60,
         width: width,
         position: 'absolute',
         bottom: 0
@@ -71,8 +79,8 @@ const styles = StyleSheet.create({
         color: whiteColor,
         fontSize: fontLarge,
         letterSpacing: 3,
-        marginTop: 110,
-        fontWeight:'700'
+        // marginTop: 110,/
+        fontWeight: '700'
     },
     imageBorder: {
         height: 110,
@@ -90,7 +98,8 @@ const styles = StyleSheet.create({
     },
     centerImage: {
         height: '60%',
-        justifyContent: 'center',
-        alignItems: 'center'
+        // justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative'
     }
 })

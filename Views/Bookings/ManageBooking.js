@@ -54,7 +54,7 @@ class ManageBooking extends React.Component {
                         />
                     </View>
                     <View style={styles.btnStyles}>
-                        <ButtonMain isColored={true} label="CANCLE BOOKING" />
+                        <ButtonMain isColored={true} label="CANCEL BOOKING" />
                     </View>
                 </View>
             </View>

@@ -12,6 +12,7 @@ import MapMain from "../Views/Map";
 import ManageBooking from "../Views/Bookings/ManageBooking";
 import CheckRoute from "../Views/CheckRoute";
 import Review from "../Views/Accounts/Review";
+import Profile from "../Views/Accounts/Profile";
 
 const AppNavigator = createStackNavigator(
   {
@@ -28,6 +29,7 @@ const AppNavigator = createStackNavigator(
     UserPayment: UserPayment,
     MapMain: MapMain,
     ManageBooking: ManageBooking,
+    Profile: Profile
   },
   {
     initialRouteName: "CheckRoute",
