@@ -55,15 +55,11 @@ class MapMain extends React.Component {
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
+  handlerMarkerPress(data){
+    this.props.handlerMarker(data)
+  }
 
   render() {
-    let { region } = this.state
-    let chandigarh = {
-      latitude: 30.733315,
-      longitude: 76.779419,
-      latitudeDelta: 0.0922,
-      longitudeDelta: LONGITUDE_DELTA * ASPECT_RATIO,
-    }
     return (
       <MapView
         style={styles.container}
@@ -75,7 +71,7 @@ class MapMain extends React.Component {
         scrollEnabled={true}
         draggable={true}
         showsUserLocation={true}
-        pointerEvents={false}
+        // pointerEvents={false}
         pitchEnabled={false}
         followsUserLocation={true}
         showsMyLocationButton={false}
@@ -87,14 +83,19 @@ class MapMain extends React.Component {
         rotateEnabled={true}
         myLocationButton={true}
       >
-         <MapView.Marker
-          coordinate={this.state.region}
-          title="My Location"
-        />
-         <MapView.Marker
-          coordinate={chandigarh}
-          title="Chandigarh"
-        />
+        {this.props.markers.map(( val, index ) => {
+          return(
+            <MapView.Marker
+              key={index}
+              coordinate={val.map}
+              title={val.name}
+              description={val.description}
+              onPress={() => this.handlerMarkerPress(val)}
+            />
+          )
+        })}
+       
+         
       </MapView>
     )
   }
@@ -105,6 +106,7 @@ export default MapMain
 const styles = StyleSheet.create({
   container: {
     height: '100%', 
-    width: '100%' 
+    width: '100%' ,
+    zIndex:-1
   },
 });

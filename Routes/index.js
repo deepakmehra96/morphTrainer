@@ -5,15 +5,15 @@ import ActivationCode from "../Views/Auth/ActivationCode";
 import Header from "../components/Header";
 import LoggedinTabs from "../Views/FooterTab.js";
 import Accounts from "../Views/Accounts";
-import Calender from '../Views/Accounts/Calender'
 import Availability from "../Views/Accounts/Availability";
-import UserPayment from '../Views/Accounts/UserPayment'
+import Payment from '../Views/Accounts/Payment'
 import MapMain from "../Views/Map";
 import ManageBooking from "../Views/Bookings/ManageBooking";
 import CheckRoute from "../Views/CheckRoute";
 import Review from "../Views/Accounts/Review";
 import Profile from "../Views/Accounts/Profile";
 import Location from "../Views/Accounts/Location";
+import Calender from "../Views/Main/Calender";
 
 const AppNavigator = createStackNavigator(
   {
@@ -27,11 +27,11 @@ const AppNavigator = createStackNavigator(
     Calender: Calender,
     Availability: Availability,
     Review:Review,
-    UserPayment: UserPayment,
+    Payment: Payment,
     Location:Location,
     MapMain: MapMain,
     ManageBooking: ManageBooking,
-    Profile: Profile
+    Profile: Profile,
   },
   {
     initialRouteName: "CheckRoute",

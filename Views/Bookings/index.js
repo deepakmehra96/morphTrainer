@@ -106,7 +106,7 @@ class Booking extends React.Component {
                         </TouchableOpacity>
                     </View>
                     <ScrollView>
-                        <View style={styles.scrollContent}>
+                        <View>
                             {arrayToShow.map((val, index) => {
                                 return (
                                     <TouchableOpacity onPress={() => this.handleBooking(val)}>
@@ -142,7 +142,6 @@ const styles = StyleSheet.create({
         backgroundColor: whiteColor,
         marginBottom:70
     },
-
     listStyle: {
         paddingLeft: 40
     },

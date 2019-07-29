@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Dimensions, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, ScrollView, AsyncStorage, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
 import BackgroundText from '../../components/BackgroundText';
 import BackgroundContent from '../../components/BackgroundContent';
@@ -22,9 +22,6 @@ class Accounts extends React.Component {
         };
     }
 
-    handleCalender() {
-        this.props.navigation.navigate("Calender")
-    }
     handleAvailability(){
         this.props.navigation.navigate("Availability")
     }
@@ -35,10 +32,14 @@ class Accounts extends React.Component {
         this.props.navigation.navigate("Location")
     }
     handlePayment() {
-        this.props.navigation.navigate("UserPayment")
+        this.props.navigation.navigate("Payment")
     }
-    handleProfile() {
-        this.props.navigation.navigate("Profile")
+    handleLogout() {
+        AsyncStorage.removeItem('token')
+        this.props.navigation.navigate("Login")
+    }
+    handleBankDetails() {
+        this.props.navigation.navigate("BankDetails")
     }
     render() {
         return (
@@ -48,14 +49,6 @@ class Accounts extends React.Component {
                 </View>
                 <View style={styles.flexSecondCon}>
                     <ScrollView>
-                        <TouchableOpacity onPress={() => this.handleCalender()}>
-                            <ListItem
-                                iconLeftStyle={styles.iconOutCalender}
-                                heading="Calender"
-                                iconLeft={require('../../assets/calanderColor.png')}
-                                iconRight={require('../../assets/arrow.png')}
-                            />
-                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.handleAvailability()}>
                             <ListItem
                                 iconLeftStyle={styles.iconOutLoaction}
@@ -75,7 +68,7 @@ class Accounts extends React.Component {
                         <TouchableOpacity onPress={() => this.handleLocation()}>
                             <ListItem
                                 iconLeftStyle={styles.iconOutLoaction}
-                                heading="Locations"
+                                heading="Locations reach"
                                 iconLeft={require('../../assets/location.png')}
                                 iconRight={require('../../assets/arrow.png')}
                             />
@@ -88,10 +81,18 @@ class Accounts extends React.Component {
                                 iconRight={require('../../assets/arrow.png')}
                             />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.handleProfile()}>
+                        <TouchableOpacity onPress={() => this.handleBankDetails()}>
                             <ListItem
-                                heading="Profile"
+                                heading="Bank details"
                                 iconLeftStyle={styles.iconOutCredits}
+                                iconRight={require('../../assets/arrow.png')}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.handleLogout()}>
+                            <ListItem
+                                heading="Sign out"
+                                iconLeftStyle={styles.iconOutSignOut}
+                                iconLeft={require('../../assets/logout.png')}
                                 iconRight={require('../../assets/arrow.png')}
                             />
                         </TouchableOpacity>
@@ -123,8 +124,8 @@ const styles = StyleSheet.create({
         width: 27,
     },
     iconOut: {
-        height: 27,
-        width: 35,
+        height: 25,
+        width: 32,
     },
     iconOutCredits: {
         height: 22,
@@ -133,5 +134,9 @@ const styles = StyleSheet.create({
     iconOutNotes: {
         height: 30,
         width: 30,
+    },
+    iconOutSignOut:{
+        height: 25,
+        width: 25,
     }
 })

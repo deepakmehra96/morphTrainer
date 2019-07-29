@@ -75,8 +75,7 @@ class Login extends React.Component {
             <View style={styles.fullScreen}>
                 <BackgroundContent />
                 <KeyboardAvoidingView
-                    behavior={Platform.OS == 'ios' ? 'position' : 'position'}
-                >
+                    behavior={'position'}>
                     <View style={styles.mainContainer}>
                         <BackgroundText showImage={true} textHeading="SIGN IN" />
                         <View style={styles.formContainer}>

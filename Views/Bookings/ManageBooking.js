@@ -28,7 +28,7 @@ class ManageBooking extends React.Component {
             <View style={styles.fullScreen}>
                 <View style={styles.flexMain}>
                     <Header source={require('../../assets/back-white-arrow.png')} navigation={this.props.navigation} />
-                    <ProfileBackground textHeading="MANAGE BOOKINGS" />
+                    <ProfileBackground textHeading="BOOKINGS" />
                 </View>
                 <View style={styles.flexSecondCon}>
                     <View>
@@ -52,9 +52,6 @@ class ManageBooking extends React.Component {
                             iconLeftStyle={styles.iconOut}
                             iconLeft={require('../../assets/card.png')}
                         />
-                    </View>
-                    <View style={styles.btnStyles}>
-                        <ButtonMain isColored={true} label="CANCEL BOOKING" />
                     </View>
                 </View>
             </View>

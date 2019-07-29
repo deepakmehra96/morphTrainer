@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, Dimensions, StyleSheet, SafeAreaView, Image, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
-// import LinearGradient from 'react-native-linear-gradient';
-import { fontMedium, fontLarge, whiteColor, fontXXL, fontXL, fontSmall } from '../../components/constant';
-import MapMain from '../Map';
+import MapScreen from './Map';
+import Calender from './Calender';
+import { whiteColor } from '../../components/constant';
 var { height, width } = Dimensions.get('window')
 
 
@@ -14,30 +14,47 @@ class Main extends React.Component {
     constructor() {
         super()
         this.state = {
-            data: [
-                { title: 'FAT LOSS', trainerCount: 28 },
-                { title: 'MUSCLE BUILDING', trainerCount: 280 },
-                { title: 'BETTER POSTURE', trainerCount: 2822 },
-                { title: 'EMS', trainerCount: 28 }
-            ]
+            selectedIndex : 1
         };
     }
-    handleGoToExercise(item) {
-        this.props.navigation.navigate('ExerciseView', {
-            data: item,
-        });
+
+    handleScreens(){
+        let { selectedIndex } = this.state
+        switch (selectedIndex) {
+            case 1:
+                return <MapScreen  navigation={this.props.navigation} />
+                break;
+            case 2:
+                return <Calender navigation={this.props.navigation} />
+                break;
+            default:
+                break;
+        }
     }
+   
+    handleTextStyles(val){
+        let { selectedIndex } = this.state
+        if (val == selectedIndex) {
+            return styles.textColor
+        }else{
+            return styles.textColorDark
+        }
+    }
+
     render() {
-        let { data } = this.state
         return (
             <View style={styles.fullScreen}>
-                <View style={styles.flexMain}>
-                    <MapMain />
+                <View  style={styles.alignCenter}>
+                    <View style={styles.tabContainer}>
+                        <TouchableOpacity onPress={() => this.setState({selectedIndex: 1})} style={[styles.tabs, styles.extraBorder]}>
+                            <Text style={this.handleTextStyles(1)}>Map View</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.setState({selectedIndex: 2})} style={styles.tabs}>
+                            <Text style={this.handleTextStyles(2)}>Calender View</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={styles.flexContainer}>
-                    <Text style={styles.textMain}>No booking selected. </Text>
-                    <Text style={styles.textColor}>Tap one to see the details.</Text>
-                </View>
+                {this.handleScreens()}
             </View>
         )
     }
@@ -46,30 +63,39 @@ export default connect(state => state)(Main)
 
 const styles = StyleSheet.create({
     fullScreen: {
-        height: height,
+        flex: 1
     },
-    flexMain: {
-        flex: 5,
+    tabContainer:{
+        position:"absolute",
+        top:30,
+        width:width-80,
+        zIndex:99999,
+        flexDirection:'row',
+        height:30,
+        backgroundColor:"rgba(0, 0, 0, 0.54)",
+        opacity:0.8,
+        borderRadius:5,
     },
-    flexContainer: {
-        flex: 3,
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom:48
+    extraBorder:{
+        borderRightColor:whiteColor,
+        borderRightWidth:2
     },
-    textContainer: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    textMain:{
-        color:"#4F4F4F",
-        letterSpacing:2,
-        fontSize:fontMedium
+    tabs:{
+        width:width/2 -40,
+        alignItems:'center',
+        justifyContent:'center'
     },
     textColor:{
-        color:"#520CC3",
-        letterSpacing:2,
-        fontSize:fontMedium
-
+        color:whiteColor,
+        fontWeight:'600'
     },
+    textColorDark:{
+        color:'#C1C1C1',
+        fontWeight:'600'
+    },
+    alignCenter:{
+        zIndex:99999,
+        width:width,
+        alignItems:'center'
+    }
 })

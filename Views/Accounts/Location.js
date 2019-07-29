@@ -41,7 +41,7 @@ class Location extends React.Component {
                             <View style={styles.textBoxOut}>
                                 <TextBox
                                     mode='outline'
-                                    placeholder="Pastcode"
+                                    placeholder="Postcode"
                                     onChangeText={this.handleChange.bind(this)}
                                     tintColor={'#520CC3'}
                                     highlightColor={'#520CC3'}
@@ -64,7 +64,6 @@ class Location extends React.Component {
                                     onValueChange={(e) => this.setState({ value: e })}
                                 />
                             </View>
-                         
                             <Text style={styles.headingText}>{Math.round(value * 10) / 10}</Text>
                         </View>
                         </KeyboardAvoidingView>

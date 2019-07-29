@@ -6,10 +6,12 @@ import Bookings from '../Bookings';
 import Favourite from '../Favourite';
 import Accounts from '../Accounts';
 import Location from '../Accounts/Location';
-import UserPayment from '../Accounts/UserPayment';
+import Payment from '../Accounts/Payment';
 import Availability from '../Accounts/Availability';
-import Calender from '../Accounts/Calender';
 import Review from '../Accounts/Review';
+import BankDetails from '../Accounts/BankDetails';
+import Calender from '../Main/Calender';
+import Profile from '../Accounts/Profile';
 
 const AccountsStack = createStackNavigator({
     Accounts: {
@@ -27,9 +29,12 @@ const AccountsStack = createStackNavigator({
     Location: {
         screen: Location,
     },
-    UserPayment: {
-        screen: UserPayment,
+    Payment: {
+        screen: Payment,
     },
+    BankDetails:{
+        screen: BankDetails
+    }
 });
 
 const TabIcon = ({ activeImage, style }) => {
@@ -83,8 +88,8 @@ const Tabs = createBottomTabNavigator({
                 />
         }
     },
-    Favourite: {
-        screen: Favourite,
+    Profile: {
+        screen: Profile,
         navigationOptions: {
             title: '',
             tabBarIcon: ({ focused }) => focused ? <TabIcon
