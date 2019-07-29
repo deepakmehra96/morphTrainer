@@ -19,13 +19,12 @@ const ProfileBackground = props => {
                 <View>
                     <Text style={styles.textHeading}>{props.profileText}</Text>
                 </View>
-
-            {
-                props.content ?
-                    <View style={[styles.contentOut, props.containerStyles]}>
-                        {props.content}
-                    </View> : null
-            }
+                {
+                    props.content ?
+                        <View style={[styles.contentOut, props.containerStyles]}>
+                            {props.content}
+                        </View> : null
+                }
             </SafeAreaView>
             {
                 props.imageMain ?
@@ -35,7 +34,6 @@ const ProfileBackground = props => {
                     :
                     null
             }
-
         </ImageBackground>
     )
 }
@@ -55,7 +53,7 @@ const styles = StyleSheet.create({
         width: width,
         // position: 'absolute',
         // top:15,
-        marginTop:10,
+        marginTop: 10,
         justifyContent: 'center',
         alignItems: 'center'
     },
