@@ -4,7 +4,7 @@ import StarRating from 'react-native-star-rating';
 import { connect } from 'react-redux'
 import Header from '../../components/Header';
 import ProfileBackground from '../../components/ProfileBackground';
-import { whiteColor, fontXXL, fontSmall, fontMedium, PlatformIos } from '../../components/constant';
+import { whiteColor, fontXXL, fontSmall, fontMedium, PlatformIos, fontX3L } from '../../components/constant';
 var { height, width } = Dimensions.get('window')
 
 class Review extends React.Component {
@@ -45,7 +45,7 @@ class Review extends React.Component {
             <View style={styles.fullScreen}>
                 <View style={styles.flexMain}>
                     <Header source={require('../../assets/back-white-arrow.png')} navigation={this.props.navigation} />
-                    <ProfileBackground  centerImage={styles.textBarHeight} content={this.textContent()} textHeading="REVIEW" />
+                    <ProfileBackground  centerImage={styles.textBarHeight} content={this.textContent()} textHeading="REVIEWS" />
                 </View>
                 <View style={styles.flexSecondCon}>
                     <ScrollView>
@@ -104,12 +104,12 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         color: whiteColor,
-        fontSize: fontXXL,
+        fontSize: fontX3L,
         letterSpacing: 3,
         fontWeight: '700',
     },
     textDetails: {
-        fontSize: fontSmall,
+        fontSize: fontMedium,
         color: '#FFC379'
     },
     containerMain: {

@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, Dimensions, StyleSheet, SafeAreaView, Image, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, Animated, Image, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
-// import LinearGradient from 'react-native-linear-gradient';
 import { fontMedium, fontLarge, whiteColor, fontXXL, fontXL, fontSmall } from '../../components/constant';
 import MapMain from '../Map';
 import ButtonMain from '../../components/ButtonMain';
+import SlidingUpPanel from 'rn-sliding-up-panel';
 var { height, width } = Dimensions.get('window')
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
@@ -37,7 +37,7 @@ class MapScreen extends React.Component {
                 {
                     name: 'Steve Hamilto, ems',
                     discription: '16:30',
-                    map : {
+                    map: {
                         latitude: 37.761472,
                         longitude: -122.441297,
                         latitudeDelta: 0.0922,
@@ -47,7 +47,7 @@ class MapScreen extends React.Component {
                 {
                     name: 'Steve Jones, ems ',
                     discription: '19:00 ',
-                    map : {
+                    map: {
                         latitude: 37.761472,
                         longitude: -122.411297,
                         latitudeDelta: 0.0922,
@@ -64,15 +64,15 @@ class MapScreen extends React.Component {
         });
     }
 
-    handlerMarker(values){
+    handlerMarker(values) {
         console.log(values)
-        this.setState({ customerDetails:  values})
+        this.setState({ customerDetails: values })
     }
 
-    handleCustomer(){
-     let { customerDetails } = this.state
-     if(customerDetails) {
-         return(
+    handleCustomer() {
+        let { customerDetails } = this.state
+        if (customerDetails) {
+            return (
                 <View style={styles.flexContainerDesc}>
                     <View>
                         <Text style={styles.headerTitle}>LOCATION REACH</Text>
@@ -82,32 +82,38 @@ class MapScreen extends React.Component {
                         <Text style={styles.textColor}>    SW4 OVF</Text>
                     </View>
                     <View style={styles.btnCon}>
-                        <ButtonMain buttonStyle={styles.buttonStyle} isColored={true} label="DETAILS"  />
-                        <ButtonMain buttonStyle={styles.buttonStyle} isColored={true} label="CANCEL"  />
-                    </View> 
+                        <ButtonMain buttonStyle={styles.buttonStyle} isColored={true} label="DETAILS" />
+                        <ButtonMain buttonStyle={styles.buttonStyle} isColored={true} label="CANCEL" />
+                    </View>
                 </View>
-         )
-      
-     }else{
-         return(
-            <View style={styles.flexContainer}>
-                <Text style={styles.textMain}>No booking selected. </Text>
-                <Text style={styles.textColor}>Tap one to see the details.</Text>
-            </View>
-         )
-     }
+            )
+
+        } else {
+            return (
+                <View style={styles.flexContainer}>
+                    <Text style={styles.textMain}>No booking selected. </Text>
+                    <Text style={styles.textColor}>Tap one to see the details.</Text>
+                </View>
+            )
+        }
+    }
+    componentDidMount() {
+        this.scrollY = new Animated.Value(0);
+        this.changingHeight = this.scrollY.interpolate({
+            inputRange: [0, 50],
+            outputRange: [120, 60],
+            extrapolate: "clamp"
+        });
     }
 
     render() {
         let { mapPoints } = this.state
         return (
             <View style={styles.fullScreen}>
-                <View style={styles.flexMain}>
+                <View style={styles.mapHeight}>
                     <MapMain markers={mapPoints} handlerMarker={(values) => this.handlerMarker(values)} />
                 </View>
-
-                { this.handleCustomer() }
-               
+               {this.handleCustomer()}
             </View>
         )
     }
@@ -118,20 +124,30 @@ const styles = StyleSheet.create({
     fullScreen: {
         height: height,
     },
-    flexMain: {
-        flex: 5,
-        zIndex: -1,
+    mapHeight: {
+        height: height-250,
     },
+    container: {
+        height:300,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
     flexContainer: {
-        flex: 3,
         alignItems: "center",
         marginBottom: 48,
-        justifyContent:'center'
+        justifyContent: 'center',
+        height: 200,
+        width: width,
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: whiteColor,
+        zIndex: 999999
     },
-    flexContainerDesc:{
+    flexContainerDesc: {
         flex: 3,
         marginBottom: 48,
-        alignItems:'center'
+        alignItems: 'center'
     },
     textContainer: {
         justifyContent: "center",
@@ -146,31 +162,31 @@ const styles = StyleSheet.create({
         color: "#520CC3",
         letterSpacing: 2,
         fontSize: fontMedium,
-        marginTop:5
+        marginTop: 5
     },
-    headerTitle:{
+    headerTitle: {
         color: "#4F4F4F",
         letterSpacing: 2,
         fontSize: fontLarge,
-        marginTop:15
+        marginTop: 15
     },
-    desContainer:{
-        flexDirection:"column",
-        alignSelf:'flex-start',
-        paddingLeft:30,
-        padding:20
+    desContainer: {
+        flexDirection: "column",
+        alignSelf: 'flex-start',
+        paddingLeft: 30,
+        padding: 20
     },
-    btnCon:{
-        paddingLeft:30,
-        padding:20,
-        flexDirection:"row",
-        justifyContent:"space-between",
-        width:width
+    btnCon: {
+        paddingLeft: 30,
+        padding: 20,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: width
     },
-    buttonStyle:{
-        width:120,
-        height:40,
-        alignItems:"center",
-        justifyContent:'center'
+    buttonStyle: {
+        width: 120,
+        height: 40,
+        alignItems: "center",
+        justifyContent: 'center'
     }
 })

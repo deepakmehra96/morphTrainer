@@ -5,8 +5,9 @@ export const fontMedium = 12
 export const fontLarge = 14
 export const fontXL = 16
 export const fontXXL = 18
+export const fontX3L = 20
 
-export const errorColor = 'red'
+export const errorColor = '#fc3f3f'
 export const whiteColor = '#fff'
 
 

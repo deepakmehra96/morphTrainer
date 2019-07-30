@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         color: whiteColor,
         fontSize: fontXXL,
         letterSpacing: 3,
-        marginTop: width <= 320 ? 20 : 30,
+        marginTop: width <= 320 ? 20 : 40,
     },
     textDes: {
         color: whiteColor,

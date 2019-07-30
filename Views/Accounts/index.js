@@ -93,7 +93,6 @@ class Accounts extends React.Component {
                                 heading="Sign out"
                                 iconLeftStyle={styles.iconOutSignOut}
                                 iconLeft={require('../../assets/logout.png')}
-                                iconRight={require('../../assets/arrow.png')}
                             />
                         </TouchableOpacity>
                     </ScrollView>

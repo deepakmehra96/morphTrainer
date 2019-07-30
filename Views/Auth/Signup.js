@@ -131,17 +131,6 @@ class SignUp extends React.Component {
                                     />
                                     <Text style={styles.errorMsgText}>{errors.password && errors.password[0]}</Text>
                                 </View>
-                                <View style={styles.textOut}>
-                                    <Text style={styles.textMain}>Can we contact you with offers, events and our newsletter?</Text>
-                                    <View>
-                                        <CheckBox
-                                            checked={checked}
-                                            onPress={() => this.handleCheck()}
-                                            checkedColor={whiteColor}
-                                            checkedIcon="check-square"
-                                        />
-                                    </View>
-                                </View>
                             </View>
                         </View>
                     </KeyboardAvoidingView>
@@ -212,9 +201,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     errorMsgText: {
-        fontSize: fontSmall,
+        fontSize: fontMedium,
+        marginTop:4,
         color: errorColor,
-        letterSpacing:2,
     },
 
     fullScreen: {

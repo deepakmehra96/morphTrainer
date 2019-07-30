@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
         fontSize: width <= 360 ? fontSmall : fontMedium
     },
     boxInColumn:{ 
-        flexDirection: 'column' 
+        flexDirection: 'column' ,
+        marginTop:5
     }
 })

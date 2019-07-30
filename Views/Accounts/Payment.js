@@ -52,7 +52,7 @@ class Payment extends React.Component {
             <View style={styles.fullScreen}>
                 <View style={styles.flexMain}>
                     <Header source={require('../../assets/back-white-arrow.png')} navigation={this.props.navigation} />
-                    <ProfileBackground centerImage={styles.textBarHeight} content={this.textContent()} textHeading="PAYMENT" />
+                    <ProfileBackground centerImage={styles.textBarHeight} content={this.textContent()} textHeading="PAYMENTS" />
                 </View>
                 <View style={styles.flexSecondCon}>
                     <ScrollView>

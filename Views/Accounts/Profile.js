@@ -3,7 +3,7 @@ import { View, Text, Dimensions, StyleSheet, ScrollView, SafeAreaView, Touchable
 import { connect } from 'react-redux'
 import ProfileBackground from '../../components/ProfileBackground';
 import Header from '../../components/Header';
-import { whiteColor, fontXL, fontLarge, fontSmall, fontMedium, fontXXL, buttonBottom, buttonView } from '../../components/constant';
+import { whiteColor, fontLarge, fontSmall, fontMedium, buttonBottom, buttonView,fontX3L } from '../../components/constant';
 import ButtonMain from '../../components/ButtonMain';
 var { height, width } = Dimensions.get('window')
 
@@ -43,7 +43,6 @@ class Profile extends React.Component {
         return (
             <View style={styles.fullScreen}>
                 <View style={styles.flexMain}>
-                    <Header source={require('../../assets/back-white-arrow.png')} navigation={this.props.navigation} />
                     <ProfileBackground profileText="JODI PITOUT" content={this.textContent()} imageMain={require('../../assets/dp.png')} />
                 </View>
                 <View style={styles.flexMain}>
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         color: whiteColor,
-        fontSize: fontXXL,
+        fontSize: fontX3L,
         letterSpacing: 3,
         fontWeight: '700',
     },

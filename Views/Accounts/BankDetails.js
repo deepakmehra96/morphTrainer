@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import microValidator from 'micro-validator'
 import is from 'is_js'
 import Header from '../../components/Header';
-import { whiteColor, fontLarge, errorColor, buttonBottom, fontXL } from '../../components/constant';
+import { whiteColor, fontLarge, errorColor, buttonBottom, fontXL, fontMedium } from '../../components/constant';
 import ProfileBackground from '../../components/ProfileBackground';
 import ButtonMain from '../../components/ButtonMain';
 import TextBox from '../../components/TextField.js';
@@ -177,8 +177,8 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     errorMsgText: {
-        fontSize: fontLarge,
-        letterSpacing: 2,
+        marginTop:4,
+        fontSize: fontMedium,
         color: errorColor
     },
     buttonOut: {

@@ -55,7 +55,7 @@ class MapMain extends React.Component {
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
-  handlerMarkerPress(data){
+  handlerMarkerPress(data) {
     this.props.handlerMarker(data)
   }
 
@@ -83,19 +83,19 @@ class MapMain extends React.Component {
         rotateEnabled={true}
         myLocationButton={true}
       >
-        {this.props.markers.map(( val, index ) => {
-          return(
-            <MapView.Marker
-              key={index}
-              coordinate={val.map}
-              title={val.name}
-              description={val.description}
-              onPress={() => this.handlerMarkerPress(val)}
-            />
-          )
-        })}
-       
-         
+        {
+          this.props.markers && this.props.markers.map((val, index) => {
+            return (
+              <MapView.Marker
+                key={index}
+                coordinate={val.map}
+                title={val.name}
+                description={val.description}
+                onPress={() => this.handlerMarkerPress(val)}
+              />
+            )
+          }
+          )}
       </MapView>
     )
   }
@@ -105,8 +105,8 @@ export default MapMain
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%', 
-    width: '100%' ,
-    zIndex:-1
+    height: '100%',
+    width: '100%',
+    zIndex: -1
   },
 });

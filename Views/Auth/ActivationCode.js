@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-nati
 import { connect } from 'react-redux'
 import Header from '../../components/Header';
 import TextBox from '../../components/TextField.js';
-import { fontSmall, errorColor, whiteColor, fontMedium, buttonBottom } from '../../components/constant';
+import { fontSmall, errorColor, whiteColor, fontMedium, buttonBottom, fontLarge } from '../../components/constant';
 import { ActivationCodeApi } from '../../redux/actions';
 import ButtonMain from '../../components/ButtonMain';
 import BackgroundContent from '../../components/BackgroundContent';
@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     errorMsgText: {
-        fontSize: fontSmall,
-        letterSpacing:2,
+        fontSize: fontLarge,
+        marginTop:4,
         color: errorColor
     },
     buttonOut: {

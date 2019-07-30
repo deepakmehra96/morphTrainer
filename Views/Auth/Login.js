@@ -145,8 +145,8 @@ const styles = StyleSheet.create({
         marginTop: 25,
     },
     errorMsgText: {
+        marginTop:4,
         fontSize: fontLarge,
-        letterSpacing:2,
         color: errorColor
     },
     signUpText: {
