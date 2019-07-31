@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { fontMedium, fontLarge, whiteColor, fontXXL, fontXL, fontSmall } from '../../components/constant';
 import MapMain from '../Map';
 import ButtonMain from '../../components/ButtonMain';
-import SlidingUpPanel from 'rn-sliding-up-panel';
+import Icon from 'react-native-vector-icons/AntDesign'
 var { height, width } = Dimensions.get('window')
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
@@ -17,12 +17,6 @@ class MapScreen extends React.Component {
     constructor() {
         super()
         this.state = {
-            data: [
-                { title: 'FAT LOSS', trainerCount: 28 },
-                { title: 'MUSCLE BUILDING', trainerCount: 280 },
-                { title: 'BETTER POSTURE', trainerCount: 2822 },
-                { title: 'EMS', trainerCount: 28 }
-            ],
             mapPoints: [
                 {
                     name: 'Emma Jones, ems',
@@ -55,25 +49,27 @@ class MapScreen extends React.Component {
                     }
                 }
             ],
-            customerDetails: null
+            customerDetails: null,
+            displayDetails: true
         };
     }
-    handleGoToExercise(item) {
-        this.props.navigation.navigate('ExerciseView', {
-            data: item,
+
+    componentDidMount() {
+        this.scrollY = new Animated.Value(0);
+        this.changingHeight = this.scrollY.interpolate({
+            inputRange: [0, 50],
+            outputRange: [120, 60],
+            extrapolate: "clamp"
         });
     }
-
-    handlerMarker(values) {
-        console.log(values)
-        this.setState({ customerDetails: values })
-    }
-
-    handleCustomer() {
-        let { customerDetails } = this.state
+    handleCustomer(customerDetails) {
+        console.log(customerDetails, "customerDetails")
         if (customerDetails) {
             return (
                 <View style={styles.flexContainerDesc}>
+                    <TouchableOpacity onPress={() => this.handleHideBox()} style={{ position: 'absolute', right: 15, top: 10, }}>
+                        <Icon name="caretdown" size={18} />
+                    </TouchableOpacity>
                     <View>
                         <Text style={styles.headerTitle}>LOCATION REACH</Text>
                     </View>
@@ -91,29 +87,41 @@ class MapScreen extends React.Component {
         } else {
             return (
                 <View style={styles.flexContainer}>
+                    <TouchableOpacity onPress={() => this.handleHideBox()} style={{ position: 'absolute', right: 15, top: 10, }}>
+                        <Icon name="caretdown" size={18} />
+                    </TouchableOpacity>
                     <Text style={styles.textMain}>No booking selected. </Text>
                     <Text style={styles.textColor}>Tap one to see the details.</Text>
                 </View>
             )
         }
     }
-    componentDidMount() {
-        this.scrollY = new Animated.Value(0);
-        this.changingHeight = this.scrollY.interpolate({
-            inputRange: [0, 50],
-            outputRange: [120, 60],
-            extrapolate: "clamp"
-        });
+    handleHideBox() {
+        let { displayDetails } = this.state
+        this.setState({ displayDetails: !displayDetails })
+    }
+
+    handlerMarker(values) {
+        let { displayDetails } = this.state
+        this.setState({ customerDetails: values, displayDetails: true })
     }
 
     render() {
-        let { mapPoints } = this.state
+        let { mapPoints, displayDetails, customerDetails } = this.state
+        console.log(displayDetails, "displayDetails")
         return (
             <View style={styles.fullScreen}>
                 <View style={styles.mapHeight}>
                     <MapMain markers={mapPoints} handlerMarker={(values) => this.handlerMarker(values)} />
                 </View>
-               {this.handleCustomer()}
+                {
+                    !displayDetails ?
+                        <TouchableOpacity onPress={() => this.handleHideBox()} style={{ zIndex: 9999999, position: 'absolute', right: 15, bottom: 60, }}>
+                            <Icon name="caretup" size={18} />
+                        </TouchableOpacity> 
+                        :
+                        this.handleCustomer(customerDetails)
+                }
             </View>
         )
     }
@@ -125,14 +133,14 @@ const styles = StyleSheet.create({
         height: height,
     },
     mapHeight: {
-        height: height-250,
+        height: height,
     },
     container: {
-        height:300,
+        height: 300,
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center'
-      },
+    },
     flexContainer: {
         alignItems: "center",
         marginBottom: 48,
@@ -145,9 +153,15 @@ const styles = StyleSheet.create({
         zIndex: 999999
     },
     flexContainerDesc: {
-        flex: 3,
+        alignItems: "center",
         marginBottom: 48,
-        alignItems: 'center'
+        justifyContent: 'center',
+        height: 200,
+        width: width,
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: whiteColor,
+        zIndex: 999999
     },
     textContainer: {
         justifyContent: "center",
